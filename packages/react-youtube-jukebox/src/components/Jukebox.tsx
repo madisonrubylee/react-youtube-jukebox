@@ -168,6 +168,7 @@ export function Jukebox({
     tracks.length > 1
       ? tracks[getNextTrackIndex(currentIndex, 1, tracks.length)]
       : undefined;
+  const effectiveIsExpanded = currentTrack ? isExpanded : false;
 
   const handleToggleExpanded = () => {
     if (!currentTrack) {
@@ -182,7 +183,7 @@ export function Jukebox({
       className={clsx(
         "rj-root",
         {
-          "rj-root--expanded": isExpanded,
+          "rj-root--expanded": effectiveIsExpanded,
           "rj-root--portal": portal,
           "rj-root--inline": !portal,
         },
@@ -196,7 +197,7 @@ export function Jukebox({
         <JukeboxExpandedPlayer
           currentIndex={currentIndex}
           currentTrack={currentTrack}
-          isExpanded={isExpanded}
+          isExpanded={effectiveIsExpanded}
           isMuted={isMuted}
           isPlaying={isPlaying}
           nextTrack={nextTrack}
@@ -215,7 +216,7 @@ export function Jukebox({
         <div className="rj-dock__inner">
           <TrackSummary
             currentTrack={currentTrack}
-            isExpanded={isExpanded}
+            isExpanded={effectiveIsExpanded}
             isPlaying={isPlaying}
             onToggleExpanded={handleToggleExpanded}
           />

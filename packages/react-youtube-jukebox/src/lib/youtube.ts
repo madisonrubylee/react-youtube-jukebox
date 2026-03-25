@@ -74,6 +74,9 @@ export function loadYouTubeIframeApi() {
   }
 
   youtubeIframeApiPromise = new Promise<YouTubeNamespace>((resolve, reject) => {
+    const resetPromise = () => {
+      youtubeIframeApiPromise = null;
+    };
     const existingScript = document.querySelector<HTMLScriptElement>(
       'script[src="https://www.youtube.com/iframe_api"]',
     );
@@ -86,16 +89,21 @@ export function loadYouTubeIframeApi() {
       document.head.append(script);
     }
 
-    script.addEventListener("error", () => {
+    const handleError = () => {
+      resetPromise();
       reject(new Error("Failed to load the YouTube iframe API."));
-    });
+    };
+
+    script.addEventListener("error", handleError, { once: true });
 
     const previousReadyHandler = window.onYouTubeIframeAPIReady;
 
     window.onYouTubeIframeAPIReady = () => {
       previousReadyHandler?.();
+      script.removeEventListener("error", handleError);
 
       if (!window.YT?.Player) {
+        resetPromise();
         reject(new Error("YouTube iframe API loaded without a player."));
         return;
       }

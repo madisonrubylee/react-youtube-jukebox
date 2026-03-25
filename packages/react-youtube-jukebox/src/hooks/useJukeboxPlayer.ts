@@ -30,6 +30,7 @@ export function useJukeboxPlayer({
   const isPlayingRef = useRef(false);
   const mutedPreferenceRef = useRef(true);
   const shouldResumePlaybackRef = useRef(autoplay);
+  const tracksRef = useRef(tracks);
   const volumeRef = useRef(DEFAULT_VOLUME);
   const [playerMountNode, setPlayerMountNode] = useState<HTMLDivElement | null>(
     null,
@@ -40,11 +41,12 @@ export function useJukeboxPlayer({
   const [isMuted, setIsMuted] = useState(true);
   const [volume, setVolumeState] = useState(DEFAULT_VOLUME);
 
-  const hasTracks = tracks.length > 0;
-  const hasMultipleTracks = tracks.length > 1;
-  const safeCurrentIndex = hasTracks
-    ? Math.min(currentIndex, tracks.length - 1)
-    : 0;
+  const trackCount = tracks.length;
+  const hasTracks = trackCount > 0;
+  const hasMultipleTracks = trackCount > 1;
+  const safeCurrentIndex = hasTracks ? Math.min(currentIndex, trackCount - 1) : 0;
+  const currentTrack = tracks[safeCurrentIndex];
+  const currentVideoId = currentTrack?.videoId;
 
   const moveTrack = useCallback(
     (step: number) => {
@@ -53,9 +55,9 @@ export function useJukeboxPlayer({
       }
 
       shouldResumePlaybackRef.current = isPlayingRef.current;
-      setCurrentIndex((index) => getNextTrackIndex(index, step, tracks.length));
+      setCurrentIndex((index) => getNextTrackIndex(index, step, trackCount));
     },
-    [hasMultipleTracks, tracks.length],
+    [hasMultipleTracks, trackCount],
   );
 
   const pausePlayback = useCallback(() => {
@@ -75,6 +77,10 @@ export function useJukeboxPlayer({
   useEffect(() => {
     currentIndexRef.current = safeCurrentIndex;
   }, [safeCurrentIndex]);
+
+  useEffect(() => {
+    tracksRef.current = tracks;
+  }, [tracks]);
 
   useEffect(() => {
     isPlayingRef.current = isPlaying;
@@ -106,7 +112,7 @@ export function useJukeboxPlayer({
         playerRef.current = new YT.Player(playerMountNode, {
           width: "100%",
           height: "100%",
-          videoId: tracks[currentIndexRef.current]?.videoId ?? "",
+          videoId: tracksRef.current[currentIndexRef.current]?.videoId ?? "",
           playerVars: {
             controls: 1,
             origin: window.location.origin,
@@ -134,7 +140,9 @@ export function useJukeboxPlayer({
             },
             onStateChange: (event) => {
               if (event.data === PLAYER_STATE_ENDED) {
-                if (!hasMultipleTracks) {
+                const nextTrackCount = tracksRef.current.length;
+
+                if (nextTrackCount <= 1) {
                   shouldResumePlaybackRef.current = false;
                   setIsPlaying(false);
                   return;
@@ -142,7 +150,7 @@ export function useJukeboxPlayer({
 
                 shouldResumePlaybackRef.current = true;
                 setCurrentIndex((index) =>
-                  getNextTrackIndex(index, 1, tracks.length),
+                  getNextTrackIndex(index, 1, nextTrackCount),
                 );
                 return;
               }
@@ -175,23 +183,22 @@ export function useJukeboxPlayer({
       playerRef.current?.destroy();
       playerRef.current = null;
     };
-  }, [hasMultipleTracks, hasTracks, playerMountNode, tracks]);
+  }, [hasTracks, playerMountNode]);
 
   useEffect(() => {
     const player = playerRef.current;
-    const currentTrack = tracks[safeCurrentIndex];
 
-    if (!isReady || !player || !currentTrack) {
+    if (!isReady || !player || !currentVideoId) {
       return;
     }
 
     if (shouldResumePlaybackRef.current) {
-      player.loadVideoById(currentTrack.videoId);
+      player.loadVideoById(currentVideoId);
       return;
     }
 
-    player.cueVideoById(currentTrack.videoId);
-  }, [isReady, safeCurrentIndex, tracks]);
+    player.cueVideoById(currentVideoId);
+  }, [currentVideoId, isReady]);
 
   return {
     playerMountRef: setPlayerMountNode,
@@ -199,7 +206,7 @@ export function useJukeboxPlayer({
     isMuted,
     isPlaying,
     volume,
-    setVolume: (nextVolume: number) => {
+    setVolume: useCallback((nextVolume: number) => {
       const clampedVolume = clampVolume(nextVolume);
       const player = playerRef.current;
 
@@ -226,8 +233,8 @@ export function useJukeboxPlayer({
       }
 
       player.unMute();
-    },
-    toggleMute: () => {
+    }, []),
+    toggleMute: useCallback(() => {
       const player = playerRef.current;
       const nextMuted = !mutedPreferenceRef.current;
 
@@ -244,8 +251,8 @@ export function useJukeboxPlayer({
       }
 
       player.unMute();
-    },
-    togglePlay: () => {
+    }, []),
+    togglePlay: useCallback(() => {
       const player = playerRef.current;
 
       if (!canControlPlayer(player) || !isReady || !hasTracks) {
@@ -259,12 +266,12 @@ export function useJukeboxPlayer({
 
       shouldResumePlaybackRef.current = true;
       player.playVideo();
-    },
-    playNext: () => {
+    }, [hasTracks, isReady, pausePlayback]),
+    playNext: useCallback(() => {
       moveTrack(1);
-    },
-    playPrev: () => {
+    }, [moveTrack]),
+    playPrev: useCallback(() => {
       moveTrack(-1);
-    },
+    }, [moveTrack]),
   };
 }
