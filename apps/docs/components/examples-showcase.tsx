@@ -4,6 +4,7 @@ import { useState } from "react";
 
 import {
   Jukebox,
+  type JukeboxExpandedRenderProps,
   type JukeboxPosition,
   type JukeboxTrack,
 } from "@react-youtube-jukebox/core";
@@ -20,6 +21,9 @@ type PreviewCardProps = {
   chrome: (typeof jukeboxChromeOptions)[number]["value"];
   description: string;
   position?: JukeboxPosition;
+  renderExpandedContent?: (
+    props: JukeboxExpandedRenderProps,
+  ) => React.ReactNode;
   title: string;
   tracks: JukeboxTrack[];
   theme: (typeof jukeboxThemeOptions)[number]["value"];
@@ -67,6 +71,7 @@ function PreviewCard({
   chrome,
   description,
   position = "bottom-left",
+  renderExpandedContent,
   theme,
   title,
   tracks,
@@ -87,10 +92,71 @@ function PreviewCard({
             theme={theme}
             chrome={chrome}
             className="docs-preview__jukebox"
+            {...(renderExpandedContent
+              ? { renderExpandedContent }
+              : undefined)}
           />
         </div>
       </div>
     </div>
+  );
+}
+
+function CustomExpandedPreview({
+  currentIndex,
+  currentTrack,
+  isExpanded,
+  isMuted,
+  isPlaying,
+  nextTrack,
+  playerMountRef,
+  totalTracks,
+  volume,
+  setVolume,
+  toggleMute,
+  togglePlay,
+  playNext,
+  playPrev,
+}: JukeboxExpandedRenderProps) {
+  return (
+    <section className="docs-custom-expanded" data-open={isExpanded}>
+      <div className="docs-custom-expanded__player" ref={playerMountRef} />
+      <div className="docs-custom-expanded__meta">
+        <span className="docs-custom-expanded__eyebrow">
+          Custom expanded · {currentIndex + 1}/{totalTracks}
+        </span>
+        <strong>{currentTrack.title}</strong>
+        <p>
+          {currentTrack.artist ?? "Unknown artist"}
+          {nextTrack ? ` · Next: ${nextTrack.title}` : ""}
+        </p>
+      </div>
+      <div className="docs-custom-expanded__controls">
+        <button type="button" onClick={playPrev}>
+          Prev
+        </button>
+        <button type="button" onClick={togglePlay}>
+          {isPlaying ? "Pause" : "Play"}
+        </button>
+        <button type="button" onClick={playNext}>
+          Next
+        </button>
+        <button type="button" onClick={toggleMute}>
+          {isMuted ? "Unmute" : "Mute"}
+        </button>
+      </div>
+      <label className="docs-custom-expanded__volume">
+        <span>Volume</span>
+        <input
+          type="range"
+          min={0}
+          max={100}
+          step={1}
+          value={volume}
+          onChange={(event) => setVolume(Number(event.target.value))}
+        />
+      </label>
+    </section>
   );
 }
 
@@ -148,6 +214,14 @@ export function ExamplesShowcase() {
           description="Previous and next controls stay disabled with one track."
           tracks={singleDemoTrack}
           theme={theme}
+        />
+        <PreviewCard
+          chrome={chrome}
+          title="Custom Expanded"
+          description="The dock stays the same while the expanded panel is rendered by your app."
+          tracks={demoTracks}
+          theme={theme}
+          renderExpandedContent={(props) => <CustomExpandedPreview {...props} />}
         />
         <PreviewCard
           chrome={chrome}

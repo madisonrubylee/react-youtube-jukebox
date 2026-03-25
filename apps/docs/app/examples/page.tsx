@@ -12,6 +12,7 @@ export default function ExamplesPage() {
         { href: "#themes", label: "Themes" },
         { href: "#chrome", label: "Chrome Presets" },
         { href: "#positions", label: "Position Presets" },
+        { href: "#custom-expanded", label: "Custom Expanded" },
         { href: "#single-track", label: "Single Track" },
         { href: "#empty-tracks", label: "Empty Tracks" },
       ]}
@@ -59,6 +60,35 @@ export default function ExamplesPage() {
 <Jukebox tracks={tracks} position="bottom-right" offset={20} />
 <Jukebox tracks={tracks} position="top-left" offset={{ x: 24, y: 24 }} />
 <Jukebox tracks={tracks} position="top-right" offset={{ x: 24, y: 24 }} />`}</CodeBlock>
+      </section>
+
+      <section id="custom-expanded">
+        <h2>Custom Expanded</h2>
+        <p>
+          Keep the dock and player state from the library, but render your own{" "}
+          expanded layout with <code>renderExpandedContent</code>.
+        </p>
+        <CodeBlock>{`function CustomExpandedPanel({
+  currentTrack,
+  isPlaying,
+  playerMountRef,
+  togglePlay,
+}: JukeboxExpandedRenderProps) {
+  return (
+    <section>
+      <div ref={playerMountRef} style={{ aspectRatio: "16 / 9" }} />
+      <strong>{currentTrack.title}</strong>
+      <button onClick={togglePlay}>
+        {isPlaying ? "Pause" : "Play"}
+      </button>
+    </section>
+  );
+}
+
+<Jukebox
+  tracks={tracks}
+  renderExpandedContent={(props) => <CustomExpandedPanel {...props} />}
+/>`}</CodeBlock>
       </section>
 
       <section id="single-track">
