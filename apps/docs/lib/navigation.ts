@@ -3,7 +3,6 @@ export const topNavigation = [
   { href: "/quick-start", label: "Quick Start" },
   { href: "/api-playground", label: "API & Playground" },
   { href: "/examples", label: "Examples" },
-  { href: "/showcase", label: "Showcase" },
 ] as const;
 
 export const sidebarSections = [
@@ -19,7 +18,6 @@ export const sidebarSections = [
     items: [
       { href: "/api-playground", label: "Jukebox API" },
       { href: "/examples", label: "Examples" },
-      { href: "/showcase", label: "Showcase" },
     ],
   },
 ] as const;
