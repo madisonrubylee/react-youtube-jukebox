@@ -357,6 +357,8 @@
 
 .rj-root--inline {
   z-index: 20;
+  width: min(100%, var(--rj-root-width));
+  max-width: 100%;
 }
 
 .rj-dock {
@@ -371,6 +373,11 @@
 .rj-root--expanded .rj-dock {
   width: var(--rj-root-expanded-width);
   max-width: calc(100vw - 16px);
+}
+
+.rj-root--inline.rj-root--expanded .rj-dock {
+  width: min(100%, var(--rj-root-expanded-width));
+  max-width: 100%;
 }
 
 .rj-root[data-position$="right"].rj-root--expanded .rj-dock {
@@ -536,6 +543,11 @@
   padding: var(--rj-expanded-padding);
   box-shadow: var(--rj-shadow);
   backdrop-filter: var(--rj-expanded-backdrop);
+}
+
+.rj-root--inline .rj-expanded {
+  width: min(100%, var(--rj-root-expanded-width));
+  max-width: 100%;
 }
 
 .rj-root[data-position$="left"] .rj-expanded {
@@ -1232,6 +1244,67 @@
   .rj-root {
     --rj-root-width: min(100vw - 16px, 320px);
     --rj-root-expanded-width: min(100vw - 16px, 320px);
+  }
+
+  .rj-root--inline {
+    --rj-root-width: 100%;
+    --rj-root-expanded-width: 100%;
+  }
+
+  .rj-root--inline .rj-expanded {
+    padding: 6px;
+  }
+
+  .rj-root--inline .rj-expanded__shell {
+    padding: 10px;
+  }
+
+  .rj-root--inline .rj-next-track {
+    flex-wrap: wrap;
+    align-items: flex-start;
+  }
+
+  .rj-root--inline .rj-next-track__button {
+    width: 100%;
+    text-align: left;
+  }
+
+  .rj-root--inline[data-chrome="wallet"] .rj-expanded__transport {
+    gap: 6px;
+    padding: 6px;
+  }
+
+  .rj-root--inline[data-chrome="wallet"] .rj-expanded__utility {
+    display: grid;
+    grid-template-columns: 28px minmax(0, 1fr);
+    gap: 8px;
+  }
+
+  .rj-root--inline[data-chrome="wallet"] .rj-expanded__counter {
+    width: 100%;
+    text-align: center;
+  }
+
+  .rj-root--inline[data-chrome="ride"] .rj-expanded__titles {
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .rj-root--inline[data-chrome="ride"] .rj-expanded__artist {
+    max-width: none;
+    text-align: left;
+  }
+
+  .rj-root--inline[data-chrome="ride"] .rj-expanded__controls {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .rj-root--inline[data-chrome="ride"] .rj-expanded__transport {
+    width: 100%;
+  }
+
+  .rj-root--inline[data-chrome="ride"] .rj-expanded__counter {
+    justify-self: start;
   }
 }
 

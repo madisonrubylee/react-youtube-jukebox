@@ -86,6 +86,7 @@ function PreviewCard({
             offset={20}
             theme={theme}
             chrome={chrome}
+            className="docs-preview__jukebox"
           />
         </div>
       </div>
