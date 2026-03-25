@@ -24,7 +24,7 @@ export default function ApiPlaygroundPage() {
   artist?: string;
 };
 
-type JukeboxTheme = "glass" | "simple" | "sunset";
+type JukeboxTheme = "glass" | "simple" | "sunset" | "ride";
 type JukeboxChrome = "classic" | "wallet" | "ride";
 
 type JukeboxProps = {
@@ -62,7 +62,7 @@ type JukeboxProps = {
             </tr>
             <tr>
               <td><code>theme</code></td>
-              <td><code>"glass" | "simple" | "sunset"</code></td>
+              <td><code>"glass" | "simple" | "sunset" | "ride"</code></td>
               <td>Optional. Defaults to <code>"glass"</code>.</td>
             </tr>
             <tr>

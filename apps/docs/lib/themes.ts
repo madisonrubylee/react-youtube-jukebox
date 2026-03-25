@@ -34,6 +34,11 @@ export const jukeboxThemeOptions: JukeboxThemeOption[] = [
     label: "Sunset",
     description: "Warm gradient theme for louder, more playful embeds.",
   },
+  {
+    value: "ride",
+    label: "Ride",
+    description: "The previous ride palette, now available as a reusable theme.",
+  },
 ];
 
 export const jukeboxChromeOptions: JukeboxChromeOption[] = [

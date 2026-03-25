@@ -12,7 +12,7 @@ export type JukeboxPosition =
   | "top-right"
   | "top-left";
 
-export type JukeboxTheme = "glass" | "simple" | "sunset";
+export type JukeboxTheme = "glass" | "simple" | "sunset" | "ride";
 export type JukeboxChrome = "classic" | "wallet" | "ride";
 
 export type JukeboxOffset = number | { x: number; y: number };
