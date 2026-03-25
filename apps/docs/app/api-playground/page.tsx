@@ -1,0 +1,86 @@
+import { CodeBlock } from "../../components/code-block";
+import { DocsPage } from "../../components/docs-page";
+import { LivePreview } from "../../components/live-preview";
+
+export default function ApiPlaygroundPage() {
+  return (
+    <DocsPage
+      title="API & Playground"
+      breadcrumbs={[{ label: "Docs" }, { label: "API & Playground" }]}
+      toc={[
+        { href: "#interface", label: "Interface" },
+        { href: "#props", label: "Props" },
+        { href: "#playground", label: "Playground" },
+      ]}
+    >
+      <section id="interface">
+        <p>
+          The public API stays intentionally small in v1. Consumers pass only
+          track metadata and positioning props.
+        </p>
+        <CodeBlock>{`type JukeboxTrack = {
+  videoId: string;
+  title: string;
+  artist?: string;
+};
+
+type JukeboxProps = {
+  tracks: JukeboxTrack[];
+  position?: "bottom-right" | "bottom-left" | "top-right" | "top-left";
+  offset?: number | { x: number; y: number };
+  portal?: boolean;
+  className?: string;
+};`}</CodeBlock>
+      </section>
+
+      <section id="props">
+        <h2>Props</h2>
+        <table className="docs-table">
+          <thead>
+            <tr>
+              <th>Prop</th>
+              <th>Type</th>
+              <th>Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>tracks</code></td>
+              <td><code>JukeboxTrack[]</code></td>
+              <td>Required. Empty and single-track cases are handled safely.</td>
+            </tr>
+            <tr>
+              <td><code>position</code></td>
+              <td>corner preset</td>
+              <td>Controls top/bottom and left/right placement.</td>
+            </tr>
+            <tr>
+              <td><code>offset</code></td>
+              <td><code>number | {"{ x, y }"}</code></td>
+              <td>Applies spacing from the chosen edge preset.</td>
+            </tr>
+            <tr>
+              <td><code>portal</code></td>
+              <td><code>boolean</code></td>
+              <td>Defaults to `true`. Inline mode is opt-in.</td>
+            </tr>
+            <tr>
+              <td><code>className</code></td>
+              <td><code>string</code></td>
+              <td>Root-level hook for limited customization in v1.</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="playground">
+        <h2>Playground</h2>
+        <p>
+          The live preview below renders inline for docs only. The package
+          default remains portal rendering on the viewport.
+        </p>
+        <LivePreview />
+      </section>
+    </DocsPage>
+  );
+}

@@ -1,45 +1,26 @@
 {
-  "name": "@react-youtube-jukebox/core",
-  "version": "0.1.0",
-  "description": "Floating YouTube jukebox component for React applications.",
+  "name": "react-youtube-jukebox-workspace",
+  "private": true,
   "type": "module",
-  "sideEffects": [
-    "*.css"
-  ],
-  "files": [
-    "dist"
-  ],
+  "packageManager": "pnpm@10.15.1",
   "scripts": {
-    "dev": "vite",
-    "build": "tsup",
-    "typecheck": "tsc --noEmit",
-    "lint": "eslint .",
-    "test": "vitest run"
-  },
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
-    }
-  },
-  "main": "./dist/index.js",
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "peerDependencies": {
-    "react": "^18.3.0 || ^19.0.0",
-    "react-dom": "^18.3.0 || ^19.0.0"
-  },
-  "dependencies": {
-    "clsx": "^2.1.1"
+    "dev": "pnpm --filter @react-youtube-jukebox/docs dev",
+    "dev:docs": "pnpm --filter @react-youtube-jukebox/docs dev",
+    "build": "pnpm -r build",
+    "build:package": "pnpm --filter @react-youtube-jukebox/core build",
+    "build:docs": "pnpm --filter @react-youtube-jukebox/docs build",
+    "lint": "pnpm -r lint",
+    "typecheck": "pnpm -r typecheck",
+    "test": "pnpm --filter @react-youtube-jukebox/core test",
+    "publish:check": "pnpm --filter @react-youtube-jukebox/core build && pnpm --filter @react-youtube-jukebox/core pack:check"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.4",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.0",
     "@types/node": "^24.12.0",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
-    "@testing-library/jest-dom": "^6.9.1",
-    "@testing-library/react": "^16.3.0",
-    "@vitejs/plugin-react": "^6.0.1",
     "eslint": "^9.39.4",
     "eslint-plugin-react-hooks": "^7.0.1",
     "globals": "^17.4.0",
@@ -47,7 +28,6 @@
     "tsup": "^8.5.1",
     "typescript": "~5.9.3",
     "typescript-eslint": "^8.57.0",
-    "vite": "^8.0.1",
     "vitest": "^3.2.4"
   }
 }

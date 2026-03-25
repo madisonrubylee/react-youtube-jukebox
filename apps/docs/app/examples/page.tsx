@@ -1,0 +1,63 @@
+import { CodeBlock } from "../../components/code-block";
+import { DocsPage } from "../../components/docs-page";
+import { ExamplesShowcase } from "../../components/examples-showcase";
+
+export default function ExamplesPage() {
+  return (
+    <DocsPage
+      title="Examples"
+      breadcrumbs={[{ label: "Docs" }, { label: "Examples" }]}
+      toc={[
+        { href: "#default", label: "Default" },
+        { href: "#positions", label: "Position Presets" },
+        { href: "#single-track", label: "Single Track" },
+        { href: "#empty-tracks", label: "Empty Tracks" },
+      ]}
+    >
+      <section id="default">
+        <p>
+          The package default is a floating portal render. Inside docs we keep
+          previews inline so they stay inside the page layout, but the API
+          example below is the real default usage.
+        </p>
+        <CodeBlock>{`<Jukebox tracks={tracks} />`}</CodeBlock>
+        <ExamplesShowcase />
+      </section>
+
+      <section id="positions">
+        <h2>Position Presets</h2>
+        <p>
+          Use <code>position</code> to pin the jukebox to any corner of the
+          viewport. <code>offset</code> lets you nudge it from the chosen edge.
+        </p>
+        <CodeBlock>{`<Jukebox tracks={tracks} position="bottom-left" offset={20} />
+<Jukebox tracks={tracks} position="bottom-right" offset={20} />
+<Jukebox tracks={tracks} position="top-left" offset={{ x: 24, y: 24 }} />
+<Jukebox tracks={tracks} position="top-right" offset={{ x: 24, y: 24 }} />`}</CodeBlock>
+      </section>
+
+      <section id="single-track">
+        <h2>Single Track</h2>
+        <ul>
+          <li>Pass a one-item array when you only need a single song.</li>
+          <li>Previous and next controls are disabled automatically.</li>
+          <li>Playback, mute, expand, and volume control still work normally.</li>
+        </ul>
+        <CodeBlock>{`<Jukebox
+  tracks={[
+    { videoId: "yTg4v2Cnfyo", title: "Soul Below", artist: "Ljones" },
+  ]}
+/>`}</CodeBlock>
+      </section>
+
+      <section id="empty-tracks">
+        <h2>Empty Tracks</h2>
+        <p>
+          Passing an empty array is safe. The component renders a fallback dock
+          instead of throwing and keeps playback controls disabled.
+        </p>
+        <CodeBlock>{`<Jukebox tracks={[]} />`}</CodeBlock>
+      </section>
+    </DocsPage>
+  );
+}

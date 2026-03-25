@@ -1,0 +1,43 @@
+{
+  "name": "@react-youtube-jukebox/core",
+  "version": "0.1.0",
+  "description": "Floating YouTube jukebox component for React applications.",
+  "type": "module",
+  "sideEffects": [
+    "*.css",
+    "**/*.css"
+  ],
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "typecheck": "tsc --project tsconfig.json --noEmit",
+    "lint": "eslint src",
+    "test": "vitest run",
+    "pack:check": "npm pack --dry-run --cache /tmp/react-youtube-jukebox-npm-cache"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./styles.css": {
+      "default": "./dist/index.css"
+    }
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "publishConfig": {
+    "access": "public"
+  },
+  "peerDependencies": {
+    "react": "^18.3.0 || ^19.0.0",
+    "react-dom": "^18.3.0 || ^19.0.0"
+  },
+  "dependencies": {
+    "clsx": "^2.1.1"
+  }
+}
