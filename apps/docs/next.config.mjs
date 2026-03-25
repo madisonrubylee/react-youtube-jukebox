@@ -11,9 +11,11 @@ const coreStylesPath = path.resolve(
   currentDirPath,
   "../../packages/react-youtube-jukebox/src/styles/jukebox.css",
 );
+const docsDistDir = process.env.NODE_ENV === "development" ? ".next-dev" : ".next";
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  distDir: docsDistDir,
   transpilePackages: ["@react-youtube-jukebox/core"],
   turbopack: {
     resolveAlias: {
