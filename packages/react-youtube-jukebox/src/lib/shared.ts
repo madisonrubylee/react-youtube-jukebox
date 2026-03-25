@@ -12,12 +12,15 @@ export type JukeboxPosition =
   | "top-right"
   | "top-left";
 
+export type JukeboxTheme = "glass" | "simple" | "sunset";
+
 export type JukeboxOffset = number | { x: number; y: number };
 
 export type JukeboxProps = {
   tracks: JukeboxTrack[];
   autoplay?: boolean;
   position?: JukeboxPosition;
+  theme?: JukeboxTheme;
   offset?: JukeboxOffset;
   portal?: boolean;
   className?: string;
@@ -37,6 +40,7 @@ export type JukeboxPlayerState = {
 };
 
 export const DEFAULT_POSITION: JukeboxPosition = "bottom-right";
+export const DEFAULT_THEME: JukeboxTheme = "glass";
 export const DEFAULT_OFFSET_PX = 20;
 export const DEFAULT_VOLUME = 100;
 export const LEVEL_BAR_HEIGHTS = [12, 18, 14] as const;

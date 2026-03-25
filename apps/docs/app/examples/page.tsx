@@ -9,6 +9,7 @@ export default function ExamplesPage() {
       breadcrumbs={[{ label: "Docs" }, { label: "Examples" }]}
       toc={[
         { href: "#default", label: "Default" },
+        { href: "#themes", label: "Themes" },
         { href: "#positions", label: "Position Presets" },
         { href: "#single-track", label: "Single Track" },
         { href: "#empty-tracks", label: "Empty Tracks" },
@@ -22,6 +23,17 @@ export default function ExamplesPage() {
         </p>
         <CodeBlock>{`<Jukebox tracks={tracks} />`}</CodeBlock>
         <ExamplesShowcase />
+      </section>
+
+      <section id="themes">
+        <h2>Themes</h2>
+        <p>
+          Use <code>theme</code> when the default glass chrome does not match
+          the page. If omitted, the component keeps the current default theme.
+        </p>
+        <CodeBlock>{`<Jukebox tracks={tracks} theme="glass" />
+<Jukebox tracks={tracks} theme="simple" />
+<Jukebox tracks={tracks} theme="sunset" />`}</CodeBlock>
       </section>
 
       <section id="positions">

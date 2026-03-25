@@ -3,5 +3,6 @@ export type {
   JukeboxOffset,
   JukeboxPosition,
   JukeboxProps,
+  JukeboxTheme,
   JukeboxTrack,
 } from "./lib/shared";

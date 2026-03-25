@@ -25,6 +25,7 @@ export function Page() {
 ```
 
 패키지 스타일은 별도 CSS export로 제공됩니다. 앱 엔트리에서 `@react-youtube-jukebox/core/styles.css`를 함께 import 해야 합니다.
+기본 테마는 `glass`이며, 필요하면 `theme="simple"` 또는 `theme="sunset"`을 전달할 수 있습니다.
 
 ## Props
 
@@ -35,10 +36,13 @@ type JukeboxTrack = {
   artist?: string;
 };
 
+type JukeboxTheme = "glass" | "simple" | "sunset";
+
 type JukeboxProps = {
   tracks: JukeboxTrack[];
   autoplay?: boolean;
   position?: "bottom-right" | "bottom-left" | "top-right" | "top-left";
+  theme?: JukeboxTheme;
   offset?: number | { x: number; y: number };
   portal?: boolean;
   className?: string;
