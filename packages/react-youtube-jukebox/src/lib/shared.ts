@@ -1,4 +1,4 @@
-import type { CSSProperties } from "react";
+import type { CSSProperties, ReactNode } from "react";
 
 export type JukeboxTrack = {
   videoId: string;
@@ -26,6 +26,9 @@ export type JukeboxProps = {
   offset?: JukeboxOffset;
   portal?: boolean;
   className?: string;
+  renderExpandedContent?: (
+    props: JukeboxExpandedRenderProps,
+  ) => ReactNode;
 };
 
 export type JukeboxPlayerState = {
@@ -39,6 +42,13 @@ export type JukeboxPlayerState = {
   togglePlay: () => void;
   playNext: () => void;
   playPrev: () => void;
+};
+
+export type JukeboxExpandedRenderProps = JukeboxPlayerState & {
+  currentTrack: JukeboxTrack;
+  isExpanded: boolean;
+  nextTrack: JukeboxTrack | undefined;
+  totalTracks: number;
 };
 
 export const DEFAULT_POSITION: JukeboxPosition = "bottom-right";

@@ -1,24 +1,8 @@
-import type { ChangeEvent, RefCallback } from "react";
-import clsx from "clsx";
+import type { ChangeEvent } from "react";
 
-import type { JukeboxTrack } from "../lib/shared";
+import type { JukeboxExpandedRenderProps } from "../lib/shared";
 
-type JukeboxExpandedPlayerProps = {
-  currentIndex: number;
-  currentTrack: JukeboxTrack;
-  isExpanded: boolean;
-  isMuted: boolean;
-  isPlaying: boolean;
-  nextTrack: JukeboxTrack | undefined;
-  playerMountRef: RefCallback<HTMLDivElement>;
-  totalTracks: number;
-  volume: number;
-  onPlayNext: () => void;
-  onPlayPrev: () => void;
-  onTogglePlay: () => void;
-  onToggleMute: () => void;
-  onVolumeChange: (volume: number) => void;
-};
+type JukeboxExpandedPlayerProps = JukeboxExpandedRenderProps;
 
 function SpeakerIcon({ isMuted }: { isMuted: boolean }) {
   if (isMuted) {
@@ -41,32 +25,27 @@ function SpeakerIcon({ isMuted }: { isMuted: boolean }) {
 export function JukeboxExpandedPlayer({
   currentIndex,
   currentTrack,
-  isExpanded,
   isMuted,
   isPlaying,
   nextTrack,
   playerMountRef,
   totalTracks,
   volume,
-  onPlayNext,
-  onPlayPrev,
-  onTogglePlay,
-  onToggleMute,
-  onVolumeChange,
+  playNext,
+  playPrev,
+  togglePlay,
+  toggleMute,
+  setVolume,
 }: JukeboxExpandedPlayerProps) {
   const hasMultipleTracks = totalTracks > 1;
   const hasNextTrack = nextTrack !== undefined;
 
   const handleVolumeInput = (event: ChangeEvent<HTMLInputElement>) => {
-    onVolumeChange(Number(event.target.value));
+    setVolume(Number(event.target.value));
   };
 
   return (
-    <div
-      aria-hidden={!isExpanded}
-      className={clsx("rj-expanded", {
-        "rj-expanded--hidden": !isExpanded,
-      })}>
+    <>
       <div className="rj-expanded__shell">
         <div className="rj-expanded__screen-frame">
           <div className="rj-expanded__screen">
@@ -86,20 +65,20 @@ export function JukeboxExpandedPlayer({
             <div className="rj-expanded__transport">
               <button
                 type="button"
-                onClick={onPlayPrev}
+                onClick={playPrev}
                 disabled={!hasMultipleTracks}
                 className="rj-chip-button">
                 ◀
               </button>
               <button
                 type="button"
-                onClick={onTogglePlay}
+                onClick={togglePlay}
                 className="rj-chip-button rj-chip-button--primary">
                 {isPlaying ? "Pause" : "Play"}
               </button>
               <button
                 type="button"
-                onClick={onPlayNext}
+                onClick={playNext}
                 disabled={!hasMultipleTracks}
                 className="rj-chip-button">
                 ▶
@@ -109,7 +88,7 @@ export function JukeboxExpandedPlayer({
             <div className="rj-expanded__utility">
               <button
                 type="button"
-                onClick={onToggleMute}
+                onClick={toggleMute}
                 aria-label={isMuted ? "Unmute" : "Mute"}
                 className="rj-icon-button">
                 <span className="rj-icon-button__icon">
@@ -141,13 +120,13 @@ export function JukeboxExpandedPlayer({
           <span className="rj-next-track__label">Next</span>
           <button
             type="button"
-            onClick={onPlayNext}
+            onClick={playNext}
             disabled={!hasMultipleTracks}
             className="rj-next-track__button">
             {nextTrack.title}
           </button>
         </div>
       ) : null}
-    </div>
+    </>
   );
 }

@@ -16,7 +16,7 @@ import { Jukebox } from "@react-youtube-jukebox/core";
 
 const tracks = [
   { videoId: "yTg4v2Cnfyo", title: "Soul Below", artist: "Ljones" },
-  { videoId: "s4MQku9Mkwc", title: "Something About Us", artist: "Daft Punk" }
+  { videoId: "s4MQku9Mkwc", title: "Something About Us", artist: "Daft Punk" },
 ];
 
 export function Page() {
@@ -27,6 +27,41 @@ export function Page() {
 패키지 스타일은 별도 CSS export로 제공됩니다. 앱 엔트리에서 `@react-youtube-jukebox/core/styles.css`를 함께 import 해야 합니다.
 기본 테마는 `glass`이며, 필요하면 `theme="simple"`, `theme="sunset"`, `theme="ride"`를 전달할 수 있습니다.
 쉘 형태는 `chrome` prop으로 제어하며 기본값은 `classic`입니다. `wallet`과 `ride` 프리셋으로 같은 로직 위에 다른 UI chrome을 적용할 수 있습니다.
+
+## Custom Expanded Panel
+
+```tsx
+import {
+  Jukebox,
+  type JukeboxExpandedRenderProps,
+} from "@react-youtube-jukebox/core";
+
+function CustomExpandedPanel({
+  currentTrack,
+  isExpanded,
+  playerMountRef,
+  togglePlay,
+}: JukeboxExpandedRenderProps) {
+  return (
+    <section data-open={isExpanded}>
+      <div ref={playerMountRef} style={{ aspectRatio: "16 / 9" }} />
+      <strong>{currentTrack.title}</strong>
+      <button onClick={togglePlay}>Toggle</button>
+    </section>
+  );
+}
+
+export function Page() {
+  return (
+    <Jukebox
+      tracks={tracks}
+      renderExpandedContent={(props) => <CustomExpandedPanel {...props} />}
+    />
+  );
+}
+```
+
+`renderExpandedContent`를 전달하면 기본 expanded 디자인 대신 사용자 렌더를 사용합니다. 토글 애니메이션과 컨테이너 visibility는 라이브러리가 계속 관리하고, 소비자는 내부 레이아웃과 컨트롤만 정의하면 됩니다.
 
 ## Props
 
@@ -39,6 +74,22 @@ type JukeboxTrack = {
 
 type JukeboxTheme = "glass" | "simple" | "sunset" | "ride";
 type JukeboxChrome = "classic" | "wallet" | "ride";
+type JukeboxExpandedRenderProps = {
+  currentIndex: number;
+  currentTrack: JukeboxTrack;
+  isExpanded: boolean;
+  isMuted: boolean;
+  isPlaying: boolean;
+  nextTrack: JukeboxTrack | undefined;
+  playerMountRef: (node: HTMLDivElement | null) => void;
+  totalTracks: number;
+  volume: number;
+  setVolume: (nextVolume: number) => void;
+  toggleMute: () => void;
+  togglePlay: () => void;
+  playNext: () => void;
+  playPrev: () => void;
+};
 
 type JukeboxProps = {
   tracks: JukeboxTrack[];
@@ -49,6 +100,9 @@ type JukeboxProps = {
   offset?: number | { x: number; y: number };
   portal?: boolean;
   className?: string;
+  renderExpandedContent?: (
+    props: JukeboxExpandedRenderProps,
+  ) => React.ReactNode;
 };
 ```
 

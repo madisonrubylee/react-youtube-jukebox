@@ -1,4 +1,9 @@
-import { useState, useSyncExternalStore, type CSSProperties } from "react";
+import {
+  useState,
+  useSyncExternalStore,
+  type CSSProperties,
+  type ReactNode,
+} from "react";
 import { createPortal } from "react-dom";
 import clsx from "clsx";
 
@@ -12,6 +17,7 @@ import {
   LEVEL_BAR_ANIMATION_DELAY_MS,
   LEVEL_BAR_HEIGHTS,
   LEVEL_BAR_REST_HEIGHT,
+  type JukeboxExpandedRenderProps,
   type JukeboxProps,
   type JukeboxTrack,
 } from "../lib/shared";
@@ -134,6 +140,24 @@ function TrackSummary({
   );
 }
 
+function ExpandedPanel({
+  children,
+  isExpanded,
+}: {
+  children: ReactNode;
+  isExpanded: boolean;
+}) {
+  return (
+    <div
+      aria-hidden={!isExpanded}
+      className={clsx("rj-expanded", {
+        "rj-expanded--hidden": !isExpanded,
+      })}>
+      {children}
+    </div>
+  );
+}
+
 export function Jukebox({
   tracks,
   autoplay = true,
@@ -143,6 +167,7 @@ export function Jukebox({
   offset,
   portal = true,
   className,
+  renderExpandedContent,
 }: JukeboxProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const isMounted = useSyncExternalStore(
@@ -169,6 +194,25 @@ export function Jukebox({
       ? tracks[getNextTrackIndex(currentIndex, 1, tracks.length)]
       : undefined;
   const effectiveIsExpanded = currentTrack ? isExpanded : false;
+  const expandedRenderProps: JukeboxExpandedRenderProps | undefined =
+    currentTrack
+      ? {
+          currentIndex,
+          currentTrack,
+          isExpanded: effectiveIsExpanded,
+          isMuted,
+          isPlaying,
+          nextTrack,
+          playerMountRef,
+          totalTracks: tracks.length,
+          volume,
+          setVolume,
+          toggleMute,
+          togglePlay,
+          playNext,
+          playPrev,
+        }
+      : undefined;
 
   const handleToggleExpanded = () => {
     if (!currentTrack) {
@@ -193,23 +237,14 @@ export function Jukebox({
       data-theme={theme}
       data-chrome={chrome}
       style={getPositionStyle(position, offset, portal)}>
-      {currentTrack ? (
-        <JukeboxExpandedPlayer
-          currentIndex={currentIndex}
-          currentTrack={currentTrack}
-          isExpanded={effectiveIsExpanded}
-          isMuted={isMuted}
-          isPlaying={isPlaying}
-          nextTrack={nextTrack}
-          playerMountRef={playerMountRef}
-          totalTracks={tracks.length}
-          volume={volume}
-          onPlayNext={playNext}
-          onPlayPrev={playPrev}
-          onTogglePlay={togglePlay}
-          onToggleMute={toggleMute}
-          onVolumeChange={setVolume}
-        />
+      {expandedRenderProps ? (
+        <ExpandedPanel isExpanded={effectiveIsExpanded}>
+          {renderExpandedContent ? (
+            renderExpandedContent(expandedRenderProps)
+          ) : (
+            <JukeboxExpandedPlayer {...expandedRenderProps} />
+          )}
+        </ExpandedPanel>
       ) : null}
 
       <div className="rj-dock">
