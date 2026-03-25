@@ -16,6 +16,7 @@ export type JukeboxOffset = number | { x: number; y: number };
 
 export type JukeboxProps = {
   tracks: JukeboxTrack[];
+  autoplay?: boolean;
   position?: JukeboxPosition;
   offset?: JukeboxOffset;
   portal?: boolean;
@@ -33,7 +34,6 @@ export type JukeboxPlayerState = {
   togglePlay: () => void;
   playNext: () => void;
   playPrev: () => void;
-  pausePlayback: () => void;
 };
 
 export const DEFAULT_POSITION: JukeboxPosition = "bottom-right";

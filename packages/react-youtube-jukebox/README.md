@@ -37,6 +37,7 @@ type JukeboxTrack = {
 
 type JukeboxProps = {
   tracks: JukeboxTrack[];
+  autoplay?: boolean;
   position?: "bottom-right" | "bottom-left" | "top-right" | "top-left";
   offset?: number | { x: number; y: number };
   portal?: boolean;
@@ -45,3 +46,4 @@ type JukeboxProps = {
 ```
 
 기본 사용은 viewport 기준 포털 렌더링입니다. 레이아웃 안에서 직접 배치가 필요할 때만 `portal={false}`를 사용합니다.
+`autoplay`는 기본값이 `true`이며, 첫 진입 시 무음 상태로 자동 재생합니다. 자동 재생을 끄려면 `autoplay={false}`를 전달합니다.

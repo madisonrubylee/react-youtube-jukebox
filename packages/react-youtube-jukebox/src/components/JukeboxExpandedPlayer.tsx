@@ -1,10 +1,12 @@
 import type { ChangeEvent, RefCallback } from "react";
+import clsx from "clsx";
 
 import type { JukeboxTrack } from "../lib/shared";
 
 type JukeboxExpandedPlayerProps = {
   currentIndex: number;
   currentTrack: JukeboxTrack;
+  isExpanded: boolean;
   isMuted: boolean;
   isPlaying: boolean;
   nextTrack: JukeboxTrack | undefined;
@@ -39,6 +41,7 @@ function SpeakerIcon({ isMuted }: { isMuted: boolean }) {
 export function JukeboxExpandedPlayer({
   currentIndex,
   currentTrack,
+  isExpanded,
   isMuted,
   isPlaying,
   nextTrack,
@@ -59,7 +62,11 @@ export function JukeboxExpandedPlayer({
   };
 
   return (
-    <div className="rj-expanded">
+    <div
+      aria-hidden={!isExpanded}
+      className={clsx("rj-expanded", {
+        "rj-expanded--hidden": !isExpanded,
+      })}>
       <div className="rj-expanded__shell">
         <div className="rj-expanded__screen-frame">
           <div className="rj-expanded__screen">

@@ -17,17 +17,19 @@ import {
 } from "../lib/youtube";
 
 type UseJukeboxPlayerOptions = {
+  autoplay: boolean;
   tracks: JukeboxTrack[];
 };
 
 export function useJukeboxPlayer({
+  autoplay,
   tracks,
 }: UseJukeboxPlayerOptions): JukeboxPlayerState {
   const playerRef = useRef<YouTubePlayer | null>(null);
   const currentIndexRef = useRef(0);
   const isPlayingRef = useRef(false);
   const mutedPreferenceRef = useRef(true);
-  const shouldResumePlaybackRef = useRef(false);
+  const shouldResumePlaybackRef = useRef(autoplay);
   const volumeRef = useRef(DEFAULT_VOLUME);
   const [playerMountNode, setPlayerMountNode] = useState<HTMLDivElement | null>(
     null,
@@ -81,6 +83,12 @@ export function useJukeboxPlayer({
   useEffect(() => {
     volumeRef.current = volume;
   }, [volume]);
+
+  useEffect(() => {
+    if (!isReady && !isPlayingRef.current) {
+      shouldResumePlaybackRef.current = autoplay;
+    }
+  }, [autoplay, isReady]);
 
   useEffect(() => {
     if (!playerMountNode || !hasTracks) {
@@ -258,6 +266,5 @@ export function useJukeboxPlayer({
     playPrev: () => {
       moveTrack(-1);
     },
-    pausePlayback,
   };
 }

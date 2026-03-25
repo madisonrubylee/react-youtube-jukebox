@@ -134,6 +134,7 @@ function TrackSummary({
 
 export function Jukebox({
   tracks,
+  autoplay = true,
   position = DEFAULT_POSITION,
   offset,
   portal = true,
@@ -156,8 +157,7 @@ export function Jukebox({
     togglePlay,
     playNext,
     playPrev,
-    pausePlayback,
-  } = useJukeboxPlayer({ tracks });
+  } = useJukeboxPlayer({ autoplay, tracks });
 
   const currentTrack = tracks[currentIndex];
   const nextTrack =
@@ -170,13 +170,7 @@ export function Jukebox({
       return;
     }
 
-    if (isExpanded) {
-      pausePlayback();
-      setIsExpanded(false);
-      return;
-    }
-
-    setIsExpanded(true);
+    setIsExpanded((expanded) => !expanded);
   };
 
   const content = (
@@ -192,10 +186,11 @@ export function Jukebox({
       )}
       data-position={position}
       style={getPositionStyle(position, offset, portal)}>
-      {isExpanded && currentTrack ? (
+      {currentTrack ? (
         <JukeboxExpandedPlayer
           currentIndex={currentIndex}
           currentTrack={currentTrack}
+          isExpanded={isExpanded}
           isMuted={isMuted}
           isPlaying={isPlaying}
           nextTrack={nextTrack}

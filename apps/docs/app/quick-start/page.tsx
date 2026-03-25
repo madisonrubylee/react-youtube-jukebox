@@ -30,6 +30,10 @@ const tracks = [
 export function App() {
   return <Jukebox tracks={tracks} />;
 }`}</CodeBlock>
+        <p>
+          By default the first track starts automatically in a muted state. Pass{" "}
+          <code>autoplay={"{false}"}</code> when you want manual playback.
+        </p>
       </section>
 
       <section id="positioning">

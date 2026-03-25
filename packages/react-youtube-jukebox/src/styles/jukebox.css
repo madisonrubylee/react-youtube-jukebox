@@ -204,6 +204,12 @@
   backdrop-filter: blur(18px) saturate(1.5);
 }
 
+.rj-expanded--hidden {
+  visibility: hidden;
+  pointer-events: none;
+  opacity: 0;
+}
+
 .rj-root[data-position^="top"] .rj-expanded {
   top: calc(100% + 10px);
   bottom: auto;

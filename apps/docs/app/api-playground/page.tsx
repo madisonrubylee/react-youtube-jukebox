@@ -15,8 +15,8 @@ export default function ApiPlaygroundPage() {
     >
       <section id="interface">
         <p>
-          The public API stays intentionally small in v1. Consumers pass only
-          track metadata and positioning props.
+          The public API stays intentionally small in v1. Consumers pass track
+          metadata plus a few playback and positioning props.
         </p>
         <CodeBlock>{`type JukeboxTrack = {
   videoId: string;
@@ -26,6 +26,7 @@ export default function ApiPlaygroundPage() {
 
 type JukeboxProps = {
   tracks: JukeboxTrack[];
+  autoplay?: boolean;
   position?: "bottom-right" | "bottom-left" | "top-right" | "top-left";
   offset?: number | { x: number; y: number };
   portal?: boolean;
@@ -53,6 +54,11 @@ type JukeboxProps = {
               <td><code>position</code></td>
               <td>corner preset</td>
               <td>Controls top/bottom and left/right placement.</td>
+            </tr>
+            <tr>
+              <td><code>autoplay</code></td>
+              <td><code>boolean</code></td>
+              <td>Defaults to `true` and starts muted on first load.</td>
             </tr>
             <tr>
               <td><code>offset</code></td>
