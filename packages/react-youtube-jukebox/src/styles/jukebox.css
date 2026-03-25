@@ -47,11 +47,7 @@
   --rj-next-border: #c3cad5;
   --rj-next-bg: linear-gradient(180deg, #f8fafc 0%, #e8edf3 100%);
   --rj-next-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9);
-  color: var(--rj-text);
-  z-index: 50;
-  width: min(296px, calc(100vw - 16px));
-  overflow: visible;
-  font-family:
+  --rj-font-family:
     Inter,
     "Segoe UI",
     ui-sans-serif,
@@ -59,6 +55,37 @@
     -apple-system,
     BlinkMacSystemFont,
     sans-serif;
+  --rj-root-width: min(296px, calc(100vw - 16px));
+  --rj-root-expanded-width: min(320px, calc(100vw - 16px));
+  --rj-dock-radius: 22px;
+  --rj-dock-padding: 6px;
+  --rj-dock-backdrop: blur(18px) saturate(1.5);
+  --rj-dock-inner-radius: 18px;
+  --rj-dock-inner-gap: 6px;
+  --rj-dock-inner-padding-right: 6px;
+  --rj-track-summary-radius: 18px;
+  --rj-track-summary-padding: 10px 12px;
+  --rj-expanded-radius: 22px;
+  --rj-expanded-padding: 8px;
+  --rj-expanded-backdrop: blur(18px) saturate(1.5);
+  --rj-shell-radius: 18px;
+  --rj-shell-padding: 12px;
+  --rj-screen-frame-radius: 15px;
+  --rj-screen-frame-padding: 8px;
+  --rj-screen-radius: 12px;
+  --rj-screen-padding: 8px;
+  --rj-player-radius: 10px;
+  --rj-chip-radius: 9999px;
+  --rj-chip-padding: 7px 10px;
+  --rj-volume-width: 72px;
+  --rj-expanded-control-gap: 8px;
+  --rj-next-radius: 16px;
+  --rj-next-padding: 10px 12px;
+  color: var(--rj-text);
+  z-index: 50;
+  width: var(--rj-root-width);
+  overflow: visible;
+  font-family: var(--rj-font-family);
 }
 
 .rj-root[data-theme="simple"] {
@@ -162,30 +189,121 @@
   --rj-next-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.82);
 }
 
+.rj-root[data-chrome="wallet"] {
+  --rj-root-width: min(308px, calc(100vw - 16px));
+  --rj-root-expanded-width: min(332px, calc(100vw - 16px));
+  --rj-dock-radius: 30px;
+  --rj-dock-padding: 8px;
+  --rj-dock-inner-radius: 24px;
+  --rj-dock-inner-gap: 10px;
+  --rj-dock-inner-padding-right: 0;
+  --rj-track-summary-radius: 22px;
+  --rj-track-summary-padding: 14px 14px;
+  --rj-expanded-radius: 30px;
+  --rj-expanded-padding: 10px;
+  --rj-shell-radius: 24px;
+  --rj-shell-padding: 16px;
+  --rj-screen-frame-radius: 20px;
+  --rj-screen-frame-padding: 10px;
+  --rj-screen-radius: 16px;
+  --rj-screen-padding: 10px;
+  --rj-player-radius: 14px;
+  --rj-chip-radius: 18px;
+  --rj-chip-padding: 10px 14px;
+  --rj-volume-width: 92px;
+  --rj-expanded-control-gap: 10px;
+  --rj-next-radius: 22px;
+  --rj-next-padding: 12px 14px;
+}
+
+.rj-root[data-chrome="ride"] {
+  --rj-text: #f8fafc;
+  --rj-text-muted: rgba(226, 232, 240, 0.7);
+  --rj-panel: rgba(3, 7, 18, 0.96);
+  --rj-button-text: #f8fafc;
+  --rj-dock-bg: #050816;
+  --rj-dock-shadow: 0 24px 54px -34px rgba(2, 6, 23, 0.72);
+  --rj-dock-inner-bg: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.03) 0%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  --rj-track-hover-bg: rgba(255, 255, 255, 0.06);
+  --rj-icon-hover-bg: rgba(255, 255, 255, 0.08);
+  --rj-shell-border: rgba(255, 255, 255, 0.08);
+  --rj-shell-inset-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  --rj-volume-track: rgba(148, 163, 184, 0.38);
+  --rj-volume-thumb: #ffffff;
+  --rj-volume-thumb-shadow: none;
+  --rj-expanded-icon: rgba(226, 232, 240, 0.82);
+  --rj-expanded-icon-hover: #ffffff;
+  --rj-next-border: rgba(255, 255, 255, 0.1);
+  --rj-next-bg: linear-gradient(
+    180deg,
+    rgba(15, 23, 42, 0.96) 0%,
+    rgba(2, 6, 23, 0.98) 100%
+  );
+  --rj-next-shadow: none;
+  --rj-font-family:
+    "IBM Plex Sans",
+    "Segoe UI",
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    sans-serif;
+  --rj-root-width: min(304px, calc(100vw - 16px));
+  --rj-root-expanded-width: min(336px, calc(100vw - 16px));
+  --rj-dock-radius: 18px;
+  --rj-dock-padding: 4px;
+  --rj-dock-backdrop: none;
+  --rj-dock-inner-radius: 14px;
+  --rj-dock-inner-gap: 4px;
+  --rj-dock-inner-padding-right: 4px;
+  --rj-track-summary-radius: 12px;
+  --rj-track-summary-padding: 12px;
+  --rj-expanded-radius: 18px;
+  --rj-expanded-padding: 6px;
+  --rj-expanded-backdrop: none;
+  --rj-shell-radius: 14px;
+  --rj-shell-padding: 12px;
+  --rj-screen-frame-radius: 12px;
+  --rj-screen-frame-padding: 6px;
+  --rj-screen-radius: 10px;
+  --rj-screen-padding: 6px;
+  --rj-player-radius: 8px;
+  --rj-chip-radius: 12px;
+  --rj-chip-padding: 10px 12px;
+  --rj-volume-width: 88px;
+  --rj-expanded-control-gap: 6px;
+  --rj-next-radius: 14px;
+  --rj-next-padding: 10px 12px;
+}
+
 .rj-root--inline {
   z-index: 20;
 }
 
 .rj-root--expanded {
-  width: min(320px, calc(100vw - 16px));
+  width: var(--rj-root-expanded-width);
 }
 
 .rj-dock {
   border: 1px solid var(--rj-border);
-  border-radius: 22px;
+  border-radius: var(--rj-dock-radius);
   background: var(--rj-dock-bg);
-  padding: 6px;
+  padding: var(--rj-dock-padding);
   box-shadow: var(--rj-dock-shadow);
-  backdrop-filter: blur(18px) saturate(1.5);
+  backdrop-filter: var(--rj-dock-backdrop);
 }
 
 .rj-dock__inner {
   display: flex;
   align-items: center;
-  gap: 6px;
-  border-radius: 18px;
+  gap: var(--rj-dock-inner-gap);
+  border-radius: var(--rj-dock-inner-radius);
   background: var(--rj-dock-inner-bg);
-  padding-right: 6px;
+  padding-right: var(--rj-dock-inner-padding-right);
 }
 
 .rj-track-summary {
@@ -196,8 +314,8 @@
   gap: 10px;
   border: 0;
   background: transparent;
-  border-radius: 18px;
-  padding: 10px 12px;
+  border-radius: var(--rj-track-summary-radius);
+  padding: var(--rj-track-summary-padding);
   text-align: left;
   color: inherit;
   cursor: pointer;
@@ -331,11 +449,11 @@
   left: 0;
   z-index: 2;
   border: 1px solid var(--rj-border);
-  border-radius: 22px;
+  border-radius: var(--rj-expanded-radius);
   background: var(--rj-panel);
-  padding: 8px;
+  padding: var(--rj-expanded-padding);
   box-shadow: var(--rj-shadow);
-  backdrop-filter: blur(18px) saturate(1.5);
+  backdrop-filter: var(--rj-expanded-backdrop);
 }
 
 .rj-expanded--hidden {
@@ -350,33 +468,33 @@
 }
 
 .rj-expanded__shell {
-  border-radius: 18px;
+  border-radius: var(--rj-shell-radius);
   border: 1px solid var(--rj-shell-border);
   background: var(--rj-gradient-soft);
-  padding: 12px;
+  padding: var(--rj-shell-padding);
   box-shadow: var(--rj-shell-inset-shadow);
 }
 
 .rj-expanded__screen-frame {
-  border-radius: 15px;
+  border-radius: var(--rj-screen-frame-radius);
   border: 1px solid var(--rj-screen-frame-border);
   background: var(--rj-screen-frame-bg);
-  padding: 8px;
+  padding: var(--rj-screen-frame-padding);
   box-shadow: var(--rj-screen-frame-shadow);
 }
 
 .rj-expanded__screen {
-  border-radius: 12px;
+  border-radius: var(--rj-screen-radius);
   border: 1px solid var(--rj-screen-border);
   background: var(--rj-screen-bg);
-  padding: 8px;
+  padding: var(--rj-screen-padding);
 }
 
 .rj-expanded__player {
   overflow: hidden;
   width: 100%;
   aspect-ratio: 16 / 9;
-  border-radius: 10px;
+  border-radius: var(--rj-player-radius);
   background: var(--rj-player-bg);
 }
 
@@ -403,14 +521,14 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 8px;
+  gap: var(--rj-expanded-control-gap);
 }
 
 .rj-chip-button {
   border: 1px solid var(--rj-chip-border);
-  border-radius: 9999px;
+  border-radius: var(--rj-chip-radius);
   background: var(--rj-gradient-soft);
-  padding: 7px 10px;
+  padding: var(--rj-chip-padding);
   color: var(--rj-button-text);
   font-size: 10px;
   font-weight: 600;
@@ -439,7 +557,7 @@
 }
 
 .rj-volume {
-  width: 72px;
+  width: var(--rj-volume-width);
   height: 4px;
   cursor: pointer;
   appearance: none;
@@ -511,10 +629,10 @@
   justify-content: space-between;
   gap: 8px;
   margin-top: 10px;
-  border-radius: 16px;
+  border-radius: var(--rj-next-radius);
   border: 1px solid var(--rj-next-border);
   background: var(--rj-next-bg);
-  padding: 10px 12px;
+  padding: var(--rj-next-padding);
   font-size: 10px;
   color: var(--rj-text-muted);
   box-shadow: var(--rj-next-shadow);
@@ -538,6 +656,111 @@
 .rj-next-track__button:disabled {
   cursor: not-allowed;
   opacity: 0.45;
+}
+
+.rj-root[data-chrome="wallet"] .rj-dock {
+  box-shadow:
+    var(--rj-dock-shadow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.72);
+}
+
+.rj-root[data-chrome="wallet"] .rj-dock__inner {
+  align-items: stretch;
+}
+
+.rj-root[data-chrome="wallet"] .rj-track-summary {
+  border: 1px solid var(--rj-border);
+  background: var(--rj-gradient-soft);
+  box-shadow: 0 14px 28px -26px rgba(15, 23, 42, 0.28);
+}
+
+.rj-root[data-chrome="wallet"] .rj-dock .rj-icon-button {
+  align-self: stretch;
+  width: 38px;
+  height: auto;
+  border: 1px solid var(--rj-border);
+  border-radius: 18px;
+  background: var(--rj-gradient-soft);
+  box-shadow: var(--rj-chip-shadow);
+}
+
+.rj-root[data-chrome="wallet"] .rj-expanded__meta {
+  margin-top: 16px;
+}
+
+.rj-root[data-chrome="wallet"] .rj-volume {
+  flex-basis: 100%;
+  order: 5;
+  width: 100%;
+}
+
+.rj-root[data-chrome="wallet"] .rj-expanded__counter {
+  margin-left: 0;
+  border: 1px solid var(--rj-chip-border);
+  border-radius: 9999px;
+  background: var(--rj-gradient-soft);
+  padding: 7px 10px;
+  color: var(--rj-button-text);
+}
+
+.rj-root[data-chrome="wallet"] .rj-next-track {
+  align-items: flex-start;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.rj-root[data-chrome="wallet"] .rj-next-track__label {
+  border-radius: 9999px;
+  background: var(--rj-track-hover-bg);
+  padding: 4px 8px;
+}
+
+.rj-root[data-chrome="ride"] .rj-dock {
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.rj-root[data-chrome="ride"] .rj-track-summary__title,
+.rj-root[data-chrome="ride"] .rj-expanded__title,
+.rj-root[data-chrome="ride"] .rj-next-track__label {
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.rj-root[data-chrome="ride"] .rj-track-summary__title {
+  font-size: 11px;
+}
+
+.rj-root[data-chrome="ride"] .rj-track-summary__artist {
+  font-size: 10px;
+}
+
+.rj-root[data-chrome="ride"] .rj-dock .rj-icon-button {
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.rj-root[data-chrome="ride"] .rj-expanded__shell {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0)),
+    var(--rj-gradient-soft);
+}
+
+.rj-root[data-chrome="ride"] .rj-chip-button {
+  min-width: 44px;
+  box-shadow: none;
+}
+
+.rj-root[data-chrome="ride"] .rj-volume {
+  flex-basis: 100%;
+  order: 4;
+  width: 100%;
+}
+
+.rj-root[data-chrome="ride"] .rj-expanded__counter {
+  margin-left: 0;
+  padding: 4px 0;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -659,12 +882,42 @@
     --rj-next-bg: linear-gradient(180deg, rgba(136, 19, 55, 0.96) 0%, rgba(76, 5, 25, 0.96) 100%);
     --rj-next-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
   }
+
+  .rj-root[data-chrome="ride"] {
+    --rj-text: #f8fafc;
+    --rj-text-muted: rgba(226, 232, 240, 0.7);
+    --rj-panel: rgba(3, 7, 18, 0.96);
+    --rj-button-text: #f8fafc;
+    --rj-dock-bg: #050816;
+    --rj-dock-shadow: 0 24px 54px -34px rgba(2, 6, 23, 0.72);
+    --rj-dock-inner-bg: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.03) 0%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    --rj-track-hover-bg: rgba(255, 255, 255, 0.06);
+    --rj-icon-hover-bg: rgba(255, 255, 255, 0.08);
+    --rj-shell-border: rgba(255, 255, 255, 0.08);
+    --rj-shell-inset-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    --rj-volume-track: rgba(148, 163, 184, 0.38);
+    --rj-volume-thumb: #ffffff;
+    --rj-volume-thumb-shadow: none;
+    --rj-expanded-icon: rgba(226, 232, 240, 0.82);
+    --rj-expanded-icon-hover: #ffffff;
+    --rj-next-border: rgba(255, 255, 255, 0.1);
+    --rj-next-bg: linear-gradient(
+      180deg,
+      rgba(15, 23, 42, 0.96) 0%,
+      rgba(2, 6, 23, 0.98) 100%
+    );
+    --rj-next-shadow: none;
+  }
 }
 
 @media (max-width: 640px) {
-  .rj-root,
-  .rj-root--expanded {
-    width: min(100vw - 16px, 320px);
+  .rj-root {
+    --rj-root-width: min(100vw - 16px, 320px);
+    --rj-root-expanded-width: min(100vw - 16px, 320px);
   }
 }
 

@@ -4,6 +4,7 @@ import clsx from "clsx";
 
 import { useJukeboxPlayer } from "../hooks/useJukeboxPlayer";
 import {
+  DEFAULT_CHROME,
   DEFAULT_POSITION,
   DEFAULT_THEME,
   getNextTrackIndex,
@@ -138,6 +139,7 @@ export function Jukebox({
   autoplay = true,
   position = DEFAULT_POSITION,
   theme = DEFAULT_THEME,
+  chrome = DEFAULT_CHROME,
   offset,
   portal = true,
   className,
@@ -188,6 +190,7 @@ export function Jukebox({
       )}
       data-position={position}
       data-theme={theme}
+      data-chrome={chrome}
       style={getPositionStyle(position, offset, portal)}>
       {currentTrack ? (
         <JukeboxExpandedPlayer

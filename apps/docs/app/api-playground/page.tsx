@@ -25,12 +25,14 @@ export default function ApiPlaygroundPage() {
 };
 
 type JukeboxTheme = "glass" | "simple" | "sunset";
+type JukeboxChrome = "classic" | "wallet" | "ride";
 
 type JukeboxProps = {
   tracks: JukeboxTrack[];
   autoplay?: boolean;
   position?: "bottom-right" | "bottom-left" | "top-right" | "top-left";
   theme?: JukeboxTheme;
+  chrome?: JukeboxChrome;
   offset?: number | { x: number; y: number };
   portal?: boolean;
   className?: string;
@@ -64,6 +66,14 @@ type JukeboxProps = {
               <td>Optional. Defaults to <code>"glass"</code>.</td>
             </tr>
             <tr>
+              <td><code>chrome</code></td>
+              <td><code>"classic" | "wallet" | "ride"</code></td>
+              <td>
+                Optional. Switches shell and control styling. Defaults to{" "}
+                <code>"classic"</code>.
+              </td>
+            </tr>
+            <tr>
               <td><code>autoplay</code></td>
               <td><code>boolean</code></td>
               <td>Defaults to `true` and starts muted on first load.</td>
@@ -92,7 +102,7 @@ type JukeboxProps = {
         <p>
           The live preview below renders inline for docs only. The package
           default remains portal rendering on the viewport, and you can switch
-          themes here to compare the available presets.
+          themes and chrome presets here to compare the available combinations.
         </p>
         <LivePreview />
       </section>
