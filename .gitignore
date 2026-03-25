@@ -12,6 +12,7 @@ dist
 dist-ssr
 .next
 .next-dev
+*.tsbuildinfo
 .turbo
 .vercel
 *.local
