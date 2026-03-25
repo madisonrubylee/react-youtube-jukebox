@@ -52,6 +52,7 @@ export function JukeboxExpandedPlayer({
   onVolumeChange,
 }: JukeboxExpandedPlayerProps) {
   const hasMultipleTracks = totalTracks > 1;
+  const hasNextTrack = nextTrack !== undefined;
 
   const handleVolumeInput = (event: ChangeEvent<HTMLInputElement>) => {
     onVolumeChange(Number(event.target.value));
@@ -118,22 +119,25 @@ export function JukeboxExpandedPlayer({
               aria-label="Volume"
               className="rj-volume"
             />
-            <span className="rj-expanded__counter">
-              {totalTracks === 0 ? 0 : currentIndex + 1} / {totalTracks}
-            </span>
+            {hasMultipleTracks ? (
+              <span className="rj-expanded__counter">
+                {currentIndex + 1} / {totalTracks}
+              </span>
+            ) : null}
           </div>
         </div>
       </div>
 
-      {hasMultipleTracks ? (
+      {hasNextTrack ? (
         <div className="rj-next-track">
           <span className="rj-next-track__label">Next</span>
           <button
             type="button"
             onClick={onPlayNext}
+            disabled={!hasMultipleTracks}
             className="rj-next-track__button"
           >
-            {nextTrack?.title}
+            {nextTrack.title}
           </button>
         </div>
       ) : null}

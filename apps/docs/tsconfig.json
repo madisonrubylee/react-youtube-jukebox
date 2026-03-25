@@ -2,7 +2,16 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "allowJs": false,
+    "baseUrl": ".",
     "incremental": true,
+    "paths": {
+      "@react-youtube-jukebox/core": [
+        "../../packages/react-youtube-jukebox/src/index.ts"
+      ],
+      "@react-youtube-jukebox/core/styles.css": [
+        "../../packages/react-youtube-jukebox/src/styles/jukebox.css"
+      ]
+    },
     "plugins": [
       {
         "name": "next"
@@ -12,13 +21,6 @@
     "resolveJsonModule": true,
     "jsx": "preserve"
   },
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    ".next/types/**/*.ts"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "exclude": ["node_modules"]
 }
