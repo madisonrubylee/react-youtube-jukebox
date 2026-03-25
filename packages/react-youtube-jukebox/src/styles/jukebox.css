@@ -23,7 +23,7 @@
 }
 
 .rj-root--inline {
-  z-index: auto;
+  z-index: 20;
 }
 
 .rj-root--expanded {
@@ -195,12 +195,18 @@
   right: 0;
   bottom: calc(100% + 10px);
   left: 0;
+  z-index: 2;
   border: 1px solid var(--rj-border);
   border-radius: 22px;
   background: var(--rj-panel);
   padding: 8px;
   box-shadow: var(--rj-shadow);
   backdrop-filter: blur(18px) saturate(1.5);
+}
+
+.rj-root[data-position^="top"] .rj-expanded {
+  top: calc(100% + 10px);
+  bottom: auto;
 }
 
 .rj-expanded__shell {

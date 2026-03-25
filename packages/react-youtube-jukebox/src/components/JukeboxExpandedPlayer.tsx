@@ -125,17 +125,18 @@ export function JukeboxExpandedPlayer({
         </div>
       </div>
 
-      <div className="rj-next-track">
-        <span className="rj-next-track__label">Next</span>
-        <button
-          type="button"
-          onClick={onPlayNext}
-          disabled={!hasMultipleTracks}
-          className="rj-next-track__button"
-        >
-          {nextTrack?.title ?? "No upcoming track"}
-        </button>
-      </div>
+      {hasMultipleTracks ? (
+        <div className="rj-next-track">
+          <span className="rj-next-track__label">Next</span>
+          <button
+            type="button"
+            onClick={onPlayNext}
+            className="rj-next-track__button"
+          >
+            {nextTrack?.title}
+          </button>
+        </div>
+      ) : null}
     </div>
   );
 }
