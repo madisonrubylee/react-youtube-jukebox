@@ -48,14 +48,9 @@
   --rj-next-bg: linear-gradient(180deg, #f8fafc 0%, #e8edf3 100%);
   --rj-next-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9);
   --rj-font-family:
-    Inter,
-    "Segoe UI",
-    ui-sans-serif,
-    system-ui,
-    -apple-system,
-    BlinkMacSystemFont,
-    sans-serif;
-  --rj-root-width: min(296px, calc(100vw - 16px));
+    Inter, "Segoe UI", ui-sans-serif, system-ui, -apple-system,
+    BlinkMacSystemFont, sans-serif;
+  --rj-root-width: min(320px, calc(100vw - 16px));
   --rj-root-expanded-width: min(320px, calc(100vw - 16px));
   --rj-dock-radius: 22px;
   --rj-dock-padding: 6px;
@@ -173,7 +168,11 @@
   --rj-screen-bg: #431407;
   --rj-player-bg:
     radial-gradient(circle at top, rgba(253, 224, 71, 0.18), transparent 40%),
-    radial-gradient(circle at 70% 30%, rgba(244, 114, 182, 0.18), transparent 35%),
+    radial-gradient(
+      circle at 70% 30%,
+      rgba(244, 114, 182, 0.18),
+      transparent 35%
+    ),
     linear-gradient(180deg, #7c2d12 0%, #4c0519 100%);
   --rj-chip-border: rgba(244, 114, 182, 0.28);
   --rj-chip-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72);
@@ -190,30 +189,74 @@
 }
 
 .rj-root[data-chrome="wallet"] {
-  --rj-root-width: min(308px, calc(100vw - 16px));
-  --rj-root-expanded-width: min(332px, calc(100vw - 16px));
-  --rj-dock-radius: 30px;
-  --rj-dock-padding: 8px;
-  --rj-dock-inner-radius: 24px;
-  --rj-dock-inner-gap: 10px;
+  --rj-text: #0f172a;
+  --rj-text-muted: #64748b;
+  --rj-border: rgba(191, 219, 254, 0.72);
+  --rj-panel: rgba(245, 249, 255, 0.96);
+  --rj-shadow: 0 22px 46px -28px rgba(37, 99, 235, 0.22);
+  --rj-gradient: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+  --rj-gradient-soft: linear-gradient(180deg, #ffffff 0%, #eef4ff 100%);
+  --rj-button-text: #1e3a8a;
+  --rj-dock-bg: rgba(231, 240, 255, 0.86);
+  --rj-dock-shadow:
+    0 16px 36px -28px rgba(59, 130, 246, 0.26),
+    inset 0 1px 0 rgba(255, 255, 255, 0.92);
+  --rj-dock-inner-bg: transparent;
+  --rj-track-hover-bg: rgba(219, 234, 254, 0.58);
+  --rj-level-gradient: linear-gradient(
+    180deg,
+    #60a5fa 0%,
+    #2563eb 60%,
+    #1d4ed8 100%
+  );
+  --rj-level-shadow-color: rgba(96, 165, 250, 0.2);
+  --rj-icon-hover-bg: rgba(59, 130, 246, 0.1);
+  --rj-shell-border: rgba(191, 219, 254, 0.88);
+  --rj-shell-inset-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.96);
+  --rj-screen-frame-border: #bfdbfe;
+  --rj-screen-frame-bg: linear-gradient(180deg, #ffffff 0%, #eff6ff 100%);
+  --rj-screen-frame-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.96);
+  --rj-screen-border: #93c5fd;
+  --rj-screen-bg: #dbeafe;
+  --rj-player-bg:
+    radial-gradient(circle at top, rgba(255, 255, 255, 0.48), transparent 48%),
+    linear-gradient(180deg, #bfdbfe 0%, #60a5fa 100%);
+  --rj-chip-border: rgba(147, 197, 253, 0.9);
+  --rj-chip-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.92);
+  --rj-chip-primary-border: rgba(59, 130, 246, 0.28);
+  --rj-chip-primary-text: #1e3a8a;
+  --rj-volume-track: #bfdbfe;
+  --rj-volume-thumb: #2563eb;
+  --rj-volume-thumb-shadow: 0 2px 8px rgba(37, 99, 235, 0.18);
+  --rj-expanded-icon: #2563eb;
+  --rj-expanded-icon-hover: #1d4ed8;
+  --rj-next-border: rgba(147, 197, 253, 0.72);
+  --rj-next-bg: linear-gradient(180deg, #ffffff 0%, #eff6ff 100%);
+  --rj-next-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.96);
+  --rj-root-width: min(306px, calc(100vw - 16px));
+  --rj-root-expanded-width: min(306px, calc(100vw - 16px));
+  --rj-dock-radius: 26px;
+  --rj-dock-padding: 6px;
+  --rj-dock-inner-radius: 20px;
+  --rj-dock-inner-gap: 8px;
   --rj-dock-inner-padding-right: 0;
-  --rj-track-summary-radius: 22px;
-  --rj-track-summary-padding: 14px 14px;
-  --rj-expanded-radius: 30px;
-  --rj-expanded-padding: 10px;
-  --rj-shell-radius: 24px;
-  --rj-shell-padding: 16px;
-  --rj-screen-frame-radius: 20px;
-  --rj-screen-frame-padding: 10px;
-  --rj-screen-radius: 16px;
-  --rj-screen-padding: 10px;
-  --rj-player-radius: 14px;
-  --rj-chip-radius: 18px;
-  --rj-chip-padding: 10px 14px;
-  --rj-volume-width: 92px;
-  --rj-expanded-control-gap: 10px;
-  --rj-next-radius: 22px;
-  --rj-next-padding: 12px 14px;
+  --rj-track-summary-radius: 20px;
+  --rj-track-summary-padding: 12px;
+  --rj-expanded-radius: 26px;
+  --rj-expanded-padding: 8px;
+  --rj-shell-radius: 20px;
+  --rj-shell-padding: 14px;
+  --rj-screen-frame-radius: 18px;
+  --rj-screen-frame-padding: 8px;
+  --rj-screen-radius: 14px;
+  --rj-screen-padding: 8px;
+  --rj-player-radius: 12px;
+  --rj-chip-radius: 14px;
+  --rj-chip-padding: 8px 12px;
+  --rj-volume-width: 64px;
+  --rj-expanded-control-gap: 6px;
+  --rj-next-radius: 16px;
+  --rj-next-padding: 10px 12px;
 }
 
 .rj-root[data-chrome="ride"] {
@@ -245,14 +288,9 @@
   );
   --rj-next-shadow: none;
   --rj-font-family:
-    "IBM Plex Sans",
-    "Segoe UI",
-    ui-sans-serif,
-    system-ui,
-    -apple-system,
-    BlinkMacSystemFont,
-    sans-serif;
-  --rj-root-width: min(304px, calc(100vw - 16px));
+    "IBM Plex Sans", "Segoe UI", ui-sans-serif, system-ui, -apple-system,
+    BlinkMacSystemFont, sans-serif;
+  --rj-root-width: min(336px, calc(100vw - 16px));
   --rj-root-expanded-width: min(336px, calc(100vw - 16px));
   --rj-dock-radius: 18px;
   --rj-dock-padding: 4px;
@@ -284,10 +322,6 @@
   z-index: 20;
 }
 
-.rj-root--expanded {
-  width: var(--rj-root-expanded-width);
-}
-
 .rj-dock {
   border: 1px solid var(--rj-border);
   border-radius: var(--rj-dock-radius);
@@ -295,6 +329,15 @@
   padding: var(--rj-dock-padding);
   box-shadow: var(--rj-dock-shadow);
   backdrop-filter: var(--rj-dock-backdrop);
+}
+
+.rj-root--expanded .rj-dock {
+  width: var(--rj-root-expanded-width);
+  max-width: calc(100vw - 16px);
+}
+
+.rj-root[data-position$="right"].rj-root--expanded .rj-dock {
+  margin-left: calc(var(--rj-root-width) - var(--rj-root-expanded-width));
 }
 
 .rj-dock__inner {
@@ -444,9 +487,11 @@
 
 .rj-expanded {
   position: absolute;
+  width: var(--rj-root-expanded-width);
+  max-width: calc(100vw - 16px);
   right: 0;
   bottom: calc(100% + 10px);
-  left: 0;
+  left: auto;
   z-index: 2;
   border: 1px solid var(--rj-border);
   border-radius: var(--rj-expanded-radius);
@@ -454,6 +499,11 @@
   padding: var(--rj-expanded-padding);
   box-shadow: var(--rj-shadow);
   backdrop-filter: var(--rj-expanded-backdrop);
+}
+
+.rj-root[data-position$="left"] .rj-expanded {
+  right: auto;
+  left: 0;
 }
 
 .rj-expanded--hidden {
@@ -522,6 +572,17 @@
   flex-wrap: wrap;
   align-items: center;
   gap: var(--rj-expanded-control-gap);
+}
+
+.rj-expanded__transport,
+.rj-expanded__utility {
+  display: flex;
+  align-items: center;
+  gap: var(--rj-expanded-control-gap);
+}
+
+.rj-expanded__utility {
+  margin-left: auto;
 }
 
 .rj-chip-button {
@@ -659,59 +720,135 @@
 }
 
 .rj-root[data-chrome="wallet"] .rj-dock {
-  box-shadow:
-    var(--rj-dock-shadow),
-    inset 0 1px 0 rgba(255, 255, 255, 0.72);
+  border-color: rgba(191, 219, 254, 0.92);
 }
 
 .rj-root[data-chrome="wallet"] .rj-dock__inner {
-  align-items: stretch;
+  align-items: center;
 }
 
 .rj-root[data-chrome="wallet"] .rj-track-summary {
   border: 1px solid var(--rj-border);
   background: var(--rj-gradient-soft);
-  box-shadow: 0 14px 28px -26px rgba(15, 23, 42, 0.28);
+  box-shadow:
+    0 10px 24px -24px rgba(59, 130, 246, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.92);
+}
+
+.rj-root[data-chrome="wallet"] .rj-level-meter {
+  width: 32px;
+  height: 32px;
+  border-radius: 14px;
+  background: linear-gradient(180deg, #f8fbff 0%, #dbeafe 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.94);
+}
+
+.rj-root[data-chrome="wallet"] .rj-chevron {
+  width: 22px;
+  height: 22px;
+  border-radius: 9999px;
+  background: rgba(219, 234, 254, 0.8);
+}
+
+.rj-root[data-chrome="wallet"] .rj-track-summary__title {
+  font-size: 13px;
+  letter-spacing: -0.02em;
+}
+
+.rj-root[data-chrome="wallet"] .rj-track-summary__artist {
+  margin-top: 3px;
+  font-size: 10px;
 }
 
 .rj-root[data-chrome="wallet"] .rj-dock .rj-icon-button {
-  align-self: stretch;
-  width: 38px;
-  height: auto;
+  width: 34px;
+  height: 34px;
   border: 1px solid var(--rj-border);
-  border-radius: 18px;
+  border-radius: 14px;
   background: var(--rj-gradient-soft);
   box-shadow: var(--rj-chip-shadow);
 }
 
 .rj-root[data-chrome="wallet"] .rj-expanded__meta {
-  margin-top: 16px;
+  margin-top: 14px;
+}
+
+.rj-root[data-chrome="wallet"] .rj-expanded__titles {
+  margin-bottom: 12px;
+}
+
+.rj-root[data-chrome="wallet"] .rj-expanded__title {
+  font-size: 14px;
+  letter-spacing: -0.02em;
+}
+
+.rj-root[data-chrome="wallet"] .rj-expanded__controls {
+  align-items: stretch;
+  gap: 10px;
+}
+
+.rj-root[data-chrome="wallet"] .rj-expanded__transport,
+.rj-root[data-chrome="wallet"] .rj-expanded__utility {
+  flex: 1 1 100%;
+  margin-left: 0;
+  border: 1px solid rgba(191, 219, 254, 0.92);
+  border-radius: 18px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(239, 246, 255, 0.92));
+  padding: 8px;
+  box-shadow:
+    0 14px 24px -24px rgba(37, 99, 235, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.96);
+}
+
+.rj-root[data-chrome="wallet"] .rj-expanded__transport {
+  justify-content: space-between;
+}
+
+.rj-root[data-chrome="wallet"] .rj-expanded__utility {
+  gap: 8px;
+}
+
+.rj-root[data-chrome="wallet"] .rj-chip-button {
+  font-size: 11px;
+  flex: 1 1 0;
+  min-height: 38px;
+}
+
+.rj-root[data-chrome="wallet"] .rj-chip-button--primary {
+  padding-inline: 14px;
+}
+
+.rj-root[data-chrome="wallet"] .rj-expanded .rj-icon-button {
+  margin-left: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 12px;
+  background: rgba(219, 234, 254, 0.72);
 }
 
 .rj-root[data-chrome="wallet"] .rj-volume {
-  flex-basis: 100%;
-  order: 5;
-  width: 100%;
+  flex: 1 1 auto;
+  width: auto;
 }
 
 .rj-root[data-chrome="wallet"] .rj-expanded__counter {
   margin-left: 0;
+  flex: 0 0 auto;
   border: 1px solid var(--rj-chip-border);
   border-radius: 9999px;
-  background: var(--rj-gradient-soft);
+  background: rgba(219, 234, 254, 0.78);
   padding: 7px 10px;
   color: var(--rj-button-text);
 }
 
 .rj-root[data-chrome="wallet"] .rj-next-track {
-  align-items: flex-start;
-  flex-direction: column;
-  gap: 6px;
+  gap: 10px;
 }
 
 .rj-root[data-chrome="wallet"] .rj-next-track__label {
-  border-radius: 9999px;
-  background: var(--rj-track-hover-bg);
+  border-radius: 10px;
+  background: rgba(219, 234, 254, 0.8);
   padding: 4px 8px;
 }
 
@@ -739,28 +876,178 @@
   background: rgba(255, 255, 255, 0.04);
 }
 
+.rj-root[data-chrome="ride"] .rj-expanded {
+  overflow: hidden;
+  border-color: rgba(148, 163, 184, 0.16);
+  background:
+    radial-gradient(circle at top left, rgba(148, 163, 184, 0.08), transparent 32%),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.98), rgba(2, 6, 23, 1));
+  box-shadow:
+    0 28px 54px -34px rgba(2, 6, 23, 0.92),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
 .rj-root[data-chrome="ride"] .rj-expanded__shell {
+  position: relative;
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0)),
-    var(--rj-gradient-soft);
+    linear-gradient(180deg, rgba(15, 23, 42, 0.84), rgba(2, 6, 23, 0.96));
+}
+
+.rj-root[data-chrome="ride"] .rj-expanded__shell::before {
+  content: "";
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle, rgba(255, 255, 255, 0.12), transparent 62%);
+  opacity: 0.75;
+  pointer-events: none;
+}
+
+.rj-root[data-chrome="ride"] .rj-expanded__screen-frame {
+  border-color: rgba(148, 163, 184, 0.24);
+  background:
+    linear-gradient(180deg, rgba(30, 41, 59, 0.92), rgba(15, 23, 42, 0.98));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 16px 24px -24px rgba(0, 0, 0, 0.7);
+}
+
+.rj-root[data-chrome="ride"] .rj-expanded__screen {
+  border-color: rgba(100, 116, 139, 0.4);
+}
+
+.rj-root[data-chrome="ride"] .rj-expanded__meta {
+  margin-top: 14px;
+}
+
+.rj-root[data-chrome="ride"] .rj-expanded__titles {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.rj-root[data-chrome="ride"] .rj-expanded__artist {
+  max-width: 96px;
+  margin-top: 0;
+  text-align: right;
+}
+
+.rj-root[data-chrome="ride"] .rj-expanded__controls {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 10px 12px;
+  align-items: stretch;
+}
+
+.rj-root[data-chrome="ride"] .rj-expanded__transport,
+.rj-root[data-chrome="ride"] .rj-expanded__utility {
+  margin-left: 0;
+  min-width: 0;
+}
+
+.rj-root[data-chrome="ride"] .rj-expanded__transport {
+  display: grid;
+  grid-template-columns: 36px minmax(52px, auto) 36px;
+  gap: 6px;
+  align-items: center;
+  justify-content: start;
+  width: fit-content;
+  max-width: 100%;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  border-radius: 14px;
+  background: rgba(15, 23, 42, 0.72);
+  padding: 6px;
+}
+
+.rj-root[data-chrome="ride"] .rj-expanded__utility {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 10px 12px;
+  align-items: center;
 }
 
 .rj-root[data-chrome="ride"] .rj-chip-button {
-  min-width: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  min-height: 32px;
+  padding-inline: 0;
   box-shadow: none;
+  text-align: center;
+}
+
+.rj-root[data-chrome="ride"] .rj-chip-button--primary {
+  width: 100%;
+  min-width: 0;
+  padding-inline: 10px;
+  border-color: rgba(255, 255, 255, 0.38);
+  border-radius: 13px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.12), rgba(148, 163, 184, 0.1));
+  color: #f8fafc;
+  font-size: 9px;
+  line-height: 1;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.rj-root[data-chrome="ride"] .rj-expanded__transport .rj-chip-button:not(.rj-chip-button--primary) {
+  border-color: rgba(191, 219, 254, 0.58);
+  border-radius: 12px;
+  background:
+    linear-gradient(180deg, rgba(241, 245, 249, 0.98), rgba(226, 232, 240, 0.92));
+  color: #cbd5e1;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.55);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.92),
+    0 8px 16px -14px rgba(15, 23, 42, 0.7);
+}
+
+.rj-root[data-chrome="ride"] .rj-expanded__transport .rj-chip-button:not(.rj-chip-button--primary):hover {
+  transform: translateY(0);
+  filter: brightness(1.02);
+}
+
+.rj-root[data-chrome="ride"] .rj-expanded .rj-icon-button {
+  margin-left: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.05);
 }
 
 .rj-root[data-chrome="ride"] .rj-volume {
-  flex-basis: 100%;
-  order: 4;
+  grid-column: 1 / -1;
   width: 100%;
+  min-width: 0;
 }
 
 .rj-root[data-chrome="ride"] .rj-expanded__counter {
   margin-left: 0;
-  padding: 4px 0;
+  justify-self: end;
+  border-top: 1px solid rgba(148, 163, 184, 0.18);
+  padding: 8px 0 0;
   letter-spacing: 0.12em;
   text-transform: uppercase;
+}
+
+.rj-root[data-chrome="ride"] .rj-next-track {
+  align-items: flex-start;
+  gap: 12px;
+  background:
+    linear-gradient(180deg, rgba(15, 23, 42, 0.96), rgba(2, 6, 23, 1));
+}
+
+.rj-root[data-chrome="ride"] .rj-next-track__button {
+  text-align: right;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -818,7 +1105,11 @@
     --rj-screen-border: #52525b;
     --rj-screen-bg: #09090b;
     --rj-player-bg:
-      radial-gradient(circle at top, rgba(255, 255, 255, 0.06), transparent 38%),
+      radial-gradient(
+        circle at top,
+        rgba(255, 255, 255, 0.06),
+        transparent 38%
+      ),
       linear-gradient(180deg, #18181b 0%, #020617 100%);
     --rj-chip-border: #3f3f46;
     --rj-chip-primary-border: #fafafa;
@@ -837,8 +1128,17 @@
     --rj-border: rgba(255, 255, 255, 0.1);
     --rj-panel: rgba(76, 5, 25, 0.78);
     --rj-shadow: 0 24px 56px -28px rgba(76, 5, 25, 0.5);
-    --rj-gradient: linear-gradient(135deg, #fde68a 0%, #fb7185 54%, #7c3aed 100%);
-    --rj-gradient-soft: linear-gradient(180deg, rgba(136, 19, 55, 0.92) 0%, rgba(76, 5, 25, 0.96) 100%);
+    --rj-gradient: linear-gradient(
+      135deg,
+      #fde68a 0%,
+      #fb7185 54%,
+      #7c3aed 100%
+    );
+    --rj-gradient-soft: linear-gradient(
+      180deg,
+      rgba(136, 19, 55, 0.92) 0%,
+      rgba(76, 5, 25, 0.96) 100%
+    );
     --rj-button-text: #fff7ed;
     --rj-dock-bg: rgba(76, 5, 25, 0.74);
     --rj-dock-shadow:
@@ -867,7 +1167,11 @@
     --rj-screen-bg: #19030d;
     --rj-player-bg:
       radial-gradient(circle at top, rgba(253, 224, 71, 0.2), transparent 40%),
-      radial-gradient(circle at 70% 30%, rgba(192, 132, 252, 0.18), transparent 36%),
+      radial-gradient(
+        circle at 70% 30%,
+        rgba(192, 132, 252, 0.18),
+        transparent 36%
+      ),
       linear-gradient(180deg, #4c0519 0%, #1e1b4b 100%);
     --rj-chip-border: rgba(253, 186, 116, 0.2);
     --rj-chip-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
@@ -879,7 +1183,11 @@
     --rj-expanded-icon: #fda4af;
     --rj-expanded-icon-hover: #fff1f2;
     --rj-next-border: rgba(251, 113, 133, 0.22);
-    --rj-next-bg: linear-gradient(180deg, rgba(136, 19, 55, 0.96) 0%, rgba(76, 5, 25, 0.96) 100%);
+    --rj-next-bg: linear-gradient(
+      180deg,
+      rgba(136, 19, 55, 0.96) 0%,
+      rgba(76, 5, 25, 0.96) 100%
+    );
     --rj-next-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
   }
 

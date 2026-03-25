@@ -83,54 +83,55 @@ export function JukeboxExpandedPlayer({
           </div>
 
           <div className="rj-expanded__controls">
-            <button
-              type="button"
-              onClick={onPlayPrev}
-              disabled={!hasMultipleTracks}
-              className="rj-chip-button"
-            >
-              ◀
-            </button>
-            <button
-              type="button"
-              onClick={onTogglePlay}
-              className="rj-chip-button rj-chip-button--primary"
-            >
-              {isPlaying ? "Pause" : "Play"}
-            </button>
-            <button
-              type="button"
-              onClick={onPlayNext}
-              disabled={!hasMultipleTracks}
-              className="rj-chip-button"
-            >
-              ▶
-            </button>
-            <button
-              type="button"
-              onClick={onToggleMute}
-              aria-label={isMuted ? "Unmute" : "Mute"}
-              className="rj-icon-button"
-            >
-              <span className="rj-icon-button__icon">
-                <SpeakerIcon isMuted={isMuted} />
-              </span>
-            </button>
-            <input
-              type="range"
-              min={0}
-              max={100}
-              step={1}
-              value={volume}
-              onChange={handleVolumeInput}
-              aria-label="Volume"
-              className="rj-volume"
-            />
-            {hasMultipleTracks ? (
-              <span className="rj-expanded__counter">
-                {currentIndex + 1} / {totalTracks}
-              </span>
-            ) : null}
+            <div className="rj-expanded__transport">
+              <button
+                type="button"
+                onClick={onPlayPrev}
+                disabled={!hasMultipleTracks}
+                className="rj-chip-button">
+                ◀
+              </button>
+              <button
+                type="button"
+                onClick={onTogglePlay}
+                className="rj-chip-button rj-chip-button--primary">
+                {isPlaying ? "Pause" : "Play"}
+              </button>
+              <button
+                type="button"
+                onClick={onPlayNext}
+                disabled={!hasMultipleTracks}
+                className="rj-chip-button">
+                ▶
+              </button>
+            </div>
+
+            <div className="rj-expanded__utility">
+              <button
+                type="button"
+                onClick={onToggleMute}
+                aria-label={isMuted ? "Unmute" : "Mute"}
+                className="rj-icon-button">
+                <span className="rj-icon-button__icon">
+                  <SpeakerIcon isMuted={isMuted} />
+                </span>
+              </button>
+              <input
+                type="range"
+                min={0}
+                max={100}
+                step={1}
+                value={volume}
+                onChange={handleVolumeInput}
+                aria-label="Volume"
+                className="rj-volume"
+              />
+              {hasMultipleTracks ? (
+                <span className="rj-expanded__counter">
+                  {currentIndex + 1} / {totalTracks}
+                </span>
+              ) : null}
+            </div>
           </div>
         </div>
       </div>
@@ -142,8 +143,7 @@ export function JukeboxExpandedPlayer({
             type="button"
             onClick={onPlayNext}
             disabled={!hasMultipleTracks}
-            className="rj-next-track__button"
-          >
+            className="rj-next-track__button">
             {nextTrack.title}
           </button>
         </div>
