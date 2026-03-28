@@ -12,29 +12,35 @@ const coreStylesPath = path.resolve(
   "../../packages/react-youtube-jukebox/src/styles/jukebox.css",
 );
 const docsDistDir = process.env.NODE_ENV === "development" ? ".next-dev" : ".next";
+const shouldUseWorkspaceSource = process.env.NODE_ENV === "development";
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   distDir: docsDistDir,
   transpilePackages: ["@react-youtube-jukebox/core"],
-  turbopack: {
-    resolveAlias: {
-      "@react-youtube-jukebox/core": coreEntryPath,
-      "@react-youtube-jukebox/core/styles.css": coreStylesPath,
-    },
-  },
   experimental: {
     externalDir: true,
   },
   webpack(config) {
-    config.resolve.alias = {
-      ...config.resolve.alias,
-      "@react-youtube-jukebox/core$": coreEntryPath,
-      "@react-youtube-jukebox/core/styles.css": coreStylesPath,
-    };
+    if (shouldUseWorkspaceSource) {
+      config.resolve.alias = {
+        ...config.resolve.alias,
+        "@react-youtube-jukebox/core$": coreEntryPath,
+        "@react-youtube-jukebox/core/styles.css": coreStylesPath,
+      };
+    }
 
     return config;
   },
 };
+
+if (shouldUseWorkspaceSource) {
+  nextConfig.turbopack = {
+    resolveAlias: {
+      "@react-youtube-jukebox/core": coreEntryPath,
+      "@react-youtube-jukebox/core/styles.css": coreStylesPath,
+    },
+  };
+}
 
 export default nextConfig;

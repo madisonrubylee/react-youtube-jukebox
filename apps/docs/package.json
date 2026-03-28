@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "pnpm --filter @react-youtube-jukebox/core build && next build",
     "start": "next start",
     "lint": "eslint app components lib",
     "typecheck": "tsc --project tsconfig.json --noEmit"

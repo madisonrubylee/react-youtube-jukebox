@@ -2,6 +2,23 @@
   "name": "@react-youtube-jukebox/core",
   "version": "0.1.0",
   "description": "Floating YouTube jukebox component for React applications.",
+  "license": "MIT",
+  "keywords": [
+    "react",
+    "youtube",
+    "jukebox",
+    "player",
+    "audio"
+  ],
+  "homepage": "https://github.com/madisonrubylee/react-youtube-jukebox/tree/main/packages/react-youtube-jukebox#readme",
+  "bugs": {
+    "url": "https://github.com/madisonrubylee/react-youtube-jukebox/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/madisonrubylee/react-youtube-jukebox.git",
+    "directory": "packages/react-youtube-jukebox"
+  },
   "type": "module",
   "sideEffects": [
     "*.css",
