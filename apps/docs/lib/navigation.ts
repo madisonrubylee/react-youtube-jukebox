@@ -1,5 +1,6 @@
 export const topNavigation = [
   { href: "/", label: "Home" },
+  { href: "/installation", label: "Installation" },
   { href: "/quick-start", label: "Quick Start" },
   { href: "/api-playground", label: "API & Playground" },
   { href: "/examples", label: "Examples" },
@@ -10,6 +11,7 @@ export const sidebarSections = [
     title: "Getting Started",
     items: [
       { href: "/", label: "Overview" },
+      { href: "/installation", label: "Installation" },
       { href: "/quick-start", label: "Quick Start" },
     ],
   },

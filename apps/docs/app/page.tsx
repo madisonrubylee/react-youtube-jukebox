@@ -62,7 +62,8 @@ export function Page() {
           not published with it.
         </p>
         <p>
-          Continue with <Link href="/quick-start">Quick Start</Link> or jump to{" "}
+          Continue with <Link href="/installation">Installation</Link>, then{" "}
+          <Link href="/quick-start">Quick Start</Link>, or jump to{" "}
           <Link href="/api-playground">API &amp; Playground</Link>.
         </p>
       </section>

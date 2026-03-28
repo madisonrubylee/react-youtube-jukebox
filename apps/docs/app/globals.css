@@ -60,6 +60,18 @@ pre {
   line-height: 1.7;
 }
 
+.docs-code-block {
+  margin: 0;
+}
+
+.docs-code-block__content {
+  display: block;
+  border-radius: 0;
+  background: transparent;
+  padding: 0;
+  white-space: pre;
+}
+
 .docs-site {
   min-height: 100vh;
 }

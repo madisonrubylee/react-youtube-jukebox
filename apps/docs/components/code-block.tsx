@@ -6,8 +6,8 @@ type CodeBlockProps = {
 
 export function CodeBlock({ children }: CodeBlockProps) {
   return (
-    <pre>
-      <code>{children}</code>
+    <pre className="docs-code-block">
+      <code className="docs-code-block__content">{children}</code>
     </pre>
   );
 }
