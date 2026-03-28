@@ -39,13 +39,11 @@ export default function ExamplesPage() {
       <section id="chrome">
         <h2>Chrome Presets</h2>
         <p>
-          Use <code>chrome</code> when you want to keep the same player logic
-          but switch the overall shell and control shape. The default is{" "}
-          <code>"classic"</code>.
+          The package currently exposes only the rebuilt{" "}
+          <code>"classic"</code> chrome while the other presets are being
+          reworked.
         </p>
-        <CodeBlock>{`<Jukebox tracks={tracks} chrome="classic" />
-<Jukebox tracks={tracks} chrome="wallet" />
-<Jukebox tracks={tracks} chrome="ride" />`}</CodeBlock>
+        <CodeBlock>{`<Jukebox tracks={tracks} chrome="classic" />`}</CodeBlock>
       </section>
 
       <section id="positions">

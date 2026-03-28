@@ -47,14 +47,4 @@ export const jukeboxChromeOptions: JukeboxChromeOption[] = [
     label: "Classic",
     description: "Current default chrome. Floating glass dock with soft curves.",
   },
-  {
-    value: "wallet",
-    label: "Wallet",
-    description: "Clean stacked cards with softer spacing, inspired by finance apps.",
-  },
-  {
-    value: "ride",
-    label: "Ride",
-    description: "Sharper dashboard chrome with darker control surfaces.",
-  },
 ];

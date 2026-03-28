@@ -24,7 +24,6 @@ function SpeakerIcon({ isMuted }: { isMuted: boolean }) {
 
 export function JukeboxExpandedPlayer({
   currentIndex,
-  currentTrack,
   isMuted,
   isPlaying,
   nextTrack,
@@ -54,13 +53,6 @@ export function JukeboxExpandedPlayer({
         </div>
 
         <div className="rj-expanded__meta">
-          <div className="rj-expanded__titles">
-            <div className="rj-expanded__title">{currentTrack.title}</div>
-            <div className="rj-expanded__artist">
-              {currentTrack.artist ?? "Unknown artist"}
-            </div>
-          </div>
-
           <div className="rj-expanded__controls">
             <div className="rj-expanded__transport">
               <button

@@ -12,6 +12,7 @@ import {
   DEFAULT_CHROME,
   DEFAULT_POSITION,
   DEFAULT_THEME,
+  getEffectiveChrome,
   getNextTrackIndex,
   getPositionStyle,
   LEVEL_BAR_ANIMATION_DELAY_MS,
@@ -187,6 +188,7 @@ export function Jukebox({
     playNext,
     playPrev,
   } = useJukeboxPlayer({ autoplay, tracks });
+  const effectiveChrome = getEffectiveChrome(chrome);
 
   const currentTrack = tracks[currentIndex];
   const nextTrack =
@@ -235,7 +237,7 @@ export function Jukebox({
       )}
       data-position={position}
       data-theme={theme}
-      data-chrome={chrome}
+      data-chrome={effectiveChrome}
       style={getPositionStyle(position, offset, portal)}>
       {expandedRenderProps ? (
         <ExpandedPanel isExpanded={effectiveIsExpanded}>

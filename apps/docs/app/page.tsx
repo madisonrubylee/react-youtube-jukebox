@@ -58,8 +58,8 @@ export default function HomePage() {
               <span>Corner positions</span>
             </div>
             <div className="docs-home-metric">
-              <strong>3</strong>
-              <span>UI chrome presets</span>
+              <strong>1</strong>
+              <span>Active chrome preset</span>
             </div>
           </div>
         </div>
@@ -106,7 +106,7 @@ const tracks = [
 ];
 
 export function Page() {
-  return <Jukebox tracks={tracks} theme="ride" chrome="wallet" />;
+  return <Jukebox tracks={tracks} theme="ride" chrome="classic" />;
 }`}</CodeBlock>
         </div>
       </section>

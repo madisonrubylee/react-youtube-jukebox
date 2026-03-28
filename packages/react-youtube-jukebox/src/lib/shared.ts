@@ -54,11 +54,23 @@ export type JukeboxExpandedRenderProps = JukeboxPlayerState & {
 export const DEFAULT_POSITION: JukeboxPosition = "bottom-right";
 export const DEFAULT_THEME: JukeboxTheme = "glass";
 export const DEFAULT_CHROME: JukeboxChrome = "classic";
+export const TEMPORARILY_DISABLED_CHROMES = ["wallet", "ride"] as const;
 export const DEFAULT_OFFSET_PX = 20;
 export const DEFAULT_VOLUME = 100;
 export const LEVEL_BAR_HEIGHTS = [12, 18, 14] as const;
 export const LEVEL_BAR_REST_HEIGHT = 8;
 export const LEVEL_BAR_ANIMATION_DELAY_MS = 120;
+
+export function getEffectiveChrome(chrome: JukeboxChrome): JukeboxChrome {
+  const isTemporarilyDisabledChrome =
+    chrome === "wallet" || chrome === "ride";
+
+  if (isTemporarilyDisabledChrome) {
+    return DEFAULT_CHROME;
+  }
+
+  return chrome;
+}
 
 export function getNextTrackIndex(
   index: number,

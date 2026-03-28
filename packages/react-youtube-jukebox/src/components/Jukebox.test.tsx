@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 
-import { fireEvent, render, screen } from "@testing-library/react";
+import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { Jukebox } from "./Jukebox";
@@ -26,6 +26,7 @@ vi.mock("../hooks/useJukeboxPlayer", () => ({
 
 describe("Jukebox", () => {
   afterEach(() => {
+    cleanup();
     vi.clearAllMocks();
   });
 
@@ -62,6 +63,51 @@ describe("Jukebox", () => {
 
     expect(screen.getByTestId("custom-expanded").textContent).toBe(
       "Track One:open:2",
+    );
+  });
+
+  it("omits expanded title and artist metadata in the default expanded player", () => {
+    render(
+      <Jukebox
+        tracks={[
+          {
+            videoId: "track-1",
+            title: "Track One",
+            artist: "Artist One",
+          },
+          {
+            videoId: "track-2",
+            title: "Track Two",
+            artist: "Artist Two",
+          },
+        ]}
+        portal={false}
+      />,
+    );
+
+    fireEvent.click(screen.getByRole("button", { expanded: false }));
+
+    expect(screen.getAllByText("Track One")).toHaveLength(1);
+    expect(screen.getAllByText("Artist One")).toHaveLength(1);
+  });
+
+  it("falls back to classic chrome when disabled chrome presets are requested", () => {
+    const { container } = render(
+      <Jukebox
+        tracks={[
+          {
+            videoId: "track-1",
+            title: "Track One",
+            artist: "Artist One",
+          },
+        ]}
+        chrome="wallet"
+        portal={false}
+      />,
+    );
+
+    expect(container.firstElementChild?.getAttribute("data-chrome")).toBe(
+      "classic",
     );
   });
 });
