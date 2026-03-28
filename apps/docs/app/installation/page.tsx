@@ -29,11 +29,10 @@ bun add @react-youtube-jukebox/core`}</CodeBlock>
       <section id="styles">
         <h2>Styles</h2>
         <p>
-          Import the exported stylesheet once from your app entry so the player
-          shell, expanded panel, and themes render correctly.
+          The package injects its default stylesheet automatically when you
+          import the component.
         </p>
-        <CodeBlock>{`import "@react-youtube-jukebox/core/styles.css";
-import { Jukebox } from "@react-youtube-jukebox/core";`}</CodeBlock>
+        <CodeBlock>{`import { Jukebox } from "@react-youtube-jukebox/core";`}</CodeBlock>
         <p>
           The default theme is `glass`. You can switch UI presets with{" "}
           <code>theme</code> and <code>chrome</code> without changing the core

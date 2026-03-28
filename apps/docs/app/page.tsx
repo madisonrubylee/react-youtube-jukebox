@@ -97,8 +97,7 @@ export default function HomePage() {
         </div>
 
         <div className="docs-home-code-panel">
-          <CodeBlock>{`import "@react-youtube-jukebox/core/styles.css";
-import { Jukebox } from "@react-youtube-jukebox/core";
+          <CodeBlock>{`import { Jukebox } from "@react-youtube-jukebox/core";
 
 const tracks = [
   { videoId: "yTg4v2Cnfyo", title: "Soul Below", artist: "Ljones" },

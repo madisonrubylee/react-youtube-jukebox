@@ -13,8 +13,7 @@ export default function QuickStartPage() {
       ]}>
       <section id="usage">
         <h2>Usage</h2>
-        <CodeBlock>{`import "@react-youtube-jukebox/core/styles.css";
-import { Jukebox } from "@react-youtube-jukebox/core";
+        <CodeBlock>{`import { Jukebox } from "@react-youtube-jukebox/core";
 
 const tracks = [
   { videoId: "yTg4v2Cnfyo", title: "Soul Below", artist: "Ljones" },

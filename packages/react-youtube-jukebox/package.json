@@ -39,9 +39,6 @@
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
-    },
-    "./styles.css": {
-      "default": "./dist/index.css"
     }
   },
   "main": "./dist/index.js",

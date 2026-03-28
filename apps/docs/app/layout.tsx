@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 
-import "@react-youtube-jukebox/core/styles.css";
 import { DocsSidebar } from "../components/docs-sidebar";
 import { SiteHeader } from "../components/site-header";
 import "./globals.css";

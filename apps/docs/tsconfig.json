@@ -7,9 +7,6 @@
     "paths": {
       "@react-youtube-jukebox/core": [
         "../../packages/react-youtube-jukebox/src/index.ts"
-      ],
-      "@react-youtube-jukebox/core/styles.css": [
-        "../../packages/react-youtube-jukebox/src/styles/jukebox.css"
       ]
     },
     "plugins": [
