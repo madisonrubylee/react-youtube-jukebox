@@ -10,13 +10,7 @@ export default function QuickStartPage() {
         { href: "#install", label: "Install" },
         { href: "#usage", label: "Usage" },
         { href: "#positioning", label: "Positioning" },
-      ]}
-    >
-      <section id="install">
-        <p>Install the package and keep `react` / `react-dom` as peers.</p>
-        <CodeBlock>{`pnpm add @react-youtube-jukebox/core`}</CodeBlock>
-      </section>
-
+      ]}>
       <section id="usage">
         <h2>Usage</h2>
         <CodeBlock>{`import "@react-youtube-jukebox/core/styles.css";

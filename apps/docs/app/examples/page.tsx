@@ -15,15 +15,13 @@ export default function ExamplesPage() {
         { href: "#custom-expanded", label: "Custom Expanded" },
         { href: "#single-track", label: "Single Track" },
         { href: "#empty-tracks", label: "Empty Tracks" },
-      ]}
-    >
+      ]}>
       <section id="default">
         <p>
           The package default is a floating portal render. Inside docs we keep
           previews inline so they stay inside the page layout, but the API
           example below is the real default usage.
         </p>
-        <CodeBlock>{`<Jukebox tracks={tracks} />`}</CodeBlock>
         <ExamplesShowcase />
       </section>
 
@@ -96,7 +94,9 @@ export default function ExamplesPage() {
         <ul>
           <li>Pass a one-item array when you only need a single song.</li>
           <li>Previous and next controls are disabled automatically.</li>
-          <li>Playback, mute, expand, and volume control still work normally.</li>
+          <li>
+            Playback, mute, expand, and volume control still work normally.
+          </li>
         </ul>
         <CodeBlock>{`<Jukebox
   tracks={[
