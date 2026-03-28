@@ -1101,20 +1101,30 @@ pre {
   }
 
   .docs-preview__jukebox {
+    --docs-preview-jukebox-width: calc(100% - 8px);
+    --rj-root-width: var(--docs-preview-jukebox-width);
+    --rj-root-expanded-width: var(--docs-preview-jukebox-width);
     left: 0 !important;
     right: 0 !important;
-    width: 100%;
+    width: 100% !important;
+    transform: none !important;
   }
 
   .docs-preview__jukebox .rj-dock {
-    width: fit-content;
-    max-width: 100%;
+    width: var(--docs-preview-jukebox-width) !important;
+    max-width: var(--docs-preview-jukebox-width) !important;
     margin-inline: auto;
   }
 
+  .docs-preview__jukebox .rj-dock__inner {
+    width: 100%;
+  }
+
   .docs-preview__jukebox .rj-expanded {
-    left: 50%;
-    right: auto;
+    left: 50% !important;
+    right: auto !important;
+    width: var(--docs-preview-jukebox-width) !important;
+    max-width: var(--docs-preview-jukebox-width) !important;
     transform: translateX(-50%);
   }
 }

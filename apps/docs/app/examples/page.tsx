@@ -50,10 +50,13 @@ export default function ExamplesPage() {
         <h2>Position Presets</h2>
         <p>
           Use <code>position</code> to pin the jukebox to any corner of the
-          viewport. <code>offset</code> lets you nudge it from the chosen edge.
+          viewport. On mobile, prefer <code>bottom-center</code> or{" "}
+          <code>top-center</code> so the dock stays aligned to the narrow
+          screen. <code>offset</code> lets you nudge it from the chosen edge.
         </p>
-        <CodeBlock>{`<Jukebox tracks={tracks} position="bottom-left" offset={20} />
-<Jukebox tracks={tracks} position="bottom-right" offset={20} />
+        <CodeBlock>{`<Jukebox tracks={tracks} position="bottom-center" offset={20} />
+<Jukebox tracks={tracks} position="top-center" offset={20} />
+<Jukebox tracks={tracks} position="bottom-left" offset={20} />
 <Jukebox tracks={tracks} position="top-left" offset={{ x: 24, y: 24 }} />
 <Jukebox tracks={tracks} position="top-right" offset={{ x: 24, y: 24 }} />`}</CodeBlock>
       </section>

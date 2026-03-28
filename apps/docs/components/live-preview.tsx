@@ -11,10 +11,19 @@ import {
   jukeboxChromeOptions,
   jukeboxThemeOptions,
 } from "../lib/themes";
+import {
+  getResponsivePreviewPosition,
+  useIsMobilePreview,
+} from "../lib/use-mobile-preview";
 
 export function LivePreview() {
   const [theme, setTheme] = useState(DEFAULT_JUKEBOX_THEME);
   const [chrome, setChrome] = useState(DEFAULT_JUKEBOX_CHROME);
+  const isMobilePreview = useIsMobilePreview();
+  const position = getResponsivePreviewPosition(
+    "bottom-left",
+    isMobilePreview,
+  );
 
   return (
     <div className="docs-preview">
@@ -54,7 +63,7 @@ export function LivePreview() {
         <Jukebox
           tracks={demoTracks}
           portal={false}
-          position="bottom-left"
+          position={position}
           offset={24}
           theme={theme}
           chrome={chrome}

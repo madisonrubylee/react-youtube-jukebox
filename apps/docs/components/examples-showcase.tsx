@@ -16,10 +16,17 @@ import {
   jukeboxChromeOptions,
   jukeboxThemeOptions,
 } from "../lib/themes";
+import {
+  getResponsivePreviewPosition,
+  useIsMobilePreview,
+} from "../lib/use-mobile-preview";
 
 type PreviewCardProps = {
   chrome: (typeof jukeboxChromeOptions)[number]["value"];
   description: string;
+  isMobilePreview: boolean;
+  mobileDescription?: string;
+  mobileTitle?: string;
   position?: JukeboxPosition;
   renderExpandedContent?: (
     props: JukeboxExpandedRenderProps,
@@ -70,24 +77,32 @@ function PreviewControlRow({
 function PreviewCard({
   chrome,
   description,
+  isMobilePreview,
+  mobileDescription,
+  mobileTitle,
   position = "bottom-left",
   renderExpandedContent,
   theme,
   title,
   tracks,
 }: PreviewCardProps) {
+  const resolvedPosition = getResponsivePreviewPosition(position, isMobilePreview);
+  const resolvedTitle = isMobilePreview && mobileTitle ? mobileTitle : title;
+  const resolvedDescription =
+    isMobilePreview && mobileDescription ? mobileDescription : description;
+
   return (
     <div className="docs-example-card">
       <div className="docs-example-card__header">
-        <strong>{title}</strong>
-        <p>{description}</p>
+        <strong>{resolvedTitle}</strong>
+        <p>{resolvedDescription}</p>
       </div>
       <div className="docs-preview docs-preview--compact">
         <div className="docs-preview__stage">
           <Jukebox
             tracks={tracks}
             portal={false}
-            position={position}
+            position={resolvedPosition}
             offset={20}
             theme={theme}
             chrome={chrome}
@@ -163,6 +178,7 @@ function CustomExpandedPreview({
 export function ExamplesShowcase() {
   const [theme, setTheme] = useState(DEFAULT_JUKEBOX_THEME);
   const [chrome, setChrome] = useState(DEFAULT_JUKEBOX_CHROME);
+  const isMobilePreview = useIsMobilePreview();
   const selectedTheme = jukeboxThemeOptions.find((option) => option.value === theme);
   const selectedChrome = jukeboxChromeOptions.find(
     (option) => option.value === chrome,
@@ -197,6 +213,9 @@ export function ExamplesShowcase() {
           chrome={chrome}
           title="Bottom Left"
           description="Current theme applied to the default compact dock."
+          isMobilePreview={isMobilePreview}
+          mobileTitle="Bottom"
+          mobileDescription="Mobile preview stays centered on the bottom edge."
           tracks={demoTracks}
           theme={theme}
         />
@@ -204,6 +223,9 @@ export function ExamplesShowcase() {
           chrome={chrome}
           title="Top Right"
           description="Same component, pinned to the opposite corner."
+          isMobilePreview={isMobilePreview}
+          mobileTitle="Top"
+          mobileDescription="Mobile preview stays centered on the top edge."
           tracks={demoTracks}
           position="top-right"
           theme={theme}
@@ -212,6 +234,7 @@ export function ExamplesShowcase() {
           chrome={chrome}
           title="Single Track"
           description="Previous and next controls stay disabled with one track."
+          isMobilePreview={isMobilePreview}
           tracks={singleDemoTrack}
           theme={theme}
         />
@@ -219,6 +242,7 @@ export function ExamplesShowcase() {
           chrome={chrome}
           title="Custom Expanded"
           description="The dock stays the same while the expanded panel is rendered by your app."
+          isMobilePreview={isMobilePreview}
           tracks={demoTracks}
           theme={theme}
           renderExpandedContent={(props) => <CustomExpandedPreview {...props} />}
@@ -227,6 +251,7 @@ export function ExamplesShowcase() {
           chrome={chrome}
           title="Empty Tracks"
           description="Fallback state renders safely instead of crashing."
+          isMobilePreview={isMobilePreview}
           tracks={emptyDemoTracks}
           theme={theme}
         />
