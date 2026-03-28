@@ -91,9 +91,20 @@ pre {
 }
 
 .docs-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
   font-size: 15px;
   font-weight: 700;
   letter-spacing: -0.03em;
+}
+
+.docs-brand__icon {
+  width: 28px;
+  height: 28px;
+  flex: none;
+  border-radius: 8px;
+  box-shadow: 0 10px 24px -18px rgba(15, 23, 42, 0.7);
 }
 
 .docs-nav {
