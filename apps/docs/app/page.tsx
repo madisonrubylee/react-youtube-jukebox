@@ -11,12 +11,12 @@ export default function HomePage() {
       toc={[
         { href: "#overview", label: "Overview" },
         { href: "#highlights", label: "Highlights" },
-        { href: "#first-render", label: "First Render" },
-      ]}
-    >
+      ]}>
       <section id="overview" className="docs-home-hero">
-        <div className="docs-home-hero__content">
-          <span className="docs-home-eyebrow">Floating player for React apps</span>
+        <div className="docs-home-hero__summary">
+          <span className="docs-home-eyebrow">
+            Floating player for React apps
+          </span>
           <p className="docs-home-lead">
             Ship a YouTube jukebox that feels like product UI, not an embedded
             iframe afterthought. The package handles playback, queue rotation,
@@ -28,8 +28,7 @@ export default function HomePage() {
             </Link>
             <Link
               href="/examples"
-              className="docs-home-button docs-home-button--secondary"
-            >
+              className="docs-home-button docs-home-button--secondary">
               Browse Examples
             </Link>
           </div>
@@ -39,31 +38,65 @@ export default function HomePage() {
             <span className="docs-home-chip">Custom expanded panel</span>
           </div>
         </div>
-        <div className="docs-home-hero__visual">
-          <div className="docs-home-signal-card">
-            <div className="docs-home-signal-card__top">
-              <span className="docs-home-signal-card__badge">core package</span>
-              <strong>@react-youtube-jukebox/core</strong>
+
+        <div className="docs-home-signal-card">
+          <div className="docs-home-signal-card__top">
+            <span className="docs-home-signal-card__badge">core package</span>
+            <strong>@react-youtube-jukebox/core</strong>
+          </div>
+          <p>
+            A focused package with one main export and a styles entrypoint that
+            stays in sync with the docs app.
+          </p>
+          <div className="docs-home-metric-grid">
+            <div className="docs-home-metric">
+              <strong>1</strong>
+              <span>Main component</span>
             </div>
-            <p>
-              A focused package with one main export and a styles entrypoint
-              that stays in sync with the docs app.
-            </p>
-            <div className="docs-home-metric-grid">
-              <div className="docs-home-metric">
-                <strong>1</strong>
-                <span>Main component</span>
-              </div>
-              <div className="docs-home-metric">
-                <strong>4</strong>
-                <span>Corner positions</span>
-              </div>
-              <div className="docs-home-metric">
-                <strong>3</strong>
-                <span>UI chrome presets</span>
-              </div>
+            <div className="docs-home-metric">
+              <strong>4</strong>
+              <span>Corner positions</span>
+            </div>
+            <div className="docs-home-metric">
+              <strong>3</strong>
+              <span>UI chrome presets</span>
             </div>
           </div>
+        </div>
+
+        <div className="docs-home-journey">
+          <div className="docs-home-journey__header">
+            <strong>Start here</strong>
+            <span>Fastest route through the docs</span>
+          </div>
+          <div className="docs-home-journey__steps">
+            <Link
+              href="/installation"
+              className="docs-home-journey__step">
+              <span className="docs-home-journey__index">01</span>
+              <span className="docs-home-journey__body">
+                <strong>Install the package</strong>
+                <span>Add the package and stylesheet entry once.</span>
+              </span>
+            </Link>
+            <Link href="/quick-start" className="docs-home-journey__step">
+              <span className="docs-home-journey__index">02</span>
+              <span className="docs-home-journey__body">
+                <strong>Render your first jukebox</strong>
+                <span>Drop in tracks and mount the default player.</span>
+              </span>
+            </Link>
+            <Link href="/examples" className="docs-home-journey__step">
+              <span className="docs-home-journey__index">03</span>
+              <span className="docs-home-journey__body">
+                <strong>Explore presets and layouts</strong>
+                <span>Compare themes, chrome, and custom expansions.</span>
+              </span>
+            </Link>
+          </div>
+        </div>
+
+        <div className="docs-home-code-panel">
           <CodeBlock>{`import "@react-youtube-jukebox/core/styles.css";
 import { Jukebox } from "@react-youtube-jukebox/core";
 
@@ -102,47 +135,6 @@ export function Page() {
               enough and you need a custom layout around the same controls.
             </p>
           </div>
-        </div>
-      </section>
-
-      <section id="first-render">
-        <h2>First Render</h2>
-        <p>
-          The fastest path is to install the package, import the stylesheet
-          once, and render `Jukebox` with a small track list.
-        </p>
-        <div className="docs-home-split">
-          <div className="docs-home-panel docs-home-panel--terminal">
-            <span className="docs-home-panel__eyebrow">Install</span>
-            <CodeBlock>{`pnpm add @react-youtube-jukebox/core
-npm install @react-youtube-jukebox/core
-yarn add @react-youtube-jukebox/core
-bun add @react-youtube-jukebox/core`}</CodeBlock>
-          </div>
-          <div className="docs-home-panel">
-            <span className="docs-home-panel__eyebrow">Render</span>
-            <CodeBlock>{`import "@react-youtube-jukebox/core/styles.css";
-import { Jukebox } from "@react-youtube-jukebox/core";
-
-const tracks = [
-  { videoId: "yTg4v2Cnfyo", title: "Soul Below", artist: "Ljones" },
-  { videoId: "s4MQku9Mkwc", title: "Something About Us", artist: "Daft Punk" },
-];
-
-export function Page() {
-  return <Jukebox tracks={tracks} />;
-}`}</CodeBlock>
-          </div>
-        </div>
-        <div className="docs-home-callout">
-          <strong>Next steps</strong>
-          <p>
-            Continue with <Link href="/installation">Installation</Link> for the
-            package setup details, move to{" "}
-            <Link href="/quick-start">Quick Start</Link> for the minimal flow,
-            or inspect <Link href="/api-playground">API &amp; Playground</Link>{" "}
-            for prop-level control.
-          </p>
         </div>
       </section>
     </DocsPage>
