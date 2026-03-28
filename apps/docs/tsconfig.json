@@ -3,7 +3,7 @@
   "compilerOptions": {
     "allowJs": false,
     "baseUrl": ".",
-    "incremental": true,
+    "incremental": false,
     "paths": {
       "@react-youtube-jukebox/core": [
         "../../packages/react-youtube-jukebox/src/index.ts"
