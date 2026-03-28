@@ -19,7 +19,7 @@ const tracks = [
 ];
 
 export function Page() {
-  return <Jukebox tracks={tracks} />;
+  return <Jukebox tracks={tracks} position="bottom-center" offset={20} />;
 }
 ```
 
@@ -93,7 +93,13 @@ type JukeboxExpandedRenderProps = {
 type JukeboxProps = {
   tracks: JukeboxTrack[];
   autoplay?: boolean;
-  position?: "bottom-right" | "bottom-left" | "top-right" | "top-left";
+  position?:
+    | "bottom-right"
+    | "bottom-left"
+    | "bottom-center"
+    | "top-right"
+    | "top-left"
+    | "top-center";
   theme?: JukeboxTheme;
   chrome?: JukeboxChrome;
   offset?: number | { x: number; y: number };
@@ -106,4 +112,5 @@ type JukeboxProps = {
 ```
 
 기본 사용은 viewport 기준 포털 렌더링입니다. 레이아웃 안에서 직접 배치가 필요할 때만 `portal={false}`를 사용합니다.
+`position="bottom-center"`와 `position="top-center"`를 사용하면 x축은 가운데 정렬되고, `offset`은 top/bottom 여백에 그대로 적용됩니다.
 `autoplay`는 기본값이 `true`이며, 첫 진입 시 무음 상태로 자동 재생합니다. 자동 재생을 끄려면 `autoplay={false}`를 전달합니다.

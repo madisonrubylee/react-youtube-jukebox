@@ -9,8 +9,10 @@ export type JukeboxTrack = {
 export type JukeboxPosition =
   | "bottom-right"
   | "bottom-left"
+  | "bottom-center"
   | "top-right"
-  | "top-left";
+  | "top-left"
+  | "top-center";
 
 export type JukeboxTheme = "glass" | "simple" | "sunset" | "ride";
 export type JukeboxChrome = "classic" | "wallet" | "ride";
@@ -106,17 +108,26 @@ export function getPositionStyle(
   isPortal: boolean,
 ): CSSProperties {
   const normalizedOffset = normalizeOffset(offset);
+  const isTopPosition = position.startsWith("top");
+  const isCenterPosition = position.endsWith("center");
+  const isLeftPosition = position.endsWith("left");
   const style: CSSProperties = {
     position: isPortal ? "fixed" : "absolute",
   };
 
-  if (position.includes("top")) {
+  if (isTopPosition) {
     style.top = normalizedOffset.y;
   } else {
     style.bottom = normalizedOffset.y;
   }
 
-  if (position.includes("left")) {
+  if (isCenterPosition) {
+    style.left = "50%";
+    style.transform = "translateX(-50%)";
+    return style;
+  }
+
+  if (isLeftPosition) {
     style.left = normalizedOffset.x;
   } else {
     style.right = normalizedOffset.x;

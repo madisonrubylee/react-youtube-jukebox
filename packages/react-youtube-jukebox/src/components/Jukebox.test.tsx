@@ -110,4 +110,29 @@ describe("Jukebox", () => {
       "classic",
     );
   });
+
+  it("applies centered positioning styles when bottom-center is requested", () => {
+    const { container } = render(
+      <Jukebox
+        tracks={[
+          {
+            videoId: "track-1",
+            title: "Track One",
+            artist: "Artist One",
+          },
+        ]}
+        portal={false}
+        position="bottom-center"
+        offset={20}
+      />,
+    );
+
+    const rootElement = container.firstElementChild as HTMLDivElement | null;
+
+    expect(rootElement).not.toBeNull();
+    expect(rootElement?.style.position).toBe("absolute");
+    expect(rootElement?.style.bottom).toBe("20px");
+    expect(rootElement?.style.left).toBe("50%");
+    expect(rootElement?.style.transform).toBe("translateX(-50%)");
+  });
 });

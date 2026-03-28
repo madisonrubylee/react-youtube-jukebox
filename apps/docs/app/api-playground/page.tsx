@@ -30,7 +30,13 @@ type JukeboxChrome = "classic" | "wallet" | "ride";
 type JukeboxProps = {
   tracks: JukeboxTrack[];
   autoplay?: boolean;
-  position?: "bottom-right" | "bottom-left" | "top-right" | "top-left";
+  position?:
+    | "bottom-right"
+    | "bottom-left"
+    | "bottom-center"
+    | "top-right"
+    | "top-left"
+    | "top-center";
   theme?: JukeboxTheme;
   chrome?: JukeboxChrome;
   offset?: number | { x: number; y: number };
@@ -57,8 +63,11 @@ type JukeboxProps = {
             </tr>
             <tr>
               <td><code>position</code></td>
-              <td>corner preset</td>
-              <td>Controls top/bottom and left/right placement.</td>
+              <td>edge preset</td>
+              <td>
+                Controls top/bottom placement and supports left, right, or
+                center alignment.
+              </td>
             </tr>
             <tr>
               <td><code>theme</code></td>

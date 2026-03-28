@@ -22,7 +22,13 @@ type JukeboxTrack = {
 
 type JukeboxProps = {
   tracks: JukeboxTrack[];
-  position?: "bottom-right" | "bottom-left" | "top-right" | "top-left";
+  position?:
+    | "bottom-right"
+    | "bottom-left"
+    | "bottom-center"
+    | "top-right"
+    | "top-left"
+    | "top-center";
   offset?: number | { x: number; y: number };
   portal?: boolean;
   className?: string;
