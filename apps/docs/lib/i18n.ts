@@ -89,8 +89,8 @@ const docsCopy = {
       },
       breadcrumbs: ["Home"],
       chips: [
+        "11.5 KB gzip core",
         "Portal by default",
-        "Theme + chrome presets",
         "Custom expanded panel",
       ],
       eyebrow: "Floating player for React apps",
@@ -100,8 +100,8 @@ const docsCopy = {
           title: "Dock-first interaction",
         },
         {
-          body: 'Swap the "theme" and "chrome" props to move from minimal glass to more character-heavy presets while keeping the same behavior.',
-          title: "Theme without rewriting logic",
+          body: "Keep React as a peer dependency, ship a small core bundle, and load the YouTube iframe API only when the player mounts.",
+          title: "Small core, lazy-loaded player",
         },
         {
           body: 'Use "renderExpandedContent" when the built-in player shell is not enough and you need a custom layout around the same controls.',
@@ -130,15 +130,15 @@ const docsCopy = {
         subtitle: "Fastest route through the docs",
         title: "Start here",
       },
-      lead: "Ship a YouTube jukebox that feels like product UI, not an embedded iframe afterthought. The package handles playback, queue rotation, theming, and portal rendering in one component.",
+      lead: "Ship a YouTube jukebox that feels like product UI, not an embedded iframe afterthought. The package keeps the API small, the core bundle light, and the YouTube player script out of the critical path until the component mounts.",
       metrics: [
-        { label: "Main component", value: "1" },
+        { label: "Core bundle", value: "11.5 KB" },
+        { label: "Main export", value: "1" },
         { label: "Edge presets", value: "6" },
-        { label: "Active chrome preset", value: "1" },
       ],
       signalCard: {
         badge: "core package",
-        body: "A focused package with one main export and a styles entrypoint that stays in sync with the docs app.",
+        body: "A focused package with one main export, automatic styles, and a small core bundle. React stays external, and the YouTube iframe API loads on demand.",
       },
       toc: [
         { href: "#overview", label: "Overview" },
@@ -326,8 +326,8 @@ const docsCopy = {
       },
       breadcrumbs: ["홈"],
       chips: [
+        "11.5 KB gzip 코어",
         "기본 포털 렌더링",
-        "테마 + 크롬 프리셋",
         "확장 패널 커스텀 가능",
       ],
       eyebrow: "React 앱을 위한 플로팅 플레이어",
@@ -337,8 +337,8 @@ const docsCopy = {
           title: "독 중심 인터랙션",
         },
         {
-          body: 'theme와 chrome prop만 바꿔서 미니멀한 글래스 톤부터 더 개성 있는 프리셋까지 바꿀 수 있습니다. 재생 동작은 그대로 유지됩니다.',
-          title: "로직 수정 없이 테마 변경",
+          body: "React는 peer dependency로 유지하고, 코어 번들은 가볍게 가져가며, YouTube iframe API는 플레이어가 마운트될 때만 불러옵니다.",
+          title: "가벼운 코어, 지연 로드 플레이어",
         },
         {
           body: "기본 확장 플레이어 UI가 부족할 때는 renderExpandedContent로 같은 컨트롤 상태를 유지한 채 원하는 레이아웃을 직접 렌더할 수 있습니다.",
@@ -367,15 +367,15 @@ const docsCopy = {
         subtitle: "문서를 가장 빠르게 훑는 순서",
         title: "여기서 시작하세요",
       },
-      lead: "페이지 흐름에 자연스럽게 어우러지는 YouTube jukebox를 빠르게 추가할 수 있습니다. 재생, 큐 순환, 테마, 포털 렌더링까지 하나의 컴포넌트로 처리합니다.",
+      lead: "페이지 흐름에 자연스럽게 어우러지는 YouTube jukebox를 빠르게 추가할 수 있습니다. API는 작게 유지하고, 코어 번들은 가볍게 가져가며, YouTube 플레이어 스크립트는 컴포넌트가 마운트될 때까지 크리티컬 패스 밖에 둡니다.",
       metrics: [
-        { label: "메인 컴포넌트", value: "1" },
+        { label: "코어 번들", value: "11.5 KB" },
+        { label: "메인 export", value: "1" },
         { label: "엣지 프리셋", value: "6" },
-        { label: "현재 크롬 프리셋", value: "1" },
       ],
       signalCard: {
         badge: "core package",
-        body: "메인 export 하나와 스타일 엔트리포인트에 집중한 패키지입니다. 문서 앱과도 같은 기준으로 유지됩니다.",
+        body: "메인 export 하나와 자동 스타일 주입에 집중한 패키지입니다. 코어 번들은 작게 유지하고, React는 외부에 두며, YouTube iframe API는 필요할 때만 로드합니다.",
       },
       toc: [
         { href: "#overview", label: "개요" },
