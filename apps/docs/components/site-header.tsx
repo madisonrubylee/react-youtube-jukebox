@@ -3,14 +3,37 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-import { topNavigation } from "../lib/navigation";
+import { LocaleSwitcher } from "./locale-switcher";
+import {
+  getDocsCopy,
+  getTopNavigation,
+  type DocsLocale,
+} from "../lib/i18n";
 
-export function SiteHeader() {
+type SiteHeaderProps = {
+  locale: DocsLocale;
+};
+
+export function SiteHeader({ locale }: SiteHeaderProps) {
   const pathname = usePathname();
+  const copy = getDocsCopy(locale);
+  const navigationItems = getTopNavigation(locale);
+  const localeOptions = [
+    {
+      ariaLabel: copy.header.localeOptions.en,
+      label: "EN",
+      value: "en" as const,
+    },
+    {
+      ariaLabel: copy.header.localeOptions.ko,
+      label: "KO",
+      value: "ko" as const,
+    },
+  ];
 
   return (
     <header className="docs-header">
-      <Link href="/" className="docs-brand" aria-label="react-youtube-jukebox home">
+      <Link href="/" className="docs-brand" aria-label={copy.header.homeAriaLabel}>
         <svg
           className="docs-brand__icon"
           viewBox="0 0 128 128"
@@ -28,8 +51,8 @@ export function SiteHeader() {
         </svg>
         <span>react-youtube-jukebox</span>
       </Link>
-      <nav className="docs-nav" aria-label="Primary">
-        {topNavigation.map((item) => {
+      <nav className="docs-nav" aria-label={copy.header.navigationAriaLabel}>
+        {navigationItems.map((item) => {
           const isActive = pathname === item.href;
 
           return (
@@ -43,9 +66,16 @@ export function SiteHeader() {
           );
         })}
       </nav>
-      <div className="docs-search" aria-hidden="true">
-        <span>Search documentation...</span>
-        <code>⌘ K</code>
+      <div className="docs-header__actions">
+        <div className="docs-search" aria-hidden="true">
+          <span>{copy.header.searchPlaceholder}</span>
+          <code>⌘ K</code>
+        </div>
+        <LocaleSwitcher
+          label={copy.header.localeButtonLabel}
+          locale={locale}
+          options={localeOptions}
+        />
       </div>
     </header>
   );

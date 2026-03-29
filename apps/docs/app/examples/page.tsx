@@ -1,59 +1,41 @@
 import { CodeBlock } from "../../components/code-block";
 import { DocsPage } from "../../components/docs-page";
 import { ExamplesShowcase } from "../../components/examples-showcase";
+import { getDocsCopy } from "../../lib/i18n";
+import { getCurrentLocale } from "../../lib/locale";
 
-export default function ExamplesPage() {
+export default async function ExamplesPage() {
+  const locale = await getCurrentLocale();
+  const copy = getDocsCopy(locale);
+
   return (
     <DocsPage
-      title="Examples"
-      breadcrumbs={[{ label: "Docs" }, { label: "Examples" }]}
-      toc={[
-        { href: "#default", label: "Default" },
-        { href: "#themes", label: "Themes" },
-        { href: "#chrome", label: "Chrome Presets" },
-        { href: "#positions", label: "Position Presets" },
-        { href: "#custom-expanded", label: "Custom Expanded" },
-        { href: "#single-track", label: "Single Track" },
-        { href: "#empty-tracks", label: "Empty Tracks" },
-      ]}>
+      title={copy.examples.title}
+      locale={locale}
+      breadcrumbs={copy.examples.breadcrumbs.map((label) => ({ label }))}
+      toc={copy.examples.toc}>
       <section id="default">
-        <p>
-          The package default is a floating portal render. Inside docs we keep
-          previews inline so they stay inside the page layout, but the API
-          example below is the real default usage.
-        </p>
-        <ExamplesShowcase />
+        <p>{copy.examples.body.default}</p>
+        <ExamplesShowcase locale={locale} />
       </section>
 
       <section id="themes">
-        <h2>Themes</h2>
-        <p>
-          Use <code>theme</code> when the default glass chrome does not match
-          the page. If omitted, the component keeps the current default theme.
-        </p>
+        <h2>{copy.examples.sections.themes}</h2>
+        <p>{copy.examples.body.themes}</p>
         <CodeBlock>{`<Jukebox tracks={tracks} theme="glass" />
 <Jukebox tracks={tracks} theme="simple" />
 <Jukebox tracks={tracks} theme="sunset" />`}</CodeBlock>
       </section>
 
       <section id="chrome">
-        <h2>Chrome Presets</h2>
-        <p>
-          The package currently exposes only the rebuilt{" "}
-          <code>"classic"</code> chrome while the other presets are being
-          reworked.
-        </p>
+        <h2>{copy.examples.sections.chrome}</h2>
+        <p>{copy.examples.body.chrome}</p>
         <CodeBlock>{`<Jukebox tracks={tracks} chrome="classic" />`}</CodeBlock>
       </section>
 
       <section id="positions">
-        <h2>Position Presets</h2>
-        <p>
-          Use <code>position</code> to pin the jukebox to any corner of the
-          viewport. On mobile, prefer <code>bottom-center</code> or{" "}
-          <code>top-center</code> so the dock stays aligned to the narrow
-          screen. <code>offset</code> lets you nudge it from the chosen edge.
-        </p>
+        <h2>{copy.examples.sections.positions}</h2>
+        <p>{copy.examples.body.positions}</p>
         <CodeBlock>{`<Jukebox tracks={tracks} position="bottom-center" offset={20} />
 <Jukebox tracks={tracks} position="top-center" offset={20} />
 <Jukebox tracks={tracks} position="bottom-left" offset={20} />
@@ -62,11 +44,8 @@ export default function ExamplesPage() {
       </section>
 
       <section id="custom-expanded">
-        <h2>Custom Expanded</h2>
-        <p>
-          Keep the dock and player state from the library, but render your own{" "}
-          expanded layout with <code>renderExpandedContent</code>.
-        </p>
+        <h2>{copy.examples.sections.customExpanded}</h2>
+        <p>{copy.examples.body.customExpanded}</p>
         <CodeBlock>{`function CustomExpandedPanel({
   currentTrack,
   isPlaying,
@@ -91,13 +70,11 @@ export default function ExamplesPage() {
       </section>
 
       <section id="single-track">
-        <h2>Single Track</h2>
+        <h2>{copy.examples.sections.singleTrack}</h2>
         <ul>
-          <li>Pass a one-item array when you only need a single song.</li>
-          <li>Previous and next controls are disabled automatically.</li>
-          <li>
-            Playback, mute, expand, and volume control still work normally.
-          </li>
+          {copy.examples.singleTrack.map((item) => (
+            <li key={item}>{item}</li>
+          ))}
         </ul>
         <CodeBlock>{`<Jukebox
   tracks={[
@@ -107,11 +84,8 @@ export default function ExamplesPage() {
       </section>
 
       <section id="empty-tracks">
-        <h2>Empty Tracks</h2>
-        <p>
-          Passing an empty array is safe. The component renders a fallback dock
-          instead of throwing and keeps playback controls disabled.
-        </p>
+        <h2>{copy.examples.sections.emptyTracks}</h2>
+        <p>{copy.examples.body.emptyTracks}</p>
         <CodeBlock>{`<Jukebox tracks={[]} />`}</CodeBlock>
       </section>
     </DocsPage>

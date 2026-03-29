@@ -2,97 +2,80 @@ import Link from "next/link";
 
 import { CodeBlock } from "../components/code-block";
 import { DocsPage } from "../components/docs-page";
+import { getDocsCopy } from "../lib/i18n";
+import { getCurrentLocale } from "../lib/locale";
 
-export default function HomePage() {
+export default async function HomePage() {
+  const locale = await getCurrentLocale();
+  const copy = getDocsCopy(locale);
+
   return (
     <DocsPage
       title="react-youtube-jukebox"
-      breadcrumbs={[{ label: "Home" }]}
-      toc={[
-        { href: "#overview", label: "Overview" },
-        { href: "#highlights", label: "Highlights" },
-      ]}>
+      locale={locale}
+      breadcrumbs={copy.home.breadcrumbs.map((label) => ({ label }))}
+      toc={copy.home.toc}>
       <section id="overview" className="docs-home-hero">
         <div className="docs-home-hero__summary">
-          <span className="docs-home-eyebrow">
-            Floating player for React apps
-          </span>
-          <p className="docs-home-lead">
-            Ship a YouTube jukebox that feels like product UI, not an embedded
-            iframe afterthought. The package handles playback, queue rotation,
-            theming, and portal rendering in one component.
-          </p>
+          <span className="docs-home-eyebrow">{copy.home.eyebrow}</span>
+          <p className="docs-home-lead">{copy.home.lead}</p>
           <div className="docs-home-actions">
             <Link href="/installation" className="docs-home-button">
-              Get Started
+              {copy.home.actions.getStarted}
             </Link>
             <Link
               href="/examples"
               className="docs-home-button docs-home-button--secondary">
-              Browse Examples
+              {copy.home.actions.browseExamples}
             </Link>
           </div>
           <div className="docs-home-chip-row" aria-label="Highlights">
-            <span className="docs-home-chip">Portal by default</span>
-            <span className="docs-home-chip">Theme + chrome presets</span>
-            <span className="docs-home-chip">Custom expanded panel</span>
+            {copy.home.chips.map((chip) => (
+              <span key={chip} className="docs-home-chip">
+                {chip}
+              </span>
+            ))}
           </div>
         </div>
 
         <div className="docs-home-signal-card">
           <div className="docs-home-signal-card__top">
-            <span className="docs-home-signal-card__badge">core package</span>
+            <span className="docs-home-signal-card__badge">
+              {copy.home.signalCard.badge}
+            </span>
             <strong>@react-youtube-jukebox/core</strong>
           </div>
-          <p>
-            A focused package with one main export and a styles entrypoint that
-            stays in sync with the docs app.
-          </p>
+          <p>{copy.home.signalCard.body}</p>
           <div className="docs-home-metric-grid">
-            <div className="docs-home-metric">
-              <strong>1</strong>
-              <span>Main component</span>
-            </div>
-            <div className="docs-home-metric">
-              <strong>4</strong>
-              <span>Corner positions</span>
-            </div>
-            <div className="docs-home-metric">
-              <strong>1</strong>
-              <span>Active chrome preset</span>
-            </div>
+            {copy.home.metrics.map((metric) => (
+              <div key={metric.label} className="docs-home-metric">
+                <strong>{metric.value}</strong>
+                <span>{metric.label}</span>
+              </div>
+            ))}
           </div>
         </div>
 
         <div className="docs-home-journey">
           <div className="docs-home-journey__header">
-            <strong>Start here</strong>
-            <span>Fastest route through the docs</span>
+            <strong>{copy.home.journey.title}</strong>
+            <span>{copy.home.journey.subtitle}</span>
           </div>
           <div className="docs-home-journey__steps">
-            <Link
-              href="/installation"
-              className="docs-home-journey__step">
-              <span className="docs-home-journey__index">01</span>
-              <span className="docs-home-journey__body">
-                <strong>Install the package</strong>
-                <span>Add the package and stylesheet entry once.</span>
-              </span>
-            </Link>
-            <Link href="/quick-start" className="docs-home-journey__step">
-              <span className="docs-home-journey__index">02</span>
-              <span className="docs-home-journey__body">
-                <strong>Render your first jukebox</strong>
-                <span>Drop in tracks and mount the default player.</span>
-              </span>
-            </Link>
-            <Link href="/examples" className="docs-home-journey__step">
-              <span className="docs-home-journey__index">03</span>
-              <span className="docs-home-journey__body">
-                <strong>Explore presets and layouts</strong>
-                <span>Compare themes, chrome, and custom expansions.</span>
-              </span>
-            </Link>
+            {copy.home.journey.steps.map((step, index) => (
+              <Link
+                key={step.href}
+                href={step.href}
+                className="docs-home-journey__step">
+                <span className="docs-home-journey__index">
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+                <span className="docs-home-journey__body">
+                  <strong>{step.title}</strong>
+                  <span>{step.body}</span>
+                </span>
+              </Link>
+            ))}
           </div>
         </div>
 
@@ -111,29 +94,14 @@ export function Page() {
       </section>
 
       <section id="highlights">
-        <h2>Highlights</h2>
+        <h2>{copy.home.highlightsTitle}</h2>
         <div className="docs-home-feature-grid">
-          <div className="docs-home-feature">
-            <strong>Dock-first interaction</strong>
-            <p>
-              Start compact, expand on demand, and keep playback controls close
-              to the viewport edge instead of inside page content.
-            </p>
-          </div>
-          <div className="docs-home-feature">
-            <strong>Theme without rewriting logic</strong>
-            <p>
-              Swap `theme` and `chrome` props to move from minimal glass to more
-              character-heavy presets while keeping the same behavior.
-            </p>
-          </div>
-          <div className="docs-home-feature">
-            <strong>Replace the expanded panel</strong>
-            <p>
-              Use `renderExpandedContent` when the built-in player shell is not
-              enough and you need a custom layout around the same controls.
-            </p>
-          </div>
+          {copy.home.features.map((feature) => (
+            <div key={feature.title} className="docs-home-feature">
+              <strong>{feature.title}</strong>
+              <p>{feature.body}</p>
+            </div>
+          ))}
         </div>
       </section>
     </DocsPage>

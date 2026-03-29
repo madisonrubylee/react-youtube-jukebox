@@ -4,17 +4,20 @@ import { useState } from "react";
 
 import {
   Jukebox,
+  type JukeboxChrome,
   type JukeboxExpandedRenderProps,
   type JukeboxPosition,
   type JukeboxTrack,
+  type JukeboxTheme,
 } from "@react-youtube-jukebox/core";
 
+import { getDocsCopy, type DocsLocale } from "../lib/i18n";
 import { demoTracks, emptyDemoTracks, singleDemoTrack } from "../lib/tracks";
 import {
   DEFAULT_JUKEBOX_THEME,
   DEFAULT_JUKEBOX_CHROME,
-  jukeboxChromeOptions,
-  jukeboxThemeOptions,
+  getJukeboxChromeOptions,
+  getJukeboxThemeOptions,
 } from "../lib/themes";
 import {
   getResponsivePreviewPosition,
@@ -22,7 +25,7 @@ import {
 } from "../lib/use-mobile-preview";
 
 type PreviewCardProps = {
-  chrome: (typeof jukeboxChromeOptions)[number]["value"];
+  chrome: JukeboxChrome;
   description: string;
   isMobilePreview: boolean;
   mobileDescription?: string;
@@ -33,7 +36,7 @@ type PreviewCardProps = {
   ) => React.ReactNode;
   title: string;
   tracks: JukeboxTrack[];
-  theme: (typeof jukeboxThemeOptions)[number]["value"];
+  theme: JukeboxTheme;
 };
 
 type PreviewControlRowProps = {
@@ -117,6 +120,10 @@ function PreviewCard({
   );
 }
 
+type CustomExpandedPreviewProps = JukeboxExpandedRenderProps & {
+  locale: DocsLocale;
+};
+
 function CustomExpandedPreview({
   currentIndex,
   currentTrack,
@@ -132,36 +139,42 @@ function CustomExpandedPreview({
   togglePlay,
   playNext,
   playPrev,
-}: JukeboxExpandedRenderProps) {
+  locale,
+}: CustomExpandedPreviewProps) {
+  const copy = getDocsCopy(locale);
+  const customExpandedCopy = copy.showcase.customExpanded;
+
   return (
     <section className="docs-custom-expanded" data-open={isExpanded}>
       <div className="docs-custom-expanded__player" ref={playerMountRef} />
       <div className="docs-custom-expanded__meta">
         <span className="docs-custom-expanded__eyebrow">
-          Custom expanded · {currentIndex + 1}/{totalTracks}
+          {customExpandedCopy.eyebrow} · {currentIndex + 1}/{totalTracks}
         </span>
         <strong>{currentTrack.title}</strong>
         <p>
-          {currentTrack.artist ?? "Unknown artist"}
-          {nextTrack ? ` · Next: ${nextTrack.title}` : ""}
+          {currentTrack.artist ?? customExpandedCopy.unknownArtist}
+          {nextTrack
+            ? ` · ${customExpandedCopy.nextTrackPrefix}: ${nextTrack.title}`
+            : ""}
         </p>
       </div>
       <div className="docs-custom-expanded__controls">
         <button type="button" onClick={playPrev}>
-          Prev
+          {customExpandedCopy.prev}
         </button>
         <button type="button" onClick={togglePlay}>
-          {isPlaying ? "Pause" : "Play"}
+          {isPlaying ? customExpandedCopy.pause : customExpandedCopy.play}
         </button>
         <button type="button" onClick={playNext}>
-          Next
+          {customExpandedCopy.next}
         </button>
         <button type="button" onClick={toggleMute}>
-          {isMuted ? "Unmute" : "Mute"}
+          {isMuted ? customExpandedCopy.unmute : customExpandedCopy.mute}
         </button>
       </div>
       <label className="docs-custom-expanded__volume">
-        <span>Volume</span>
+        <span>{customExpandedCopy.volume}</span>
         <input
           type="range"
           min={0}
@@ -175,12 +188,19 @@ function CustomExpandedPreview({
   );
 }
 
-export function ExamplesShowcase() {
+type ExamplesShowcaseProps = {
+  locale: DocsLocale;
+};
+
+export function ExamplesShowcase({ locale }: ExamplesShowcaseProps) {
   const [theme, setTheme] = useState(DEFAULT_JUKEBOX_THEME);
   const [chrome, setChrome] = useState(DEFAULT_JUKEBOX_CHROME);
   const isMobilePreview = useIsMobilePreview();
-  const selectedTheme = jukeboxThemeOptions.find((option) => option.value === theme);
-  const selectedChrome = jukeboxChromeOptions.find(
+  const copy = getDocsCopy(locale);
+  const themeOptions = getJukeboxThemeOptions(locale);
+  const chromeOptions = getJukeboxChromeOptions(locale);
+  const selectedTheme = themeOptions.find((option) => option.value === theme);
+  const selectedChrome = chromeOptions.find(
     (option) => option.value === chrome,
   );
 
@@ -188,18 +208,18 @@ export function ExamplesShowcase() {
     <>
       <div className="docs-showcase-controls">
         <PreviewControlRow
-          label="Theme"
-          options={jukeboxThemeOptions}
+          label={copy.showcase.labels.theme}
+          options={themeOptions}
           onSelect={(value) =>
-            setTheme(value as (typeof jukeboxThemeOptions)[number]["value"])
+            setTheme(value as JukeboxTheme)
           }
           value={theme}
         />
         <PreviewControlRow
-          label="Chrome"
-          options={jukeboxChromeOptions}
+          label={copy.showcase.labels.chrome}
+          options={chromeOptions}
           onSelect={(value) =>
-            setChrome(value as (typeof jukeboxChromeOptions)[number]["value"])
+            setChrome(value as JukeboxChrome)
           }
           value={chrome}
         />
@@ -211,46 +231,48 @@ export function ExamplesShowcase() {
       <div className="docs-example-grid">
         <PreviewCard
           chrome={chrome}
-          title="Bottom Left"
-          description="Current theme applied to the default compact dock."
+          title={copy.showcase.cards.bottom.title}
+          description={copy.showcase.cards.bottom.description}
           isMobilePreview={isMobilePreview}
-          mobileTitle="Bottom"
-          mobileDescription="Mobile preview stays centered on the bottom edge."
+          mobileTitle={copy.showcase.cards.bottom.mobileTitle}
+          mobileDescription={copy.showcase.cards.bottom.mobileDescription}
           tracks={demoTracks}
           theme={theme}
         />
         <PreviewCard
           chrome={chrome}
-          title="Top Right"
-          description="Same component, pinned to the opposite corner."
+          title={copy.showcase.cards.top.title}
+          description={copy.showcase.cards.top.description}
           isMobilePreview={isMobilePreview}
-          mobileTitle="Top"
-          mobileDescription="Mobile preview stays centered on the top edge."
+          mobileTitle={copy.showcase.cards.top.mobileTitle}
+          mobileDescription={copy.showcase.cards.top.mobileDescription}
           tracks={demoTracks}
           position="top-right"
           theme={theme}
         />
         <PreviewCard
           chrome={chrome}
-          title="Single Track"
-          description="Previous and next controls stay disabled with one track."
+          title={copy.showcase.cards.singleTrack.title}
+          description={copy.showcase.cards.singleTrack.description}
           isMobilePreview={isMobilePreview}
           tracks={singleDemoTrack}
           theme={theme}
         />
         <PreviewCard
           chrome={chrome}
-          title="Custom Expanded"
-          description="The dock stays the same while the expanded panel is rendered by your app."
+          title={copy.showcase.cards.customExpanded.title}
+          description={copy.showcase.cards.customExpanded.description}
           isMobilePreview={isMobilePreview}
           tracks={demoTracks}
           theme={theme}
-          renderExpandedContent={(props) => <CustomExpandedPreview {...props} />}
+          renderExpandedContent={(props) => (
+            <CustomExpandedPreview {...props} locale={locale} />
+          )}
         />
         <PreviewCard
           chrome={chrome}
-          title="Empty Tracks"
-          description="Fallback state renders safely instead of crashing."
+          title={copy.showcase.cards.emptyTracks.title}
+          description={copy.showcase.cards.emptyTracks.description}
           isMobilePreview={isMobilePreview}
           tracks={emptyDemoTracks}
           theme={theme}

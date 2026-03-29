@@ -1,18 +1,20 @@
 import { CodeBlock } from "../../components/code-block";
 import { DocsPage } from "../../components/docs-page";
+import { getDocsCopy } from "../../lib/i18n";
+import { getCurrentLocale } from "../../lib/locale";
 
-export default function QuickStartPage() {
+export default async function QuickStartPage() {
+  const locale = await getCurrentLocale();
+  const copy = getDocsCopy(locale);
+
   return (
     <DocsPage
-      title="Quick Start"
-      breadcrumbs={[{ label: "Docs" }, { label: "Quick Start" }]}
-      toc={[
-        { href: "#install", label: "Install" },
-        { href: "#usage", label: "Usage" },
-        { href: "#positioning", label: "Positioning" },
-      ]}>
+      title={copy.quickStart.title}
+      locale={locale}
+      breadcrumbs={copy.quickStart.breadcrumbs.map((label) => ({ label }))}
+      toc={copy.quickStart.toc}>
       <section id="usage">
-        <h2>Usage</h2>
+        <h2>{copy.quickStart.sections.usage}</h2>
         <CodeBlock>{`import { Jukebox } from "@react-youtube-jukebox/core";
 
 const tracks = [
@@ -23,23 +25,14 @@ const tracks = [
 export function App() {
   return <Jukebox tracks={tracks} />;
 }`}</CodeBlock>
-        <p>
-          By default the first track starts automatically in a muted state. Pass{" "}
-          <code>autoplay={"{false}"}</code> when you want manual playback.
-        </p>
+        <p>{copy.quickStart.body.usage}</p>
       </section>
 
       <section id="positioning">
-        <h2>Positioning</h2>
-        <p>
-          Default behavior is a viewport portal render. Use `position` to pin
-          the jukebox to one of the four corners.
-        </p>
+        <h2>{copy.quickStart.sections.positioning}</h2>
+        <p>{copy.quickStart.body.positioning}</p>
         <CodeBlock>{`<Jukebox tracks={tracks} position="top-left" offset={{ x: 20, y: 20 }} />`}</CodeBlock>
-        <p>
-          Use `portal={"{false}"}` only when you want inline rendering inside a
-          positioned container.
-        </p>
+        <p>{copy.quickStart.body.portal}</p>
       </section>
     </DocsPage>
   );

@@ -1,5 +1,7 @@
 import type { ReactNode } from "react";
 
+import { getDocsCopy, type DocsLocale } from "../lib/i18n";
+
 type Breadcrumb = {
   href?: string;
   label: string;
@@ -11,19 +13,31 @@ type TocItem = {
 };
 
 type DocsPageProps = {
-  breadcrumbs: Breadcrumb[];
+  breadcrumbs: readonly Breadcrumb[];
   children: ReactNode;
+  locale: DocsLocale;
   title: string;
-  toc: TocItem[];
+  toc: readonly TocItem[];
 };
 
-export function DocsPage({ breadcrumbs, children, title, toc }: DocsPageProps) {
+export function DocsPage({
+  breadcrumbs,
+  children,
+  locale,
+  title,
+  toc,
+}: DocsPageProps) {
+  const copy = getDocsCopy(locale);
+
   return (
     <>
       <div className="docs-main">
-        <div className="docs-breadcrumbs" aria-label="Breadcrumb">
+        <div
+          className="docs-breadcrumbs"
+          aria-label={copy.docsPage.breadcrumbAriaLabel}
+        >
           {breadcrumbs.map((item) => (
-            <span key={item.label}>{item.label}</span>
+            <span key={item.href ?? item.label}>{item.label}</span>
           ))}
         </div>
         <article className="docs-article">
@@ -31,8 +45,8 @@ export function DocsPage({ breadcrumbs, children, title, toc }: DocsPageProps) {
           {children}
         </article>
       </div>
-      <aside className="docs-toc" aria-label="On this page">
-        <h2 className="docs-toc__title">On This Page</h2>
+      <aside className="docs-toc" aria-label={copy.docsPage.tocAriaLabel}>
+        <h2 className="docs-toc__title">{copy.docsPage.tocTitle}</h2>
         {toc.map((item) => (
           <a key={item.href} href={item.href} className="docs-toc__link">
             {item.label}

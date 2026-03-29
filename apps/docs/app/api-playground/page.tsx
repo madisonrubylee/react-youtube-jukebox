@@ -1,23 +1,22 @@
 import { CodeBlock } from "../../components/code-block";
 import { DocsPage } from "../../components/docs-page";
 import { LivePreview } from "../../components/live-preview";
+import { getDocsCopy } from "../../lib/i18n";
+import { getCurrentLocale } from "../../lib/locale";
 
-export default function ApiPlaygroundPage() {
+export default async function ApiPlaygroundPage() {
+  const locale = await getCurrentLocale();
+  const copy = getDocsCopy(locale);
+
   return (
     <DocsPage
-      title="API & Playground"
-      breadcrumbs={[{ label: "Docs" }, { label: "API & Playground" }]}
-      toc={[
-        { href: "#interface", label: "Interface" },
-        { href: "#props", label: "Props" },
-        { href: "#playground", label: "Playground" },
-      ]}
+      title={copy.apiPlayground.title}
+      locale={locale}
+      breadcrumbs={copy.apiPlayground.breadcrumbs.map((label) => ({ label }))}
+      toc={copy.apiPlayground.toc}
     >
       <section id="interface">
-        <p>
-          The public API stays intentionally small in v1. Consumers pass track
-          metadata plus a few playback and positioning props.
-        </p>
+        <p>{copy.apiPlayground.body.interface}</p>
         <CodeBlock>{`type JukeboxTrack = {
   videoId: string;
   title: string;
@@ -46,74 +45,64 @@ type JukeboxProps = {
       </section>
 
       <section id="props">
-        <h2>Props</h2>
+        <h2>{copy.apiPlayground.sections.props}</h2>
         <table className="docs-table">
           <thead>
             <tr>
-              <th>Prop</th>
-              <th>Type</th>
-              <th>Notes</th>
+              <th>{copy.apiPlayground.table.headers.prop}</th>
+              <th>{copy.apiPlayground.table.headers.type}</th>
+              <th>{copy.apiPlayground.table.headers.notes}</th>
             </tr>
           </thead>
           <tbody>
             <tr>
               <td><code>tracks</code></td>
               <td><code>JukeboxTrack[]</code></td>
-              <td>Required. Empty and single-track cases are handled safely.</td>
+              <td>{copy.apiPlayground.table.rows.tracks}</td>
             </tr>
             <tr>
               <td><code>position</code></td>
               <td>edge preset</td>
-              <td>
-                Controls top/bottom placement and supports left, right, or
-                center alignment.
-              </td>
+              <td>{copy.apiPlayground.table.rows.position}</td>
             </tr>
             <tr>
               <td><code>theme</code></td>
               <td><code>"glass" | "simple" | "sunset" | "ride"</code></td>
-              <td>Optional. Defaults to <code>"glass"</code>.</td>
+              <td>{copy.apiPlayground.table.rows.theme}</td>
             </tr>
             <tr>
               <td><code>chrome</code></td>
               <td><code>"classic" | "wallet" | "ride"</code></td>
-              <td>
-                Optional. Switches shell and control styling. Defaults to{" "}
-                <code>"classic"</code>.
-              </td>
+              <td>{copy.apiPlayground.table.rows.chrome}</td>
             </tr>
             <tr>
               <td><code>autoplay</code></td>
               <td><code>boolean</code></td>
-              <td>Defaults to `true` and starts muted on first load.</td>
+              <td>{copy.apiPlayground.table.rows.autoplay}</td>
             </tr>
             <tr>
               <td><code>offset</code></td>
               <td><code>number | {"{ x, y }"}</code></td>
-              <td>Applies spacing from the chosen edge preset.</td>
+              <td>{copy.apiPlayground.table.rows.offset}</td>
             </tr>
             <tr>
               <td><code>portal</code></td>
               <td><code>boolean</code></td>
-              <td>Defaults to `true`. Inline mode is opt-in.</td>
+              <td>{copy.apiPlayground.table.rows.portal}</td>
             </tr>
             <tr>
               <td><code>className</code></td>
               <td><code>string</code></td>
-              <td>Root-level hook for limited customization in v1.</td>
+              <td>{copy.apiPlayground.table.rows.className}</td>
             </tr>
           </tbody>
         </table>
       </section>
 
       <section id="playground">
-        <h2>Playground</h2>
-        <p>
-          The live preview below renders inline for docs only. The package
-          default remains portal rendering on the viewport, and you can switch
-          themes and chrome presets here to compare the available combinations.
-        </p>
-        <LivePreview />
+        <h2>{copy.apiPlayground.sections.playground}</h2>
+        <p>{copy.apiPlayground.body.playground}</p>
+        <LivePreview locale={locale} />
       </section>
     </DocsPage>
   );
