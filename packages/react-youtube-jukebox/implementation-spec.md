@@ -8,7 +8,7 @@
 
 - 기본 패키지명 방향: `react-youtube-jukebox` 계열
 - 기본 publish 형태: scoped package
-- 현재 스캐폴드 예시: `@react-youtube-jukebox/core`
+- 현재 패키지명: `react-youtube-jukebox`
 - 실제 배포 전에는 소유 scope 기준으로 최종 이름만 확정하면 된다
 
 ## Public API v1

@@ -7,12 +7,12 @@
     "dev": "pnpm --filter @react-youtube-jukebox/docs dev",
     "dev:docs": "pnpm --filter @react-youtube-jukebox/docs dev",
     "build": "pnpm -r build",
-    "build:package": "pnpm --filter @react-youtube-jukebox/core build",
+    "build:package": "pnpm --filter react-youtube-jukebox build",
     "build:docs": "pnpm --filter @react-youtube-jukebox/docs build",
     "lint": "pnpm -r lint",
     "typecheck": "pnpm -r typecheck",
-    "test": "pnpm --filter @react-youtube-jukebox/core test",
-    "publish:check": "pnpm --filter @react-youtube-jukebox/core build && pnpm --filter @react-youtube-jukebox/core pack:check"
+    "test": "pnpm --filter react-youtube-jukebox test",
+    "publish:check": "pnpm --filter react-youtube-jukebox build && pnpm --filter react-youtube-jukebox pack:check"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.4",

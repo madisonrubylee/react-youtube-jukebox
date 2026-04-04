@@ -1,17 +1,25 @@
-# @react-youtube-jukebox/core
+# react-youtube-jukebox
 
-YouTube jukebox component for React apps.
+A floating YouTube jukebox and playlist player component for React.
+
+It wraps the YouTube IFrame Player API with a dock-style player UI, queue rotation, portal rendering, and a customizable expanded panel.
+
+For full documentation and live demos, visit **[react-youtube-jukebox.com](https://react-youtube-jukebox.com/)**.
 
 ## Install
 
 ```bash
-pnpm add @react-youtube-jukebox/core
+pnpm add react-youtube-jukebox
+```
+
+```bash
+npm i react-youtube-jukebox
 ```
 
 ## Usage
 
 ```tsx
-import { Jukebox } from "@react-youtube-jukebox/core";
+import { Jukebox } from "react-youtube-jukebox";
 
 const tracks = [
   { videoId: "yTg4v2Cnfyo", title: "Soul Below", artist: "Ljones" },
@@ -33,7 +41,7 @@ export function Page() {
 import {
   Jukebox,
   type JukeboxExpandedRenderProps,
-} from "@react-youtube-jukebox/core";
+} from "react-youtube-jukebox";
 
 function CustomExpandedPanel({
   currentTrack,

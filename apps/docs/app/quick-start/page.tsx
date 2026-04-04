@@ -15,7 +15,7 @@ export default async function QuickStartPage() {
       toc={copy.quickStart.toc}>
       <section id="usage">
         <h2>{copy.quickStart.sections.usage}</h2>
-        <CodeBlock>{`import { Jukebox } from "@react-youtube-jukebox/core";
+        <CodeBlock>{`import { Jukebox } from "react-youtube-jukebox";
 
 const tracks = [
   { videoId: "yTg4v2Cnfyo", title: "Soul Below", artist: "Ljones" },

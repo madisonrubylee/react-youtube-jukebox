@@ -1,7 +1,7 @@
 import type {
   JukeboxChrome,
   JukeboxTheme,
-} from "@react-youtube-jukebox/core";
+} from "react-youtube-jukebox";
 
 import type { DocsLocale } from "./i18n";
 

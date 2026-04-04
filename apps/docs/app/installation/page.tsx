@@ -18,16 +18,16 @@ export default async function InstallationPage() {
     >
       <section id="package">
         <p>{copy.installation.body.package}</p>
-        <CodeBlock>{`pnpm add @react-youtube-jukebox/core
-npm install @react-youtube-jukebox/core
-yarn add @react-youtube-jukebox/core
-bun add @react-youtube-jukebox/core`}</CodeBlock>
+        <CodeBlock>{`pnpm add react-youtube-jukebox
+npm install react-youtube-jukebox
+yarn add react-youtube-jukebox
+bun add react-youtube-jukebox`}</CodeBlock>
       </section>
 
       <section id="styles">
         <h2>{copy.installation.sections.styles}</h2>
         <p>{copy.installation.body.styles}</p>
-        <CodeBlock>{`import { Jukebox } from "@react-youtube-jukebox/core";`}</CodeBlock>
+        <CodeBlock>{`import { Jukebox } from "react-youtube-jukebox";`}</CodeBlock>
         <p>{copy.installation.body.theme}</p>
       </section>
 

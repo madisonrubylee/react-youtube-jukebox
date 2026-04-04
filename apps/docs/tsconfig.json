@@ -5,7 +5,7 @@
     "baseUrl": ".",
     "incremental": false,
     "paths": {
-      "@react-youtube-jukebox/core": [
+      "react-youtube-jukebox": [
         "../../packages/react-youtube-jukebox/src/index.ts"
       ]
     },

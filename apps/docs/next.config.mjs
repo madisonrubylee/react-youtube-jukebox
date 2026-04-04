@@ -13,7 +13,7 @@ const shouldUseWorkspaceSource = process.env.NODE_ENV === "development";
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   distDir: docsDistDir,
-  transpilePackages: ["@react-youtube-jukebox/core"],
+  transpilePackages: ["react-youtube-jukebox"],
   experimental: {
     externalDir: true,
   },
@@ -21,7 +21,7 @@ const nextConfig = {
     if (shouldUseWorkspaceSource) {
       config.resolve.alias = {
         ...config.resolve.alias,
-        "@react-youtube-jukebox/core$": coreEntryPath,
+        "react-youtube-jukebox$": coreEntryPath,
       };
     }
 
@@ -32,7 +32,7 @@ const nextConfig = {
 if (shouldUseWorkspaceSource) {
   nextConfig.turbopack = {
     resolveAlias: {
-      "@react-youtube-jukebox/core": coreEntryPath,
+      "react-youtube-jukebox": coreEntryPath,
     },
   };
 }

@@ -1,4 +1,4 @@
-import type { JukeboxTrack } from "@react-youtube-jukebox/core";
+import type { JukeboxTrack } from "react-youtube-jukebox";
 
 export const demoTracks: JukeboxTrack[] = [
   {

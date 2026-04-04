@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-import { Jukebox } from "@react-youtube-jukebox/core";
+import { Jukebox } from "react-youtube-jukebox";
 
 import { getDocsCopy, type DocsLocale } from "../lib/i18n";
 import { demoTracks } from "../lib/tracks";

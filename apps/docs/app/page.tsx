@@ -43,7 +43,7 @@ export default async function HomePage() {
             <span className="docs-home-signal-card__badge">
               {copy.home.signalCard.badge}
             </span>
-            <strong>@react-youtube-jukebox/core</strong>
+            <strong>react-youtube-jukebox</strong>
           </div>
           <p>{copy.home.signalCard.body}</p>
           <div className="docs-home-metric-grid">
@@ -80,7 +80,7 @@ export default async function HomePage() {
         </div>
 
         <div className="docs-home-code-panel">
-          <CodeBlock>{`import { Jukebox } from "@react-youtube-jukebox/core";
+          <CodeBlock>{`import { Jukebox } from "react-youtube-jukebox";
 
 const tracks = [
   { videoId: "yTg4v2Cnfyo", title: "Soul Below", artist: "Ljones" },

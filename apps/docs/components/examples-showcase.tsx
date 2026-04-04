@@ -9,7 +9,7 @@ import {
   type JukeboxPosition,
   type JukeboxTrack,
   type JukeboxTheme,
-} from "@react-youtube-jukebox/core";
+} from "react-youtube-jukebox";
 
 import { getDocsCopy, type DocsLocale } from "../lib/i18n";
 import { demoTracks, emptyDemoTracks, singleDemoTrack } from "../lib/tracks";

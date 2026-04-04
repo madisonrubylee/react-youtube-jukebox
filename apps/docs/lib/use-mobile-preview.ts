@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-import type { JukeboxPosition } from "@react-youtube-jukebox/core";
+import type { JukeboxPosition } from "react-youtube-jukebox";
 
 const MOBILE_PREVIEW_MEDIA_QUERY = "(max-width: 640px)";
 
