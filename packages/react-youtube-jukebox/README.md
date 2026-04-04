@@ -31,9 +31,7 @@ export function Page() {
 }
 ```
 
-기본 스타일은 컴포넌트 import 시 자동으로 주입됩니다.
-기본 테마는 `glass`이며, 필요하면 `theme="simple"`, `theme="sunset"`, `theme="ride"`를 전달할 수 있습니다.
-쉘 형태는 `chrome` prop으로 제어하며 기본값은 `classic`입니다. `wallet`과 `ride` 프리셋으로 같은 로직 위에 다른 UI chrome을 적용할 수 있습니다.
+Default styles are injected automatically when you import the component. The default theme is `glass` — pass `theme="simple"`, `theme="sunset"`, or `theme="ride"` to switch it up. The shell appearance is controlled by the `chrome` prop, which defaults to `classic`. Use the `wallet` or `ride` presets to apply a different UI chrome on top of the same underlying logic.
 
 ## Custom Expanded Panel
 
@@ -68,7 +66,7 @@ export function Page() {
 }
 ```
 
-`renderExpandedContent`를 전달하면 기본 expanded 디자인 대신 사용자 렌더를 사용합니다. 토글 애니메이션과 컨테이너 visibility는 라이브러리가 계속 관리하고, 소비자는 내부 레이아웃과 컨트롤만 정의하면 됩니다.
+When you pass `renderExpandedContent`, the library swaps out the default expanded design for your custom render. Toggle animations and container visibility are still managed internally — you only need to define the inner layout and controls.
 
 ## Props
 
@@ -119,6 +117,4 @@ type JukeboxProps = {
 };
 ```
 
-기본 사용은 viewport 기준 포털 렌더링입니다. 레이아웃 안에서 직접 배치가 필요할 때만 `portal={false}`를 사용합니다.
-`position="bottom-center"`와 `position="top-center"`를 사용하면 x축은 가운데 정렬되고, `offset`은 top/bottom 여백에 그대로 적용됩니다.
-`autoplay`는 기본값이 `true`이며, 첫 진입 시 무음 상태로 자동 재생합니다. 자동 재생을 끄려면 `autoplay={false}`를 전달합니다.
+By default, the player renders through a portal positioned relative to the viewport. Use `portal={false}` only when you need to place it inline within your layout. With `position="bottom-center"` or `position="top-center"`, the player is centered horizontally and `offset` applies to the top or bottom margin as-is. `autoplay` defaults to `true` and starts playback muted on first visit. Pass `autoplay={false}` to disable it.
