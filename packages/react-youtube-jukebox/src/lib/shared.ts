@@ -74,7 +74,7 @@ export type PlayListItem = {
 };
 
 export type PlayListTheme = "light" | "dark";
-export type PlayListSize = "compact" | "expanded";
+export type PlayListSize = "mini" | "compact" | "expanded";
 
 export type PlayListProps = {
   playlist: PlayListItem[];

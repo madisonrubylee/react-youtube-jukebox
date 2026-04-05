@@ -34,10 +34,12 @@ const PLAYLIST_THEME_OPTIONS: Record<DocsLocale, PlayListThemeOption[]> = {
 
 const PLAYLIST_SIZE_OPTIONS: Record<DocsLocale, PlayListSizeOption[]> = {
   en: [
+    { label: "Mini", value: "mini" },
     { label: "Compact", value: "compact" },
     { label: "Expanded", value: "expanded" },
   ],
   ko: [
+    { label: "Mini", value: "mini" },
     { label: "Compact", value: "compact" },
     { label: "Expanded", value: "expanded" },
   ],

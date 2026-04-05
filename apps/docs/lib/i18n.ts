@@ -143,24 +143,43 @@ const docsCopy = {
             href: "/examples",
             title: "Explore presets and layouts",
           },
+          {
+            body: "Group tracks into tabbed playlists with built-in playback.",
+            href: "/playlist",
+            title: "Build a playlist",
+          },
         ],
         subtitle: "Fastest route through the docs",
         title: "Start here",
       },
-      lead: "Ship a YouTube jukebox that feels like product UI, not an embedded iframe afterthought. The package keeps the API small, the core bundle light, and the YouTube player script out of the critical path until the component mounts.",
+      lead: "A YouTube jukebox that feels like product UI. Small API, light bundle, and lazy-loaded player.",
       metrics: [
         { label: "Core bundle", value: "11.5 KB" },
-        { label: "Main export", value: "1" },
+        { label: "Main exports", value: "2" },
         { label: "Edge presets", value: "6" },
       ],
       signalCard: {
         badge: "core package",
-        body: "A focused package with one main export, automatic styles, and a small core bundle. React stays external, and the YouTube iframe API loads on demand.",
+        body: "Two main exports — Jukebox for floating playback and PlayList for inline panels — with automatic styles and a small core bundle. React stays external, and the YouTube iframe API loads on demand.",
       },
       toc: [
         { href: "#overview", label: "Overview" },
+        { href: "#components", label: "Two Ways to Play" },
         { href: "#highlights", label: "Highlights" },
       ],
+      components: {
+        title: "Two Ways to Play",
+        jukebox: {
+          title: "Jukebox",
+          body: "A floating player fixed to the viewport edge. Stays compact by default, expands on demand, and follows the user across page navigation.",
+          linkLabel: "Jukebox API",
+        },
+        playlist: {
+          title: "PlayList",
+          body: "An inline music panel that lives inside your page layout. Grouped tabs, cover art, and a built-in player — no portal, no overlay.",
+          linkLabel: "PlayList API",
+        },
+      },
     },
     installation: {
       body: {
@@ -309,8 +328,7 @@ const docsCopy = {
             "Optional. Use it to attach layout classes for inline, fixed, or custom positioned rendering.",
           playlist:
             "Required. Each item becomes a tab with an optional cover image and its own track list.",
-          theme:
-            'Optional. Supports "dark" and "light". Defaults to "dark".',
+          theme: 'Optional. Supports "dark" and "light". Defaults to "dark".',
         },
       },
       toc: [
@@ -499,24 +517,43 @@ const docsCopy = {
             href: "/examples",
             title: "프리셋과 레이아웃 살펴보기",
           },
+          {
+            body: "트랙을 탭으로 묶고 내장 플레이어로 바로 재생할 수 있습니다.",
+            href: "/playlist",
+            title: "플레이리스트 만들기",
+          },
         ],
         subtitle: "문서를 가장 빠르게 훑는 순서",
         title: "여기서 시작하세요",
       },
-      lead: "페이지 흐름에 자연스럽게 어우러지는 YouTube jukebox를 빠르게 추가할 수 있습니다. API는 작게 유지하고, 코어 번들은 가볍게 가져가며, YouTube 플레이어 스크립트는 컴포넌트가 마운트될 때까지 크리티컬 패스 밖에 둡니다.",
+      lead: "제품 UI처럼 자연스러운 YouTube jukebox. 작은 API, 가벼운 번들, 지연 로드 플레이어.",
       metrics: [
         { label: "코어 번들", value: "11.5 KB" },
-        { label: "메인 export", value: "1" },
+        { label: "메인 export", value: "2" },
         { label: "엣지 프리셋", value: "6" },
       ],
       signalCard: {
         badge: "core package",
-        body: "메인 export 하나와 자동 스타일 주입에 집중한 패키지입니다. 코어 번들은 작게 유지하고, React는 외부에 두며, YouTube iframe API는 필요할 때만 로드합니다.",
+        body: "플로팅 재생을 위한 Jukebox와 인라인 패널을 위한 PlayList, 두 가지 메인 export를 제공합니다. 자동 스타일 주입과 작은 코어 번들을 유지하며, React는 외부에 두고 YouTube iframe API는 필요할 때만 로드합니다.",
       },
       toc: [
         { href: "#overview", label: "개요" },
+        { href: "#components", label: "두 가지 재생 방식" },
         { href: "#highlights", label: "핵심 포인트" },
       ],
+      components: {
+        title: "두 가지 재생 방식",
+        jukebox: {
+          title: "Jukebox",
+          body: "뷰포트 가장자리에 고정되는 플로팅 플레이어입니다. 기본은 컴팩트 상태이고, 필요할 때 확장하며, 페이지 이동에도 유지됩니다.",
+          linkLabel: "Jukebox API",
+        },
+        playlist: {
+          title: "PlayList",
+          body: "페이지 레이아웃 안에 임베드되는 인라인 음악 패널입니다. 탭 그룹, 커버 아트, 내장 플레이어를 제공하며 포털이나 오버레이 없이 동작합니다.",
+          linkLabel: "PlayList API",
+        },
+      },
     },
     installation: {
       body: {

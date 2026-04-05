@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import clsx from "clsx";
 
 import { useJukeboxPlayer } from "../hooks/useJukeboxPlayer";
@@ -57,6 +57,36 @@ function CompactIcon() {
   );
 }
 
+function MinimizeIcon() {
+  return (
+    <svg
+      viewBox="0 0 16 16"
+      fill="none"
+      stroke="currentColor"
+      aria-hidden="true"
+      strokeWidth="2"
+      strokeLinecap="round">
+      <path d="M4 12h8" />
+    </svg>
+  );
+}
+
+function MiniPlayIcon() {
+  return (
+    <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+      <path d="M3 1.713a.7.7 0 0 1 1.05-.607l10.89 6.288a.7.7 0 0 1 0 1.212L4.05 14.894A.7.7 0 0 1 3 14.288V1.713Z" />
+    </svg>
+  );
+}
+
+function MiniPauseIcon() {
+  return (
+    <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+      <path d="M2.7 1a.7.7 0 0 0-.7.7v12.6a.7.7 0 0 0 .7.7h2.6a.7.7 0 0 0 .7-.7V1.7a.7.7 0 0 0-.7-.7H2.7Zm8 0a.7.7 0 0 0-.7.7v12.6a.7.7 0 0 0 .7.7h2.6a.7.7 0 0 0 .7-.7V1.7a.7.7 0 0 0-.7-.7h-2.6Z" />
+    </svg>
+  );
+}
+
 function PlayingIndicator() {
   return (
     <div className="rp-track__playing-icon">
@@ -83,6 +113,18 @@ function SizeToggleButton({
       className="rp-size-toggle"
       aria-label={isExpanded ? "Compact view" : "Expanded view"}>
       {isExpanded ? <CompactIcon /> : <ExpandIcon />}
+    </button>
+  );
+}
+
+function MinimizeButton({ onMinimize }: { onMinimize: () => void }) {
+  return (
+    <button
+      type="button"
+      onClick={onMinimize}
+      className="rp-minimize-toggle"
+      aria-label="Minimize">
+      <MinimizeIcon />
     </button>
   );
 }
@@ -313,6 +355,27 @@ function toJukeboxTracks(playlistTracks: PlayListTrack[]): JukeboxTrack[] {
   }));
 }
 
+function useIsMobile() {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const query = window.matchMedia(
+      "(hover: none) and (pointer: coarse), (max-width: 640px)",
+    );
+
+    setIsMobile(query.matches);
+
+    const handleChange = (event: MediaQueryListEvent) => {
+      setIsMobile(event.matches);
+    };
+
+    query.addEventListener("change", handleChange);
+    return () => query.removeEventListener("change", handleChange);
+  }, []);
+
+  return isMobile;
+}
+
 function usePlayListSize({
   size: controlledSize,
   defaultSize = DEFAULT_PLAYLIST_SIZE,
@@ -323,13 +386,11 @@ function usePlayListSize({
   onSizeChange: ((size: PlayListSize) => void) | undefined;
 }) {
   const [internalSize, setInternalSize] = useState<PlayListSize>(defaultSize);
+  const previousSizeRef = useRef<PlayListSize>("compact");
   const isControlled = controlledSize !== undefined;
   const resolvedSize = isControlled ? controlledSize : internalSize;
 
-  const toggleSize = () => {
-    const nextSize: PlayListSize =
-      resolvedSize === "compact" ? "expanded" : "compact";
-
+  const applySize = (nextSize: PlayListSize) => {
     if (!isControlled) {
       setInternalSize(nextSize);
     }
@@ -337,7 +398,133 @@ function usePlayListSize({
     onSizeChange?.(nextSize);
   };
 
-  return { resolvedSize, toggleSize } as const;
+  const toggleSize = () => {
+    const nextSize: PlayListSize =
+      resolvedSize === "compact" ? "expanded" : "compact";
+    applySize(nextSize);
+  };
+
+  const minimize = () => {
+    if (resolvedSize !== "mini") {
+      previousSizeRef.current = resolvedSize;
+    }
+
+    applySize("mini");
+  };
+
+  const restore = () => {
+    const target =
+      previousSizeRef.current === "mini" ? "compact" : previousSizeRef.current;
+    applySize(target);
+  };
+
+  return { resolvedSize, toggleSize, minimize, restore } as const;
+}
+
+function MiniVolumeIcon({ isMuted }: { isMuted: boolean }) {
+  if (isMuted) {
+    return (
+      <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+        <path d="M7.06 3.22a.75.75 0 0 1 1.19.61v8.34a.75.75 0 0 1-1.19.61L4.26 10.5H2.75A.75.75 0 0 1 2 9.75v-3.5c0-.41.34-.75.75-.75h1.51l2.8-2.28Z" />
+        <path d="M10.28 5.22a.75.75 0 0 1 1.06 0L12 5.88l.66-.66a.75.75 0 1 1 1.06 1.06l-.66.66.66.66a.75.75 0 1 1-1.06 1.06L12 7.94l-.66.66a.75.75 0 0 1-1.06-1.06l.66-.66-.66-.66a.75.75 0 0 1 0-1.06Z" />
+      </svg>
+    );
+  }
+
+  return (
+    <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+      <path d="M7.06 3.22a.75.75 0 0 1 1.19.61v8.34a.75.75 0 0 1-1.19.61L4.26 10.5H2.75A.75.75 0 0 1 2 9.75v-3.5c0-.41.34-.75.75-.75h1.51l2.8-2.28Z" />
+      <path d="M10.5 5.02a.75.75 0 0 1 1.06 0 3.86 3.86 0 0 1 0 5.46.75.75 0 1 1-1.06-1.06 2.36 2.36 0 0 0 0-3.34.75.75 0 0 1 0-1.06Z" />
+    </svg>
+  );
+}
+
+function MiniBar({
+  currentTrack,
+  isPlaying,
+  isMuted,
+  volume,
+  onTogglePlay,
+  onToggleMute,
+  onVolumeChange,
+  onRestore,
+  theme,
+  className,
+  playerMountRef,
+}: {
+  currentTrack: PlayListTrack | undefined;
+  isPlaying: boolean;
+  isMuted: boolean;
+  volume: number;
+  onTogglePlay: () => void;
+  onToggleMute: () => void;
+  onVolumeChange: (nextVolume: number) => void;
+  onRestore: () => void;
+  theme: string;
+  className?: string;
+  playerMountRef: (node: HTMLDivElement | null) => void;
+}) {
+  return (
+    <div
+      className={clsx("rp-root", className)}
+      data-theme={theme}
+      data-size="mini">
+      <div ref={playerMountRef} className="rp-mini__mount" />
+      <div className="rp-mini">
+        {isPlaying && (
+          <div className="rp-mini__indicator">
+            <div className="rp-track__playing-bar" />
+            <div className="rp-track__playing-bar" />
+            <div className="rp-track__playing-bar" />
+          </div>
+        )}
+        <div className="rp-mini__info">
+          {currentTrack ? (
+            <>
+              <div className="rp-mini__title">{currentTrack.title}</div>
+              <div className="rp-mini__artist">{currentTrack.artist}</div>
+            </>
+          ) : (
+            <div className="rp-mini__empty">No track playing</div>
+          )}
+        </div>
+        <div className="rp-mini__volume">
+          <button
+            type="button"
+            onClick={onToggleMute}
+            aria-label={isMuted ? "Unmute" : "Mute"}
+            className="rp-mini__button rp-mini__button--volume">
+            <MiniVolumeIcon isMuted={isMuted} />
+          </button>
+          <input
+            type="range"
+            min={0}
+            max={100}
+            step={1}
+            value={volume}
+            onChange={(e) => onVolumeChange(Number(e.target.value))}
+            aria-label="Volume"
+            className="rp-mini__volume-slider"
+          />
+        </div>
+        <button
+          type="button"
+          onClick={onTogglePlay}
+          disabled={!currentTrack}
+          aria-label={isPlaying ? "Pause" : "Play"}
+          className="rp-mini__button">
+          {isPlaying ? <MiniPauseIcon /> : <MiniPlayIcon />}
+        </button>
+        <button
+          type="button"
+          onClick={onRestore}
+          aria-label="Expand"
+          className="rp-mini__button rp-mini__expand">
+          <ExpandIcon />
+        </button>
+      </div>
+    </div>
+  );
 }
 
 export function PlayList({
@@ -350,12 +537,14 @@ export function PlayList({
   className,
 }: PlayListProps) {
   const [activeTabIndex, setActiveTabIndex] = useState(0);
-  const { resolvedSize, toggleSize } = usePlayListSize({
+  const { resolvedSize, toggleSize, minimize, restore } = usePlayListSize({
     size,
     defaultSize,
     onSizeChange,
   });
+  const isMobile = useIsMobile();
 
+  const isMini = resolvedSize === "mini";
   const isExpanded = resolvedSize === "expanded";
 
   const safeTabIndex =
@@ -379,7 +568,11 @@ export function PlayList({
 
   const {
     currentIndex,
+    isMuted,
     isPlaying,
+    volume,
+    setVolume,
+    toggleMute,
     playerMountRef,
     togglePlay,
     playNext,
@@ -414,13 +607,34 @@ export function PlayList({
     }
   };
 
+  if (isMini) {
+    return (
+      <MiniBar
+        currentTrack={currentTrack}
+        isPlaying={isPlaying}
+        isMuted={isMuted}
+        volume={volume}
+        onTogglePlay={togglePlay}
+        onToggleMute={toggleMute}
+        onVolumeChange={setVolume}
+        onRestore={restore}
+        theme={theme}
+        className={className}
+        playerMountRef={playerMountRef}
+      />
+    );
+  }
+
   if (isExpanded) {
     return (
       <div
         className={clsx("rp-root", className)}
         data-theme={theme}
         data-size="expanded">
-        <SizeToggleButton currentSize={resolvedSize} onToggle={toggleSize} />
+        <div className="rp-toolbar">
+          <MinimizeButton onMinimize={minimize} />
+          <SizeToggleButton currentSize={resolvedSize} onToggle={toggleSize} />
+        </div>
         <div className="rp-content">
           <div className="rp-panel rp-panel--nav">
             <PlayListNav
@@ -460,7 +674,12 @@ export function PlayList({
 
   return (
     <div className={clsx("rp-root", className)} data-theme={theme}>
-      <SizeToggleButton currentSize={resolvedSize} onToggle={toggleSize} />
+      <div className="rp-toolbar">
+        <MinimizeButton onMinimize={minimize} />
+        {!isMobile && (
+          <SizeToggleButton currentSize={resolvedSize} onToggle={toggleSize} />
+        )}
+      </div>
       <PlayListHeader playlistItem={activePlaylist} />
       <div className="rp-content">
         <PlayListTabs
