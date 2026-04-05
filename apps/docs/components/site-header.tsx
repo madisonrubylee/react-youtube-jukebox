@@ -41,13 +41,13 @@ export function SiteHeader({ locale }: SiteHeaderProps) {
           xmlns="http://www.w3.org/2000/svg"
           aria-hidden="true"
         >
-          <rect x="4" y="4" width="120" height="120" rx="32" fill="#0F1115" />
-          <rect x="24" y="24" width="80" height="14" rx="7" fill="#F3F4F6" />
-          <circle cx="44" cy="76" r="20" fill="#F3F4F6" />
-          <path d="M39 66V86L55 76L39 66Z" fill="#0F1115" />
-          <rect x="72" y="59" width="6" height="34" rx="3" fill="#F3F4F6" />
-          <rect x="84" y="51" width="6" height="50" rx="3" fill="#F3F4F6" />
-          <rect x="96" y="63" width="6" height="26" rx="3" fill="#F3F4F6" />
+          <rect x="4" y="4" width="120" height="120" rx="32" fill="#4F46E5" />
+          <rect x="24" y="24" width="80" height="14" rx="7" fill="#E0E7FF" />
+          <circle cx="44" cy="76" r="20" fill="#E0E7FF" />
+          <path d="M39 66V86L55 76L39 66Z" fill="#4F46E5" />
+          <rect x="72" y="59" width="6" height="34" rx="3" fill="#E0E7FF" />
+          <rect x="84" y="51" width="6" height="50" rx="3" fill="#E0E7FF" />
+          <rect x="96" y="63" width="6" height="26" rx="3" fill="#E0E7FF" />
         </svg>
         <span>react-youtube-jukebox</span>
       </Link>
