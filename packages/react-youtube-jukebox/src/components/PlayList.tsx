@@ -355,15 +355,18 @@ function toJukeboxTracks(playlistTracks: PlayListTrack[]): JukeboxTrack[] {
   }));
 }
 
+const MOBILE_QUERY = "(hover: none) and (pointer: coarse), (max-width: 640px)";
+
+function getIsMobile() {
+  if (typeof window === "undefined") return false;
+  return window.matchMedia(MOBILE_QUERY).matches;
+}
+
 function useIsMobile() {
-  const [isMobile, setIsMobile] = useState(false);
+  const [isMobile, setIsMobile] = useState(getIsMobile);
 
   useEffect(() => {
-    const query = window.matchMedia(
-      "(hover: none) and (pointer: coarse), (max-width: 640px)",
-    );
-
-    setIsMobile(query.matches);
+    const query = window.matchMedia(MOBILE_QUERY);
 
     const handleChange = (event: MediaQueryListEvent) => {
       setIsMobile(event.matches);
@@ -461,7 +464,7 @@ function MiniBar({
   onVolumeChange: (nextVolume: number) => void;
   onRestore: () => void;
   theme: string;
-  className?: string;
+  className?: string | undefined;
   playerMountRef: (node: HTMLDivElement | null) => void;
 }) {
   return (
