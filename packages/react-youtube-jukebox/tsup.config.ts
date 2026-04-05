@@ -8,5 +8,6 @@ export default defineConfig({
   clean: true,
   treeshake: true,
   injectStyle: true,
-  external: ["react", "react-dom", "react/jsx-runtime"],
+  external: ["react", "react-dom"],
+  noExternal: ["react/jsx-runtime"],
 });
