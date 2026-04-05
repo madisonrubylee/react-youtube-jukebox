@@ -28,9 +28,7 @@ export type JukeboxProps = {
   offset?: JukeboxOffset;
   portal?: boolean;
   className?: string;
-  renderExpandedContent?: (
-    props: JukeboxExpandedRenderProps,
-  ) => ReactNode;
+  renderExpandedContent?: (props: JukeboxExpandedRenderProps) => ReactNode;
 };
 
 export type JukeboxPlayerState = {
@@ -63,9 +61,36 @@ export const LEVEL_BAR_HEIGHTS = [12, 18, 14] as const;
 export const LEVEL_BAR_REST_HEIGHT = 8;
 export const LEVEL_BAR_ANIMATION_DELAY_MS = 120;
 
+export type PlayListTrack = {
+  title: string;
+  artist: string;
+  videoId: string;
+};
+
+export type PlayListItem = {
+  title: string;
+  image?: string;
+  data: PlayListTrack[];
+};
+
+export type PlayListTheme = "light" | "dark";
+export type PlayListSize = "compact" | "expanded";
+
+export type PlayListProps = {
+  playlist: PlayListItem[];
+  autoplay?: boolean;
+  theme?: PlayListTheme;
+  size?: PlayListSize;
+  defaultSize?: PlayListSize;
+  onSizeChange?: (size: PlayListSize) => void;
+  className?: string;
+};
+
+export const DEFAULT_PLAYLIST_THEME: PlayListTheme = "dark";
+export const DEFAULT_PLAYLIST_SIZE: PlayListSize = "compact";
+
 export function getEffectiveChrome(chrome: JukeboxChrome): JukeboxChrome {
-  const isTemporarilyDisabledChrome =
-    chrome === "wallet" || chrome === "ride";
+  const isTemporarilyDisabledChrome = chrome === "wallet" || chrome === "ride";
 
   if (isTemporarilyDisabledChrome) {
     return DEFAULT_CHROME;

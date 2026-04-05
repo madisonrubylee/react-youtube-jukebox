@@ -11,8 +11,13 @@
   --docs-code-bg: #f3f4f6;
   --docs-shadow: 0 20px 50px -36px rgba(15, 23, 42, 0.35);
   font-family:
-    "IBM Plex Sans", "Segoe UI", ui-sans-serif, system-ui, -apple-system,
-    BlinkMacSystemFont, sans-serif;
+    "IBM Plex Sans",
+    "Segoe UI",
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    sans-serif;
   background:
     radial-gradient(circle at top, rgba(148, 163, 184, 0.14), transparent 24%),
     linear-gradient(180deg, #fafaf9 0%, #f3f4f6 100%);
@@ -344,8 +349,16 @@ pre {
   min-height: 420px;
   overflow: hidden;
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(241, 245, 249, 0.96)),
-    radial-gradient(circle at 80% 15%, rgba(96, 165, 250, 0.12), transparent 30%);
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.92),
+      rgba(241, 245, 249, 0.96)
+    ),
+    radial-gradient(
+      circle at 80% 15%,
+      rgba(96, 165, 250, 0.12),
+      transparent 30%
+    );
 }
 
 .docs-showcase-controls {
@@ -624,8 +637,11 @@ pre {
   gap: 14px;
   border: 1px solid var(--docs-border);
   border-radius: 24px;
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(248, 250, 252, 0.92));
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.9),
+    rgba(248, 250, 252, 0.92)
+  );
   padding: 18px;
   box-shadow: var(--docs-shadow);
 }
@@ -719,8 +735,16 @@ pre {
   overflow: hidden;
   padding: 22px;
   background:
-    radial-gradient(circle at top right, rgba(249, 115, 22, 0.12), transparent 36%),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(248, 250, 252, 0.96));
+    radial-gradient(
+      circle at top right,
+      rgba(249, 115, 22, 0.12),
+      transparent 36%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.96),
+      rgba(248, 250, 252, 0.96)
+    );
 }
 
 .docs-home-signal-card::after {
@@ -730,7 +754,11 @@ pre {
   width: 180px;
   height: 180px;
   border-radius: 999px;
-  background: radial-gradient(circle, rgba(59, 130, 246, 0.12), transparent 65%);
+  background: radial-gradient(
+    circle,
+    rgba(59, 130, 246, 0.12),
+    transparent 65%
+  );
 }
 
 .docs-home-signal-card__top {
@@ -833,8 +861,7 @@ pre {
 }
 
 .docs-home-panel--terminal {
-  background:
-    linear-gradient(180deg, #121720 0%, #0f1115 100%);
+  background: linear-gradient(180deg, #121720 0%, #0f1115 100%);
 }
 
 .docs-home-panel--terminal .docs-home-panel__eyebrow {
@@ -893,7 +920,11 @@ pre {
   .docs-preview {
     background:
       linear-gradient(180deg, rgba(15, 23, 42, 0.94), rgba(2, 6, 23, 0.98)),
-      radial-gradient(circle at 80% 15%, rgba(96, 165, 250, 0.12), transparent 30%);
+      radial-gradient(
+        circle at 80% 15%,
+        rgba(96, 165, 250, 0.12),
+        transparent 30%
+      );
   }
 
   .docs-segmented-control__button {
@@ -935,7 +966,11 @@ pre {
 
   .docs-home-signal-card {
     background:
-      radial-gradient(circle at top right, rgba(249, 115, 22, 0.14), transparent 36%),
+      radial-gradient(
+        circle at top right,
+        rgba(249, 115, 22, 0.14),
+        transparent 36%
+      ),
       linear-gradient(180deg, rgba(15, 23, 42, 0.96), rgba(9, 13, 22, 0.96));
   }
 
@@ -1163,4 +1198,52 @@ pre {
     max-width: var(--docs-preview-jukebox-width) !important;
     transform: translateX(-50%);
   }
+}
+
+.docs-playlist-showcase {
+  margin-top: 24px;
+}
+
+.docs-playlist-showcase__toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.docs-playlist-showcase__preview {
+  display: flex;
+  justify-content: center;
+  padding: 32px 0;
+  border-radius: 12px;
+  background: #18181b;
+}
+
+@media (prefers-color-scheme: light) {
+  .docs-playlist-showcase__preview {
+    background: #f4f4f5;
+  }
+}
+
+.docs-playlist-showcase__player {
+  --rp-height: 520px;
+}
+
+.docs-playlist-example-card__preview {
+  display: flex;
+  justify-content: center;
+  padding: 20px 12px;
+  border-radius: 20px;
+  background: #0f172a;
+  overflow-x: auto;
+}
+
+.docs-playlist-example-card__preview[data-theme="light"] {
+  background: #eef2ff;
+}
+
+.docs-playlist-example-card__player {
+  --rp-width: min(100%, 320px);
+  --rp-height: 500px;
+  flex-shrink: 0;
 }
