@@ -4,7 +4,6 @@ import {
   useRef,
   useState,
   useSyncExternalStore,
-  type CSSProperties,
 } from "react";
 import { createPortal } from "react-dom";
 import clsx from "clsx";
@@ -463,97 +462,6 @@ function MiniVolumeIcon({ isMuted }: { isMuted: boolean }) {
   );
 }
 
-function MiniBar({
-  currentTrack,
-  isPlaying,
-  isMuted,
-  volume,
-  onTogglePlay,
-  onToggleMute,
-  onVolumeChange,
-  onRestore,
-  theme,
-  className,
-  playerMountRef,
-  style,
-}: {
-  currentTrack: PlayListTrack | undefined;
-  isPlaying: boolean;
-  isMuted: boolean;
-  volume: number;
-  onTogglePlay: () => void;
-  onToggleMute: () => void;
-  onVolumeChange: (nextVolume: number) => void;
-  onRestore: () => void;
-  theme: string;
-  className?: string | undefined;
-  playerMountRef: (node: HTMLDivElement | null) => void;
-  style?: CSSProperties | undefined;
-}) {
-  return (
-    <div
-      className={clsx("rp-root", className)}
-      data-theme={theme}
-      data-size="mini"
-      style={style}>
-      <div ref={playerMountRef} className="rp-mini__mount" />
-      <div className="rp-mini">
-        {isPlaying && (
-          <div className="rp-mini__indicator">
-            <div className="rp-track__playing-bar" />
-            <div className="rp-track__playing-bar" />
-            <div className="rp-track__playing-bar" />
-          </div>
-        )}
-        <div className="rp-mini__info">
-          {currentTrack ? (
-            <>
-              <div className="rp-mini__title">{currentTrack.title}</div>
-              <div className="rp-mini__artist">{currentTrack.artist}</div>
-            </>
-          ) : (
-            <div className="rp-mini__empty">No track playing</div>
-          )}
-        </div>
-        <div className="rp-mini__volume">
-          <button
-            type="button"
-            onClick={onToggleMute}
-            aria-label={isMuted ? "Unmute" : "Mute"}
-            className="rp-mini__button rp-mini__button--volume">
-            <MiniVolumeIcon isMuted={isMuted} />
-          </button>
-          <input
-            type="range"
-            min={0}
-            max={100}
-            step={1}
-            value={volume}
-            onChange={(e) => onVolumeChange(Number(e.target.value))}
-            aria-label="Volume"
-            className="rp-mini__volume-slider"
-          />
-        </div>
-        <button
-          type="button"
-          onClick={onTogglePlay}
-          disabled={!currentTrack}
-          aria-label={isPlaying ? "Pause" : "Play"}
-          className="rp-mini__button">
-          {isPlaying ? <MiniPauseIcon /> : <MiniPlayIcon />}
-        </button>
-        <button
-          type="button"
-          onClick={onRestore}
-          aria-label="Expand"
-          className="rp-mini__button rp-mini__expand">
-          <ExpandIcon />
-        </button>
-      </div>
-    </div>
-  );
-}
-
 export function PlayList({
   playlist,
   autoplay = false,
@@ -646,115 +554,123 @@ export function PlayList({
     ? getPositionStyle(position, offset, portal)
     : undefined;
 
-  const renderContent = () => {
-    if (isMini) {
-      return (
-        <MiniBar
-          currentTrack={currentTrack}
-          isPlaying={isPlaying}
-          isMuted={isMuted}
-          volume={volume}
-          onTogglePlay={togglePlay}
-          onToggleMute={toggleMute}
-          onVolumeChange={setVolume}
-          onRestore={restore}
-          theme={theme}
-          className={className}
-          playerMountRef={playerMountRef}
-          style={positionStyle}
-        />
-      );
-    }
+  const dataSizeValue = (() => {
+    if (isMini) return "mini";
+    if (isExpanded) return "expanded";
+    return undefined;
+  })();
 
-    if (isExpanded) {
-      return (
-        <div
-          className={clsx("rp-root", className)}
-          data-theme={theme}
-          data-size="expanded"
-          style={positionStyle}>
-          <div className="rp-toolbar">
-            <MinimizeButton onMinimize={minimize} />
-            <SizeToggleButton
-              currentSize={resolvedSize}
-              onToggle={toggleSize}
-            />
+  const content = (
+    <div
+      className={clsx("rp-root", className)}
+      data-theme={theme}
+      data-size={dataSizeValue}
+      style={positionStyle}>
+      {/* Mini overlay */}
+      <div className="rp-mini">
+        {isPlaying && (
+          <div className="rp-mini__indicator">
+            <div className="rp-track__playing-bar" />
+            <div className="rp-track__playing-bar" />
+            <div className="rp-track__playing-bar" />
           </div>
-          <div className="rp-content">
-            <div className="rp-panel rp-panel--nav">
-              <PlayListNav
-                playlist={playlist}
-                activeIndex={safeTabIndex}
-                onSelect={handleTabChange}
-              />
-            </div>
-            <div className="rp-panel rp-panel--main">
-              <MainPanelHeader playlistItem={activePlaylist} />
-              <PlayListTrackList
-                tracks={activeTracks}
-                currentGlobalIndex={currentIndex}
-                isPlaying={isPlaying}
-                onTrackSelect={handleTrackSelect}
-              />
-            </div>
-            <div className="rp-panel rp-panel--now-playing">
-              <div className="rp-now-playing__video">
-                <div
-                  ref={playerMountRef}
-                  className="rp-now-playing__video-mount"
-                />
-              </div>
-              <NowPlaying currentTrack={currentTrack} />
-            </div>
-          </div>
-          <PlayListPlayer
-            playerState={playerState}
-            currentTrack={currentTrack}
-            totalTracks={activeTracks.length}
-            hideMount
-          />
-        </div>
-      );
-    }
-
-    return (
-      <div
-        className={clsx("rp-root", className)}
-        data-theme={theme}
-        style={positionStyle}>
-        <div className="rp-toolbar">
-          <MinimizeButton onMinimize={minimize} />
-          {!isMobile && (
-            <SizeToggleButton
-              currentSize={resolvedSize}
-              onToggle={toggleSize}
-            />
+        )}
+        <div className="rp-mini__info">
+          {currentTrack ? (
+            <>
+              <div className="rp-mini__title">{currentTrack.title}</div>
+              <div className="rp-mini__artist">{currentTrack.artist}</div>
+            </>
+          ) : (
+            <div className="rp-mini__empty">No track playing</div>
           )}
         </div>
-        <PlayListHeader playlistItem={activePlaylist} />
-        <div className="rp-content">
+        <div className="rp-mini__volume">
+          <button
+            type="button"
+            onClick={toggleMute}
+            aria-label={isMuted ? "Unmute" : "Mute"}
+            className="rp-mini__button rp-mini__button--volume">
+            <MiniVolumeIcon isMuted={isMuted} />
+          </button>
+          <input
+            type="range"
+            min={0}
+            max={100}
+            step={1}
+            value={volume}
+            onChange={(e) => setVolume(Number(e.target.value))}
+            aria-label="Volume"
+            className="rp-mini__volume-slider"
+          />
+        </div>
+        <button
+          type="button"
+          onClick={togglePlay}
+          disabled={!currentTrack}
+          aria-label={isPlaying ? "Pause" : "Play"}
+          className="rp-mini__button">
+          {isPlaying ? <MiniPauseIcon /> : <MiniPlayIcon />}
+        </button>
+        <button
+          type="button"
+          onClick={restore}
+          aria-label="Expand"
+          className="rp-mini__button rp-mini__expand">
+          <ExpandIcon />
+        </button>
+      </div>
+
+      {/* Full view (compact + expanded) */}
+      <div className="rp-toolbar">
+        <MinimizeButton onMinimize={minimize} />
+        {(!isMobile || isExpanded) && (
+          <SizeToggleButton
+            currentSize={resolvedSize}
+            onToggle={toggleSize}
+          />
+        )}
+      </div>
+      <PlayListHeader playlistItem={activePlaylist} />
+      <div className="rp-content">
+        <div className="rp-panel rp-panel--nav">
+          <PlayListNav
+            playlist={playlist}
+            activeIndex={safeTabIndex}
+            onSelect={handleTabChange}
+          />
+        </div>
+        <div className="rp-panel rp-panel--main">
           <PlayListTabs
             playlist={playlist}
             activeIndex={safeTabIndex}
             onTabChange={handleTabChange}
           />
+          <MainPanelHeader playlistItem={activePlaylist} />
           <PlayListTrackList
             tracks={activeTracks}
             currentGlobalIndex={currentIndex}
             isPlaying={isPlaying}
             onTrackSelect={handleTrackSelect}
           />
-          <PlayListPlayer
-            playerState={playerState}
-            currentTrack={currentTrack}
-            totalTracks={activeTracks.length}
-          />
+        </div>
+        <div className="rp-panel rp-panel--now-playing">
+          <div className="rp-now-playing__video">
+            <div
+              ref={playerMountRef}
+              className="rp-now-playing__video-mount"
+            />
+          </div>
+          <NowPlaying currentTrack={currentTrack} />
         </div>
       </div>
-    );
-  };
-
-  const content = renderContent();
+      <PlayListPlayer
+        playerState={playerState}
+        currentTrack={currentTrack}
+        totalTracks={activeTracks.length}
+      />
+    </div>
+  );
 
   if (!portal) {
     return content;

@@ -6,7 +6,6 @@ type PlayListPlayerProps = {
   playerState: JukeboxPlayerState;
   currentTrack: PlayListTrack | undefined;
   totalTracks: number;
-  hideMount?: boolean;
 };
 
 function PrevIcon() {
@@ -63,10 +62,8 @@ export function PlayListPlayer({
   playerState,
   currentTrack,
   totalTracks,
-  hideMount = false,
 }: PlayListPlayerProps) {
   const {
-    playerMountRef,
     isMuted,
     isPlaying,
     volume,
@@ -85,10 +82,6 @@ export function PlayListPlayer({
 
   return (
     <div className="rp-player">
-      <div
-        ref={hideMount ? undefined : playerMountRef}
-        className="rp-player__mount"
-      />
 
       {currentTrack ? (
         <div className="rp-player__track">
