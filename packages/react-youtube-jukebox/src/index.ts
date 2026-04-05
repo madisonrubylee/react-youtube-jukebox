@@ -9,6 +9,8 @@ export type {
   JukeboxTheme,
   JukeboxTrack,
   PlayListItem,
+  PlayListOffset,
+  PlayListPosition,
   PlayListProps,
   PlayListSize,
   PlayListTheme,

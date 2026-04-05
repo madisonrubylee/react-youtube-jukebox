@@ -76,6 +76,9 @@ export type PlayListItem = {
 export type PlayListTheme = "light" | "dark";
 export type PlayListSize = "mini" | "compact" | "expanded";
 
+export type PlayListPosition = JukeboxPosition;
+export type PlayListOffset = JukeboxOffset;
+
 export type PlayListProps = {
   playlist: PlayListItem[];
   autoplay?: boolean;
@@ -83,6 +86,9 @@ export type PlayListProps = {
   size?: PlayListSize;
   defaultSize?: PlayListSize;
   onSizeChange?: (size: PlayListSize) => void;
+  position?: PlayListPosition;
+  offset?: PlayListOffset;
+  portal?: boolean;
   className?: string;
 };
 

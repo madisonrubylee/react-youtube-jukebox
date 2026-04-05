@@ -1,10 +1,19 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  useSyncExternalStore,
+  type CSSProperties,
+} from "react";
+import { createPortal } from "react-dom";
 import clsx from "clsx";
 
 import { useJukeboxPlayer } from "../hooks/useJukeboxPlayer";
 import {
   DEFAULT_PLAYLIST_SIZE,
   DEFAULT_PLAYLIST_THEME,
+  getPositionStyle,
   type JukeboxTrack,
   type PlayListItem,
   type PlayListProps,
@@ -13,6 +22,18 @@ import {
 } from "../lib/shared";
 import { PlayListPlayer } from "./PlayListPlayer";
 import "../styles/playlist.css";
+
+function subscribeToClientRender() {
+  return () => undefined;
+}
+
+function getClientRenderSnapshot() {
+  return true;
+}
+
+function getServerRenderSnapshot() {
+  return false;
+}
 
 function MusicNoteIcon({ className }: { className?: string }) {
   return (
@@ -454,6 +475,7 @@ function MiniBar({
   theme,
   className,
   playerMountRef,
+  style,
 }: {
   currentTrack: PlayListTrack | undefined;
   isPlaying: boolean;
@@ -466,12 +488,14 @@ function MiniBar({
   theme: string;
   className?: string | undefined;
   playerMountRef: (node: HTMLDivElement | null) => void;
+  style?: CSSProperties | undefined;
 }) {
   return (
     <div
       className={clsx("rp-root", className)}
       data-theme={theme}
-      data-size="mini">
+      data-size="mini"
+      style={style}>
       <div ref={playerMountRef} className="rp-mini__mount" />
       <div className="rp-mini">
         {isPlaying && (
@@ -537,8 +561,16 @@ export function PlayList({
   size,
   defaultSize,
   onSizeChange,
+  position,
+  offset,
+  portal = false,
   className,
 }: PlayListProps) {
+  const isMounted = useSyncExternalStore(
+    subscribeToClientRender,
+    getClientRenderSnapshot,
+    getServerRenderSnapshot,
+  );
   const [activeTabIndex, setActiveTabIndex] = useState(0);
   const { resolvedSize, toggleSize, minimize, restore } = usePlayListSize({
     size,
@@ -610,98 +642,127 @@ export function PlayList({
     }
   };
 
-  if (isMini) {
-    return (
-      <MiniBar
-        currentTrack={currentTrack}
-        isPlaying={isPlaying}
-        isMuted={isMuted}
-        volume={volume}
-        onTogglePlay={togglePlay}
-        onToggleMute={toggleMute}
-        onVolumeChange={setVolume}
-        onRestore={restore}
-        theme={theme}
-        className={className}
-        playerMountRef={playerMountRef}
-      />
-    );
-  }
+  const positionStyle = position
+    ? getPositionStyle(position, offset, portal)
+    : undefined;
 
-  if (isExpanded) {
+  const renderContent = () => {
+    if (isMini) {
+      return (
+        <MiniBar
+          currentTrack={currentTrack}
+          isPlaying={isPlaying}
+          isMuted={isMuted}
+          volume={volume}
+          onTogglePlay={togglePlay}
+          onToggleMute={toggleMute}
+          onVolumeChange={setVolume}
+          onRestore={restore}
+          theme={theme}
+          className={className}
+          playerMountRef={playerMountRef}
+          style={positionStyle}
+        />
+      );
+    }
+
+    if (isExpanded) {
+      return (
+        <div
+          className={clsx("rp-root", className)}
+          data-theme={theme}
+          data-size="expanded"
+          style={positionStyle}>
+          <div className="rp-toolbar">
+            <MinimizeButton onMinimize={minimize} />
+            <SizeToggleButton
+              currentSize={resolvedSize}
+              onToggle={toggleSize}
+            />
+          </div>
+          <div className="rp-content">
+            <div className="rp-panel rp-panel--nav">
+              <PlayListNav
+                playlist={playlist}
+                activeIndex={safeTabIndex}
+                onSelect={handleTabChange}
+              />
+            </div>
+            <div className="rp-panel rp-panel--main">
+              <MainPanelHeader playlistItem={activePlaylist} />
+              <PlayListTrackList
+                tracks={activeTracks}
+                currentGlobalIndex={currentIndex}
+                isPlaying={isPlaying}
+                onTrackSelect={handleTrackSelect}
+              />
+            </div>
+            <div className="rp-panel rp-panel--now-playing">
+              <div className="rp-now-playing__video">
+                <div
+                  ref={playerMountRef}
+                  className="rp-now-playing__video-mount"
+                />
+              </div>
+              <NowPlaying currentTrack={currentTrack} />
+            </div>
+          </div>
+          <PlayListPlayer
+            playerState={playerState}
+            currentTrack={currentTrack}
+            totalTracks={activeTracks.length}
+            hideMount
+          />
+        </div>
+      );
+    }
+
     return (
       <div
         className={clsx("rp-root", className)}
         data-theme={theme}
-        data-size="expanded">
+        style={positionStyle}>
         <div className="rp-toolbar">
           <MinimizeButton onMinimize={minimize} />
-          <SizeToggleButton currentSize={resolvedSize} onToggle={toggleSize} />
+          {!isMobile && (
+            <SizeToggleButton
+              currentSize={resolvedSize}
+              onToggle={toggleSize}
+            />
+          )}
         </div>
+        <PlayListHeader playlistItem={activePlaylist} />
         <div className="rp-content">
-          <div className="rp-panel rp-panel--nav">
-            <PlayListNav
-              playlist={playlist}
-              activeIndex={safeTabIndex}
-              onSelect={handleTabChange}
-            />
-          </div>
-          <div className="rp-panel rp-panel--main">
-            <MainPanelHeader playlistItem={activePlaylist} />
-            <PlayListTrackList
-              tracks={activeTracks}
-              currentGlobalIndex={currentIndex}
-              isPlaying={isPlaying}
-              onTrackSelect={handleTrackSelect}
-            />
-          </div>
-          <div className="rp-panel rp-panel--now-playing">
-            <div className="rp-now-playing__video">
-              <div
-                ref={playerMountRef}
-                className="rp-now-playing__video-mount"
-              />
-            </div>
-            <NowPlaying currentTrack={currentTrack} />
-          </div>
+          <PlayListTabs
+            playlist={playlist}
+            activeIndex={safeTabIndex}
+            onTabChange={handleTabChange}
+          />
+          <PlayListTrackList
+            tracks={activeTracks}
+            currentGlobalIndex={currentIndex}
+            isPlaying={isPlaying}
+            onTrackSelect={handleTrackSelect}
+          />
+          <PlayListPlayer
+            playerState={playerState}
+            currentTrack={currentTrack}
+            totalTracks={activeTracks.length}
+          />
         </div>
-        <PlayListPlayer
-          playerState={playerState}
-          currentTrack={currentTrack}
-          totalTracks={activeTracks.length}
-          hideMount
-        />
       </div>
     );
+  };
+
+  const content = renderContent();
+
+  if (!portal) {
+    return content;
   }
 
-  return (
-    <div className={clsx("rp-root", className)} data-theme={theme}>
-      <div className="rp-toolbar">
-        <MinimizeButton onMinimize={minimize} />
-        {!isMobile && (
-          <SizeToggleButton currentSize={resolvedSize} onToggle={toggleSize} />
-        )}
-      </div>
-      <PlayListHeader playlistItem={activePlaylist} />
-      <div className="rp-content">
-        <PlayListTabs
-          playlist={playlist}
-          activeIndex={safeTabIndex}
-          onTabChange={handleTabChange}
-        />
-        <PlayListTrackList
-          tracks={activeTracks}
-          currentGlobalIndex={currentIndex}
-          isPlaying={isPlaying}
-          onTrackSelect={handleTrackSelect}
-        />
-        <PlayListPlayer
-          playerState={playerState}
-          currentTrack={currentTrack}
-          totalTracks={activeTracks.length}
-        />
-      </div>
-    </div>
-  );
+  if (!isMounted) {
+    return null;
+  }
+
+  return createPortal(content, document.body);
 }
