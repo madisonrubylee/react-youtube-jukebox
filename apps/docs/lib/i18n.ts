@@ -90,6 +90,10 @@ const docsCopy = {
       },
       navigationAriaLabel: "Primary",
       searchPlaceholder: "Search documentation...",
+      searchDialogTitle: "Search documentation",
+      searchInputPlaceholder: "Type to search...",
+      searchNoResults: "No results found.",
+      searchClose: "Close",
     },
     sidebar: {
       ariaLabel: "Sidebar",
@@ -468,6 +472,10 @@ const docsCopy = {
       },
       navigationAriaLabel: "주요 메뉴",
       searchPlaceholder: "문서 검색...",
+      searchDialogTitle: "문서 검색",
+      searchInputPlaceholder: "검색어를 입력하세요...",
+      searchNoResults: "검색 결과가 없습니다.",
+      searchClose: "닫기",
     },
     sidebar: {
       ariaLabel: "사이드바",

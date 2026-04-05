@@ -104,6 +104,7 @@ export function PlayListShowcase({ locale }: PlayListShowcaseProps) {
       <div className="docs-playlist-showcase__preview">
         <PlayList
           playlist={demoPlaylist}
+          autoplay
           theme={theme}
           size={size}
           onSizeChange={setSize}

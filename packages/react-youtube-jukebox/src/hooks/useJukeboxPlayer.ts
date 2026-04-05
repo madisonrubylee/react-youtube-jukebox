@@ -21,20 +21,64 @@ type UseJukeboxPlayerOptions = {
   tracks: JukeboxTrack[];
 };
 
+const OFFSCREEN_STYLE =
+  "position:fixed;top:-9999px;left:-9999px;width:1px;height:1px;overflow:hidden;pointer-events:none;opacity:0";
+
+function createPersistentWrapper(): HTMLDivElement | null {
+  if (typeof document === "undefined") {
+    return null;
+  }
+
+  const wrapper = document.createElement("div");
+
+  wrapper.style.cssText = OFFSCREEN_STYLE;
+  document.body.appendChild(wrapper);
+
+  const container = document.createElement("div");
+
+  wrapper.appendChild(container);
+
+  return container;
+}
+
+function syncWrapperToSlot(
+  wrapper: HTMLDivElement,
+  slot: HTMLDivElement | null,
+) {
+  if (!slot) {
+    wrapper.style.cssText = OFFSCREEN_STYLE;
+    return;
+  }
+
+  const rect = slot.getBoundingClientRect();
+
+  wrapper.style.cssText = [
+    "position:fixed",
+    `top:${rect.top}px`,
+    `left:${rect.left}px`,
+    `width:${rect.width}px`,
+    `height:${rect.height}px`,
+    "pointer-events:none",
+    "z-index:-1",
+    "overflow:hidden",
+  ].join(";");
+}
+
 export function useJukeboxPlayer({
   autoplay,
   tracks,
 }: UseJukeboxPlayerOptions): JukeboxPlayerState {
   const playerRef = useRef<YouTubePlayer | null>(null);
+  const containerRef = useRef<HTMLDivElement | null>(createPersistentWrapper());
+  const slotRef = useRef<HTMLDivElement | null>(null);
+  const resizeObserverRef = useRef<ResizeObserver | null>(null);
   const currentIndexRef = useRef(0);
   const isPlayingRef = useRef(false);
   const mutedPreferenceRef = useRef(true);
   const shouldResumePlaybackRef = useRef(autoplay);
   const tracksRef = useRef(tracks);
   const volumeRef = useRef(DEFAULT_VOLUME);
-  const [playerMountNode, setPlayerMountNode] = useState<HTMLDivElement | null>(
-    null,
-  );
+  const [isContainerMounted, setIsContainerMounted] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isReady, setIsReady] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -97,7 +141,9 @@ export function useJukeboxPlayer({
   }, [autoplay, isReady]);
 
   useEffect(() => {
-    if (!playerMountNode || !hasTracks) {
+    const container = containerRef.current;
+
+    if (!container || !isContainerMounted || !hasTracks) {
       return;
     }
 
@@ -109,7 +155,7 @@ export function useJukeboxPlayer({
           return;
         }
 
-        playerRef.current = new YT.Player(playerMountNode, {
+        playerRef.current = new YT.Player(container, {
           width: "100%",
           height: "100%",
           videoId: tracksRef.current[currentIndexRef.current]?.videoId ?? "",
@@ -183,7 +229,7 @@ export function useJukeboxPlayer({
       playerRef.current?.destroy();
       playerRef.current = null;
     };
-  }, [hasTracks, playerMountNode]);
+  }, [hasTracks, isContainerMounted]);
 
   useEffect(() => {
     const player = playerRef.current;
@@ -200,8 +246,66 @@ export function useJukeboxPlayer({
     player.cueVideoById(currentVideoId);
   }, [currentVideoId, isReady]);
 
+  useEffect(() => {
+    const container = containerRef.current;
+
+    if (!container) {
+      return;
+    }
+
+    const wrapper = container.parentElement as HTMLDivElement | null;
+
+    if (!wrapper) {
+      return;
+    }
+
+    const handleScroll = () => {
+      syncWrapperToSlot(wrapper, slotRef.current);
+    };
+
+    window.addEventListener("scroll", handleScroll, true);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll, true);
+    };
+  }, []);
+
+  const playerMountRef = useCallback((slotNode: HTMLDivElement | null) => {
+    const container = containerRef.current;
+
+    if (!container) {
+      return;
+    }
+
+    const wrapper = container.parentElement as HTMLDivElement | null;
+
+    if (resizeObserverRef.current) {
+      resizeObserverRef.current.disconnect();
+      resizeObserverRef.current = null;
+    }
+
+    slotRef.current = slotNode;
+
+    if (!slotNode || !wrapper) {
+      if (wrapper) {
+        syncWrapperToSlot(wrapper, null);
+      }
+      return;
+    }
+
+    syncWrapperToSlot(wrapper, slotNode);
+    setIsContainerMounted(true);
+
+    const observer = new ResizeObserver(() => {
+      syncWrapperToSlot(wrapper, slotRef.current);
+    });
+
+    observer.observe(slotNode);
+    resizeObserverRef.current = observer;
+  }, []);
+
   return {
-    playerMountRef: setPlayerMountNode,
+    playerMountRef,
     currentIndex: safeCurrentIndex,
     isMuted,
     isPlaying,

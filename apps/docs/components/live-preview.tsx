@@ -70,6 +70,7 @@ export function LivePreview({ locale }: LivePreviewProps) {
       <div className="docs-preview__stage">
         <Jukebox
           tracks={demoTracks}
+          autoplay
           portal={false}
           position={position}
           offset={24}
