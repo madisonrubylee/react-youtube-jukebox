@@ -240,4 +240,5 @@ type JukeboxProps = {
 };
 ```
 
-기본 동작은 viewport 기준 포털 렌더링입니다. 레이아웃 안에서 직접 배치해야 할 때만 `portal={false}`를 사용합니다. `position="bottom-center"` 또는 `position="top-center"`를 사용하면 x축은 가운데 정렬되고, `offset`은 top/bottom 여백에 그대로 적용됩니다. `autoplay`는 기본값이 `true`이며 첫 진입 시 무음 상태로 자동 재생합니다. 자동 재생을 끄려면 `autoplay={false}`를 전달합니다.
+기본 동작은 viewport 기준 포털 렌더링입니다. 레이아웃 안에서 직접 배치해야 할 때만 `portal={false}`를 사용합니다. `position="bottom-center"` 또는 `position="top-center"`를 사용하면 x축
+은 가운데 정렬되고, `offset`은 top/bottom 여백에 그대로 적용됩니다. `autoplay`는 기본값이 `true`이며 첫 진입 시 무음 상태로 자동 재생합니다. 자동 재생을 끄려면 `autoplay={false}`를 전달합니다.
