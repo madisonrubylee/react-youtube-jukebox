@@ -90,8 +90,23 @@ export function useJukeboxPlayer({
     currentIndexRef.current = safeCurrentIndex;
   }, [safeCurrentIndex]);
 
+  const [prevTracks, setPrevTracks] = useState(tracks);
+
+  if (prevTracks !== tracks) {
+    const hasTracksChanged =
+      prevTracks.length !== tracks.length ||
+      prevTracks.some((prev, i) => prev.videoId !== tracks[i]?.videoId);
+
+    setPrevTracks(tracks);
+
+    if (hasTracksChanged) {
+      setCurrentIndex(0);
+    }
+  }
+
   useEffect(() => {
     tracksRef.current = tracks;
+    shouldResumePlaybackRef.current = isPlayingRef.current;
   }, [tracks]);
 
   useEffect(() => {
