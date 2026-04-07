@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 
+import { Analytics } from "@vercel/analytics/next";
 import { DocsSidebar } from "../components/docs-sidebar";
 import { SiteHeader } from "../components/site-header";
 import { getDocsCopy } from "../lib/i18n";
@@ -34,6 +35,7 @@ export default async function RootLayout({
             {children}
           </div>
         </div>
+        <Analytics />
       </body>
     </html>
   );

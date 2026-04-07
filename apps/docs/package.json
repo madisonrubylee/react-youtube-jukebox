@@ -9,9 +9,10 @@
     "typecheck": "tsc --project tsconfig.json --noEmit"
   },
   "dependencies": {
-    "react-youtube-jukebox": "workspace:*",
+    "@vercel/analytics": "^2.0.1",
     "next": "^15.0.0",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "react-youtube-jukebox": "workspace:*"
   }
 }
