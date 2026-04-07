@@ -2,7 +2,7 @@
 
 <p align="center">
   <a href="https://react-youtube-jukebox.com/">
-    <img src="https://react-youtube-jukebox.com/react-youtube-jukebox-sample.png" alt="react-youtube-jukebox demo" width="720" />
+    <img src="https://raw.githubusercontent.com/madisonrubylee/react-youtube-jukebox/main/apps/docs/public/react-youtube-jukebox-sample.png" alt="react-youtube-jukebox demo" width="720" />
   </a>
 </p>
 
@@ -131,7 +131,7 @@ By default, the player renders through a portal positioned relative to the viewp
 
 <p align="center">
   <a href="https://react-youtube-jukebox.com/">
-    <img src="https://react-youtube-jukebox.com/react-youtube-jukebox-sample.png" alt="react-youtube-jukebox 데모" width="720" />
+    <img src="https://raw.githubusercontent.com/madisonrubylee/react-youtube-jukebox/main/apps/docs/public/react-youtube-jukebox-sample.png" alt="react-youtube-jukebox 데모" width="720" />
   </a>
 </p>
 
