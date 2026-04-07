@@ -71,6 +71,15 @@ export default async function HomePage() {
           </div>
         </div>
 
+        <div className="docs-home-preview-image">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/react-youtube-jukebox-sample.png"
+            alt="React YouTube Jukebox demo"
+            className="docs-home-preview-image__img"
+          />
+        </div>
+
         <div className="docs-home-code-panel">
           <CodeBlock>{`import { Jukebox } from "react-youtube-jukebox";
 

@@ -581,7 +581,7 @@ pre {
   grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr);
   grid-template-areas:
     "summary signal"
-    "journey signal"
+    "preview preview"
     "journey code";
   gap: 24px;
   align-items: start;
@@ -824,6 +824,23 @@ pre {
 .docs-home-callout p,
 .docs-home-feature p {
   margin: 0;
+}
+
+.docs-home-preview-image {
+  grid-area: preview;
+  border: 1px solid var(--docs-border);
+  border-radius: 24px;
+  background: var(--docs-surface-strong);
+  box-shadow: var(--docs-shadow);
+  overflow: hidden;
+  padding: 0;
+}
+
+.docs-home-preview-image__img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 23px;
 }
 
 .docs-home-code-panel {
@@ -1086,6 +1103,7 @@ pre {
     grid-template-areas:
       "summary"
       "signal"
+      "preview"
       "journey"
       "code";
     grid-template-columns: 1fr;
@@ -1283,13 +1301,15 @@ pre {
 }
 
 .docs-playlist-showcase__preview {
+  --docs-playlist-preview-height: 624px;
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 120px;
-  padding: 32px 0;
+  height: var(--docs-playlist-preview-height);
+  padding: 32px 16px;
   border-radius: 12px;
   background: #18181b;
+  overflow: auto;
 }
 
 @media (prefers-color-scheme: light) {
@@ -1300,6 +1320,14 @@ pre {
 
 .docs-playlist-showcase__player {
   --rp-height: 520px;
+  flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+  .docs-playlist-showcase__preview {
+    align-items: flex-start;
+    padding: 24px 12px;
+  }
 }
 
 .docs-playlist-example-card__preview {

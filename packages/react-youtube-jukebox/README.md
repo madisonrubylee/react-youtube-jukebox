@@ -1,5 +1,11 @@
 # react-youtube-jukebox
 
+<p align="center">
+  <a href="https://react-youtube-jukebox.com/">
+    <img src="https://react-youtube-jukebox.com/react-youtube-jukebox-sample.png" alt="react-youtube-jukebox demo" width="720" />
+  </a>
+</p>
+
 A floating YouTube jukebox and playlist player component for React.
 
 It wraps the YouTube IFrame Player API with a dock-style player UI, queue rotation, portal rendering, and a customizable expanded panel.
@@ -122,6 +128,12 @@ By default, the player renders through a portal positioned relative to the viewp
 ---
 
 # 한국어
+
+<p align="center">
+  <a href="https://react-youtube-jukebox.com/">
+    <img src="https://react-youtube-jukebox.com/react-youtube-jukebox-sample.png" alt="react-youtube-jukebox 데모" width="720" />
+  </a>
+</p>
 
 React용 플로팅 YouTube 주크박스 & 플레이리스트 플레이어 컴포넌트입니다.
 

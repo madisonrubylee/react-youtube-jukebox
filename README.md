@@ -1,5 +1,9 @@
 # react-youtube-jukebox Monorepo
 
+<p align="center">
+  <img src="apps/docs/public/react-youtube-jukebox-sample.png" alt="react-youtube-jukebox demo" width="720" />
+</p>
+
 `react-youtube-jukebox` 라이브러리 패키지와 Next.js 기반 docs 사이트를 함께 관리하는 pnpm workspace입니다.
 
 ## Workspace Layout

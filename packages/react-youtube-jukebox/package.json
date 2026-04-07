@@ -1,6 +1,6 @@
 {
   "name": "react-youtube-jukebox",
-  "version": "0.2.4",
+  "version": "0.2.6",
   "description": "react-youtube-jukebox is a floating YouTube jukebox and playlist player component for React.",
   "license": "MIT",
   "keywords": [
