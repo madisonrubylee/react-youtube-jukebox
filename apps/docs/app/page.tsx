@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 import { CodeBlock } from "../components/code-block";
@@ -72,10 +73,11 @@ export default async function HomePage() {
         </div>
 
         <div className="docs-home-preview-image">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
+          <Image
             src="/react-youtube-jukebox-sample.png"
             alt="React YouTube Jukebox demo"
+            width={1044}
+            height={598}
             className="docs-home-preview-image__img"
           />
         </div>
