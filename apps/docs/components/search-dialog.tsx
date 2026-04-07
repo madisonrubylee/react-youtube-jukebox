@@ -70,14 +70,15 @@ export function SearchDialog({ locale, open, onClose }: SearchDialogProps) {
     );
   }, [query, allItems]);
 
-  useEffect(() => {
-    setActiveIndex(0);
-  }, [filteredItems]);
+  const activeItemIndex =
+    filteredItems.length === 0
+      ? -1
+      : Math.min(activeIndex, filteredItems.length - 1);
+  const activeItem =
+    activeItemIndex === -1 ? undefined : filteredItems[activeItemIndex];
 
   useEffect(() => {
     if (open) {
-      setQuery("");
-      setActiveIndex(0);
       requestAnimationFrame(() => inputRef.current?.focus());
     }
   }, [open]);
@@ -107,8 +108,8 @@ export function SearchDialog({ locale, open, onClose }: SearchDialogProps) {
           break;
         case "Enter":
           event.preventDefault();
-          if (filteredItems[activeIndex]) {
-            navigate(filteredItems[activeIndex].href);
+          if (activeItem) {
+            navigate(activeItem.href);
           }
           break;
         case "Escape":
@@ -117,15 +118,15 @@ export function SearchDialog({ locale, open, onClose }: SearchDialogProps) {
           break;
       }
     },
-    [activeIndex, filteredItems, navigate, onClose]
+    [activeItem, filteredItems.length, navigate, onClose]
   );
 
   useEffect(() => {
-    const activeElement = listRef.current?.children[activeIndex] as
+    const activeElement = listRef.current?.children[activeItemIndex] as
       | HTMLElement
       | undefined;
     activeElement?.scrollIntoView({ block: "nearest" });
-  }, [activeIndex]);
+  }, [activeItemIndex]);
 
   if (!open) return null;
 
@@ -152,7 +153,10 @@ export function SearchDialog({ locale, open, onClose }: SearchDialogProps) {
             className="docs-search-dialog__input"
             type="text"
             value={query}
-            onChange={(event) => setQuery(event.target.value)}
+            onChange={(event) => {
+              setQuery(event.target.value);
+              setActiveIndex(0);
+            }}
             placeholder={copy.header.searchInputPlaceholder}
             aria-label={copy.header.searchDialogTitle}
           />
@@ -173,9 +177,9 @@ export function SearchDialog({ locale, open, onClose }: SearchDialogProps) {
             filteredItems.map((item, index) => (
               <li
                 key={item.href}
-                className={`docs-search-dialog__item${index === activeIndex ? " docs-search-dialog__item--active" : ""}`}
+                className={`docs-search-dialog__item${index === activeItemIndex ? " docs-search-dialog__item--active" : ""}`}
                 role="option"
-                aria-selected={index === activeIndex}
+                aria-selected={index === activeItemIndex}
                 onMouseEnter={() => setActiveIndex(index)}
                 onClick={() => navigate(item.href)}>
                 <span className="docs-search-dialog__item-label">

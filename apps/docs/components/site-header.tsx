@@ -92,7 +92,9 @@ export function SiteHeader({ locale }: SiteHeaderProps) {
           <span>{copy.header.searchPlaceholder}</span>
           <code>⌘ K</code>
         </button>
-        <SearchDialog locale={locale} open={searchOpen} onClose={closeSearch} />
+        {searchOpen ? (
+          <SearchDialog locale={locale} open={searchOpen} onClose={closeSearch} />
+        ) : null}
         <a
           href="https://github.com/madisonrubylee/react-youtube-jukebox"
           target="_blank"
