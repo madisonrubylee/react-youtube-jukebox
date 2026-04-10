@@ -1,8 +1,9 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
 import {
   DEFAULT_POSITION,
   getPositionStyle,
+  getRandomTrackIndex,
   normalizeOffset,
 } from "./shared";
 
@@ -45,5 +46,29 @@ describe("shared position helpers", () => {
 
   it("normalizes numeric offsets into both axes", () => {
     expect(normalizeOffset(20)).toEqual({ x: 20, y: 20 });
+  });
+});
+
+describe("getRandomTrackIndex", () => {
+  it("returns 0 when there is at most one track", () => {
+    expect(getRandomTrackIndex(0, 0)).toBe(0);
+    expect(getRandomTrackIndex(0, 1)).toBe(0);
+  });
+
+  it("returns the only other index when there are two tracks", () => {
+    expect(getRandomTrackIndex(0, 2)).toBe(1);
+    expect(getRandomTrackIndex(1, 2)).toBe(0);
+  });
+
+  it("returns an index different from the current index", () => {
+    const randomSpy = vi.spyOn(Math, "random");
+
+    randomSpy.mockReturnValue(0.99);
+    expect(getRandomTrackIndex(0, 3)).toBe(2);
+
+    randomSpy.mockReturnValue(0);
+    expect(getRandomTrackIndex(1, 3)).toBe(0);
+
+    randomSpy.mockRestore();
   });
 });

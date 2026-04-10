@@ -29,6 +29,12 @@ type JukeboxChrome = "classic" | "wallet" | "ride";
 type JukeboxProps = {
   tracks: JukeboxTrack[];
   autoplay?: boolean;
+  showSeekBar?: boolean;
+  onPlay?: () => void;
+  onPause?: () => void;
+  onTrackChange?: (track: JukeboxTrack, index: number) => void;
+  onEnd?: () => void;
+  keyboard?: boolean;
   position?:
     | "bottom-right"
     | "bottom-left"
@@ -97,6 +103,10 @@ type JukeboxProps = {
             </tr>
           </tbody>
         </table>
+        <p>
+          <code>showSeekBar</code>를 <code>false</code>로 전달하면 기본 확장
+          플레이어의 seek bar를 숨길 수 있습니다.
+        </p>
       </section>
 
       <section id="playground">

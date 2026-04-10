@@ -1,4 +1,5 @@
 import {
+  useEffect,
   useState,
   useSyncExternalStore,
   type CSSProperties,
@@ -22,6 +23,22 @@ import {
   type JukeboxProps,
   type JukeboxTrack,
 } from "../lib/shared";
+
+function shouldIgnoreKeyboardShortcut(target: EventTarget | null) {
+  if (!(target instanceof Element)) {
+    return false;
+  }
+
+  if (target.closest("input, textarea, select, [contenteditable='true']")) {
+    return true;
+  }
+
+  if (target instanceof HTMLElement && target.isContentEditable) {
+    return true;
+  }
+
+  return false;
+}
 import { JukeboxExpandedPlayer } from "./JukeboxExpandedPlayer";
 import "../styles/jukebox.css";
 
@@ -162,6 +179,12 @@ function ExpandedPanel({
 export function Jukebox({
   tracks,
   autoplay = true,
+  showSeekBar = true,
+  onPlay,
+  onPause,
+  onTrackChange,
+  onEnd,
+  keyboard = false,
   position = DEFAULT_POSITION,
   theme = DEFAULT_THEME,
   chrome = DEFAULT_CHROME,
@@ -187,7 +210,68 @@ export function Jukebox({
     togglePlay,
     playNext,
     playPrev,
-  } = useJukeboxPlayer({ autoplay, tracks });
+    playTrackAt,
+    progress,
+    duration,
+    currentTime,
+    seek,
+  } = useJukeboxPlayer({
+    autoplay,
+    tracks,
+    ...(onPlay !== undefined ? { onPlay } : {}),
+    ...(onPause !== undefined ? { onPause } : {}),
+    ...(onTrackChange !== undefined ? { onTrackChange } : {}),
+    ...(onEnd !== undefined ? { onEnd } : {}),
+  });
+
+  useEffect(() => {
+    if (!keyboard) {
+      return;
+    }
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (shouldIgnoreKeyboardShortcut(event.target)) {
+        return;
+      }
+
+      if (event.code === "Space") {
+        event.preventDefault();
+        togglePlay();
+        return;
+      }
+
+      if (event.code === "ArrowRight") {
+        event.preventDefault();
+        playNext();
+        return;
+      }
+
+      if (event.code === "ArrowLeft") {
+        event.preventDefault();
+        playPrev();
+        return;
+      }
+
+      const key = event.key.toLowerCase();
+
+      if (key === "m") {
+        event.preventDefault();
+        toggleMute();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [
+    keyboard,
+    togglePlay,
+    playNext,
+    playPrev,
+    toggleMute,
+  ]);
   const effectiveChrome = getEffectiveChrome(chrome);
 
   const currentTrack = tracks[currentIndex];
@@ -213,6 +297,11 @@ export function Jukebox({
           togglePlay,
           playNext,
           playPrev,
+          playTrackAt,
+          progress,
+          duration,
+          currentTime,
+          seek,
         }
       : undefined;
 
@@ -244,7 +333,10 @@ export function Jukebox({
           {renderExpandedContent ? (
             renderExpandedContent(expandedRenderProps)
           ) : (
-            <JukeboxExpandedPlayer {...expandedRenderProps} />
+            <JukeboxExpandedPlayer
+              {...expandedRenderProps}
+              showSeekBar={showSeekBar}
+            />
           )}
         </ExpandedPanel>
       ) : null}

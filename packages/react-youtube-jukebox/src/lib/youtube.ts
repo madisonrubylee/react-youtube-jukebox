@@ -9,10 +9,13 @@ export type YouTubePlayerStateEvent = {
 export type YouTubePlayer = {
   cueVideoById(videoId: string): void;
   destroy(): void;
+  getCurrentTime(): number;
+  getDuration(): number;
   loadVideoById(videoId: string): void;
   mute(): void;
   pauseVideo(): void;
   playVideo(): void;
+  seekTo(seconds: number, allowSeekAhead: boolean): void;
   setVolume(volume: number): void;
   unMute(): void;
 };

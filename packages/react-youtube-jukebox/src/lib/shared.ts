@@ -19,9 +19,17 @@ export type JukeboxChrome = "classic" | "wallet" | "ride";
 
 export type JukeboxOffset = number | { x: number; y: number };
 
+export type RepeatMode = "none" | "all" | "one";
+
 export type JukeboxProps = {
   tracks: JukeboxTrack[];
   autoplay?: boolean;
+  showSeekBar?: boolean;
+  onPlay?: () => void;
+  onPause?: () => void;
+  onTrackChange?: (track: JukeboxTrack, index: number) => void;
+  onEnd?: () => void;
+  keyboard?: boolean;
   position?: JukeboxPosition;
   theme?: JukeboxTheme;
   chrome?: JukeboxChrome;
@@ -42,9 +50,21 @@ export type JukeboxPlayerState = {
   togglePlay: () => void;
   playNext: () => void;
   playPrev: () => void;
+  playTrackAt: (index: number) => void;
+  shuffle: boolean;
+  toggleShuffle: () => void;
+  repeat: RepeatMode;
+  cycleRepeat: () => void;
+  progress: number;
+  duration: number;
+  currentTime: number;
+  seek: (seconds: number) => void;
 };
 
-export type JukeboxExpandedRenderProps = JukeboxPlayerState & {
+export type JukeboxExpandedRenderProps = Omit<
+  JukeboxPlayerState,
+  "shuffle" | "toggleShuffle" | "repeat" | "cycleRepeat"
+> & {
   currentTrack: JukeboxTrack;
   isExpanded: boolean;
   nextTrack: JukeboxTrack | undefined;
@@ -82,6 +102,7 @@ export type PlayListOffset = JukeboxOffset;
 export type PlayListProps = {
   playlist: PlayListItem[];
   autoplay?: boolean;
+  showSeekBar?: boolean;
   theme?: PlayListTheme;
   size?: PlayListSize;
   defaultSize?: PlayListSize;
@@ -115,6 +136,28 @@ export function getNextTrackIndex(
   }
 
   return (index + step + totalTracks) % totalTracks;
+}
+
+/** Picks a random track index in `[0, totalTracks)` other than `currentIndex`. */
+export function getRandomTrackIndex(
+  currentIndex: number,
+  totalTracks: number,
+): number {
+  if (totalTracks <= 1) {
+    return 0;
+  }
+
+  if (totalTracks === 2) {
+    return currentIndex === 0 ? 1 : 0;
+  }
+
+  let nextIndex = currentIndex;
+
+  while (nextIndex === currentIndex) {
+    nextIndex = Math.floor(Math.random() * totalTracks);
+  }
+
+  return nextIndex;
 }
 
 export function clampVolume(value: number) {

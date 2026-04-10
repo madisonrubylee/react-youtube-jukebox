@@ -32,6 +32,7 @@ type PlayListProps = {
   playlist: PlayListItem[];
   autoplay?: boolean;
   theme?: "light" | "dark";
+  size?: "mini" | "compact" | "expanded";
   className?: string;
 };`}</CodeBlock>
       </section>

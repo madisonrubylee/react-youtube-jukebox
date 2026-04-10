@@ -465,6 +465,7 @@ function MiniVolumeIcon({ isMuted }: { isMuted: boolean }) {
 export function PlayList({
   playlist,
   autoplay = false,
+  showSeekBar = true,
   theme = DEFAULT_PLAYLIST_THEME,
   size,
   defaultSize,
@@ -479,17 +480,16 @@ export function PlayList({
     getClientRenderSnapshot,
     getServerRenderSnapshot,
   );
-  const [activeTabIndex, setActiveTabIndex] = useState(0);
   const { resolvedSize, toggleSize, minimize, restore } = usePlayListSize({
     size,
     defaultSize,
     onSizeChange,
   });
   const isMobile = useIsMobile();
+  const [activeTabIndex, setActiveTabIndex] = useState(0);
 
   const isMini = resolvedSize === "mini";
   const isExpanded = resolvedSize === "expanded";
-
   const safeTabIndex =
     playlist.length > 0 ? Math.min(activeTabIndex, playlist.length - 1) : 0;
 
@@ -498,6 +498,7 @@ export function PlayList({
     () => activePlaylist?.data ?? [],
     [activePlaylist],
   );
+  const previousPlaylistIndexRef = useRef(safeTabIndex);
 
   const jukeboxTracks = useMemo(
     () => toJukeboxTracks(activeTracks),
@@ -518,11 +519,19 @@ export function PlayList({
     toggleMute,
     playerMountRef,
     togglePlay,
-    playNext,
-    playPrev,
+    playTrackAt,
   } = playerState;
 
   const currentTrack = activeTracks[currentIndex];
+
+  useEffect(() => {
+    if (previousPlaylistIndexRef.current === safeTabIndex) {
+      return;
+    }
+
+    previousPlaylistIndexRef.current = safeTabIndex;
+    playTrackAt(0);
+  }, [playTrackAt, safeTabIndex]);
 
   const handleTabChange = (index: number) => {
     setActiveTabIndex(index);
@@ -536,18 +545,7 @@ export function PlayList({
       return;
     }
 
-    const stepsForward = trackIndex - currentIndex;
-
-    if (stepsForward > 0) {
-      for (let i = 0; i < stepsForward; i++) {
-        playNext();
-      }
-    } else {
-      const stepsBack = Math.abs(stepsForward);
-      for (let i = 0; i < stepsBack; i++) {
-        playPrev();
-      }
-    }
+    playTrackAt(trackIndex);
   };
 
   const positionStyle = position
@@ -668,6 +666,8 @@ export function PlayList({
         playerState={playerState}
         currentTrack={currentTrack}
         totalTracks={activeTracks.length}
+        canSeek={Boolean(currentTrack)}
+        showSeekBar={showSeekBar}
       />
     </div>
   );

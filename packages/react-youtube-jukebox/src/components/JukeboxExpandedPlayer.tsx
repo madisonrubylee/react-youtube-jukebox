@@ -2,7 +2,9 @@ import type { ChangeEvent } from "react";
 
 import type { JukeboxExpandedRenderProps } from "../lib/shared";
 
-type JukeboxExpandedPlayerProps = JukeboxExpandedRenderProps;
+type JukeboxExpandedPlayerViewProps = JukeboxExpandedRenderProps & {
+  showSeekBar?: boolean;
+};
 
 function SpeakerIcon({ isMuted }: { isMuted: boolean }) {
   if (isMuted) {
@@ -35,12 +37,21 @@ export function JukeboxExpandedPlayer({
   togglePlay,
   toggleMute,
   setVolume,
-}: JukeboxExpandedPlayerProps) {
+  duration,
+  currentTime,
+  seek,
+  showSeekBar = true,
+}: JukeboxExpandedPlayerViewProps) {
   const hasMultipleTracks = totalTracks > 1;
   const hasNextTrack = nextTrack !== undefined;
+  const progressMax = duration > 0 ? duration : 1;
 
   const handleVolumeInput = (event: ChangeEvent<HTMLInputElement>) => {
     setVolume(Number(event.target.value));
+  };
+
+  const handleProgressInput = (event: ChangeEvent<HTMLInputElement>) => {
+    seek(Number(event.target.value));
   };
 
   return (
@@ -54,6 +65,22 @@ export function JukeboxExpandedPlayer({
 
         <div className="rj-expanded__meta">
           <div className="rj-expanded__controls">
+            {showSeekBar ? (
+              <div className="rj-expanded__progress-row">
+                <input
+                  type="range"
+                  min={0}
+                  max={progressMax}
+                  step={0.1}
+                  value={Math.min(currentTime, progressMax)}
+                  onChange={handleProgressInput}
+                  aria-label="Playback position"
+                  className="rj-progress"
+                  disabled={!duration}
+                />
+              </div>
+            ) : null}
+
             <div className="rj-expanded__transport">
               <button
                 type="button"

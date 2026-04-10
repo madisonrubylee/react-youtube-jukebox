@@ -343,6 +343,7 @@
 .rp-player__track {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 10px;
   margin-bottom: 10px;
 }
@@ -367,6 +368,68 @@
   margin-top: 1px;
   font-size: 10px;
   color: var(--rp-text-muted);
+}
+
+.rp-player__counter {
+  flex-shrink: 0;
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+  color: var(--rp-text-dim);
+}
+
+.rp-player__progress {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.rp-player__time {
+  font-size: 10px;
+  font-variant-numeric: tabular-nums;
+  color: var(--rp-text-dim);
+}
+
+.rp-player__progress-slider {
+  min-width: 0;
+  width: 100%;
+  height: 4px;
+  cursor: pointer;
+  appearance: none;
+  border-radius: 9999px;
+  background: var(--rp-volume-track);
+  outline: none;
+}
+
+.rp-player__progress-slider::-webkit-slider-runnable-track {
+  height: 4px;
+  border-radius: 9999px;
+  background: var(--rp-volume-track);
+}
+
+.rp-player__progress-slider::-webkit-slider-thumb {
+  width: 12px;
+  height: 12px;
+  margin-top: -4px;
+  appearance: none;
+  border: 0;
+  border-radius: 9999px;
+  background: var(--rp-accent);
+}
+
+.rp-player__progress-slider::-moz-range-track {
+  height: 4px;
+  border-radius: 9999px;
+  background: var(--rp-volume-track);
+}
+
+.rp-player__progress-slider::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  border: 0;
+  border-radius: 9999px;
+  background: var(--rp-accent);
 }
 
 .rp-player__controls {

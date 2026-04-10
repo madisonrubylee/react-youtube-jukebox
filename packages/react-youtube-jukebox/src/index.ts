@@ -8,6 +8,7 @@ export type {
   JukeboxProps,
   JukeboxTheme,
   JukeboxTrack,
+  RepeatMode,
   PlayListItem,
   PlayListOffset,
   PlayListPosition,
