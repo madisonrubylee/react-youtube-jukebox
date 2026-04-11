@@ -1,6 +1,5 @@
 import {
   useEffect,
-  useState,
   useSyncExternalStore,
   type CSSProperties,
   type ReactNode,
@@ -8,13 +7,12 @@ import {
 import { createPortal } from "react-dom";
 import clsx from "clsx";
 
-import { useJukeboxPlayer } from "../hooks/useJukeboxPlayer";
+import { useJukebox } from "../hooks/useJukebox";
 import {
   DEFAULT_CHROME,
   DEFAULT_POSITION,
   DEFAULT_THEME,
   getEffectiveChrome,
-  getNextTrackIndex,
   getPositionStyle,
   LEVEL_BAR_ANIMATION_DELAY_MS,
   LEVEL_BAR_HEIGHTS,
@@ -193,12 +191,26 @@ export function Jukebox({
   className,
   renderExpandedContent,
 }: JukeboxProps) {
-  const [isExpanded, setIsExpanded] = useState(false);
   const isMounted = useSyncExternalStore(
     subscribeToClientRender,
     getClientRenderSnapshot,
     getServerRenderSnapshot,
   );
+  const {
+    player,
+    currentTrack,
+    nextTrack,
+    totalTracks,
+    expanded,
+    toggleExpanded,
+  } = useJukebox({
+    tracks,
+    autoplay,
+    ...(onPlay !== undefined ? { onPlay } : {}),
+    ...(onPause !== undefined ? { onPause } : {}),
+    ...(onTrackChange !== undefined ? { onTrackChange } : {}),
+    ...(onEnd !== undefined ? { onEnd } : {}),
+  });
   const {
     playerMountRef,
     currentIndex,
@@ -215,14 +227,7 @@ export function Jukebox({
     duration,
     currentTime,
     seek,
-  } = useJukeboxPlayer({
-    autoplay,
-    tracks,
-    ...(onPlay !== undefined ? { onPlay } : {}),
-    ...(onPause !== undefined ? { onPause } : {}),
-    ...(onTrackChange !== undefined ? { onTrackChange } : {}),
-    ...(onEnd !== undefined ? { onEnd } : {}),
-  });
+  } = player;
 
   useEffect(() => {
     if (!keyboard) {
@@ -274,23 +279,17 @@ export function Jukebox({
   ]);
   const effectiveChrome = getEffectiveChrome(chrome);
 
-  const currentTrack = tracks[currentIndex];
-  const nextTrack =
-    tracks.length > 1
-      ? tracks[getNextTrackIndex(currentIndex, 1, tracks.length)]
-      : undefined;
-  const effectiveIsExpanded = currentTrack ? isExpanded : false;
   const expandedRenderProps: JukeboxExpandedRenderProps | undefined =
     currentTrack
       ? {
           currentIndex,
           currentTrack,
-          isExpanded: effectiveIsExpanded,
+          isExpanded: expanded,
           isMuted,
           isPlaying,
           nextTrack,
           playerMountRef,
-          totalTracks: tracks.length,
+          totalTracks,
           volume,
           setVolume,
           toggleMute,
@@ -305,20 +304,12 @@ export function Jukebox({
         }
       : undefined;
 
-  const handleToggleExpanded = () => {
-    if (!currentTrack) {
-      return;
-    }
-
-    setIsExpanded((expanded) => !expanded);
-  };
-
   const content = (
     <div
       className={clsx(
         "rj-root",
         {
-          "rj-root--expanded": effectiveIsExpanded,
+          "rj-root--expanded": expanded,
           "rj-root--portal": portal,
           "rj-root--inline": !portal,
         },
@@ -329,7 +320,7 @@ export function Jukebox({
       data-chrome={effectiveChrome}
       style={getPositionStyle(position, offset, portal)}>
       {expandedRenderProps ? (
-        <ExpandedPanel isExpanded={effectiveIsExpanded}>
+        <ExpandedPanel isExpanded={expanded}>
           {renderExpandedContent ? (
             renderExpandedContent(expandedRenderProps)
           ) : (
@@ -345,9 +336,9 @@ export function Jukebox({
         <div className="rj-dock__inner">
           <TrackSummary
             currentTrack={currentTrack}
-            isExpanded={effectiveIsExpanded}
+            isExpanded={expanded}
             isPlaying={isPlaying}
-            onToggleExpanded={handleToggleExpanded}
+            onToggleExpanded={toggleExpanded}
           />
 
           <button

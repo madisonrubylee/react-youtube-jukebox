@@ -35,6 +35,10 @@ const topNavigationDefinitions: NavigationDefinition[] = [
     label: { en: "API & Playground", ko: "API & 플레이그라운드" },
   },
   {
+    href: "/headless-hooks",
+    label: { en: "Headless Hooks", ko: "Headless Hooks" },
+  },
+  {
     href: "/examples",
     label: { en: "Examples", ko: "예제" },
   },
@@ -61,6 +65,15 @@ const sidebarSectionDefinitions: SidebarSectionDefinition[] = [
         label: { en: "API & Playground", ko: "API & 플레이그라운드" },
       },
       { href: "/examples", label: { en: "Examples", ko: "예제" } },
+    ],
+  },
+  {
+    title: { en: "Headless", ko: "Headless" },
+    items: [
+      {
+        href: "/headless-hooks",
+        label: { en: "Hooks", ko: "Hooks" },
+      },
     ],
   },
   {
@@ -264,6 +277,28 @@ const docsCopy = {
         { href: "#interface", label: "Interface" },
         { href: "#props", label: "Props" },
         { href: "#playground", label: "Playground" },
+      ],
+    },
+    headlessHooks: {
+      body: {
+        interface:
+          'Use the headless hooks when you want to keep the YouTube player lifecycle and playback logic from the package, but render the UI entirely in your own design system.',
+        useJukebox:
+          '`useJukebox` wraps a single queue and derives player-facing state such as the current track, next track, and expanded panel state.',
+        usePlayList:
+          '`usePlayList` adds grouped playlist state on top of the player engine, including active tab selection, size state, and track selection behavior.',
+      },
+      breadcrumbs: ["Docs", "Headless Hooks"],
+      sections: {
+        interface: "Interface",
+        useJukebox: "useJukebox",
+        usePlayList: "usePlayList",
+      },
+      title: "Headless Hooks",
+      toc: [
+        { href: "#interface", label: "Interface" },
+        { href: "#use-jukebox", label: "useJukebox" },
+        { href: "#use-playlist", label: "usePlayList" },
       ],
     },
     examples: {
@@ -641,6 +676,28 @@ const docsCopy = {
         { href: "#interface", label: "인터페이스" },
         { href: "#props", label: "Props" },
         { href: "#playground", label: "플레이그라운드" },
+      ],
+    },
+    headlessHooks: {
+      body: {
+        interface:
+          "headless hook은 패키지의 YouTube 플레이어 생명주기와 재생 로직은 그대로 쓰되, UI는 앱의 디자인 시스템에 맞게 완전히 직접 렌더하고 싶을 때 사용합니다.",
+        useJukebox:
+          "`useJukebox`는 단일 큐 기준으로 현재 트랙, 다음 트랙, 확장 상태 같은 플레이어 중심 상태를 묶어서 제공합니다.",
+        usePlayList:
+          "`usePlayList`는 플레이어 엔진 위에 활성 탭, size 상태, 트랙 선택 동작까지 함께 얹어서 플레이리스트 UI를 직접 만들 수 있게 합니다.",
+      },
+      breadcrumbs: ["문서", "Headless Hooks"],
+      sections: {
+        interface: "인터페이스",
+        useJukebox: "useJukebox",
+        usePlayList: "usePlayList",
+      },
+      title: "Headless Hooks",
+      toc: [
+        { href: "#interface", label: "인터페이스" },
+        { href: "#use-jukebox", label: "useJukebox" },
+        { href: "#use-playlist", label: "usePlayList" },
       ],
     },
     examples: {

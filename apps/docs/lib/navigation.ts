@@ -3,6 +3,7 @@ export const topNavigation = [
   { href: "/installation", label: "Installation" },
   { href: "/quick-start", label: "Quick Start" },
   { href: "/api-playground", label: "API & Playground" },
+  { href: "/headless-hooks", label: "Headless Hooks" },
   { href: "/examples", label: "Examples" },
 ] as const;
 
@@ -16,10 +17,14 @@ export const sidebarSections = [
     ],
   },
   {
-    title: "Reference",
+    title: "Jukebox",
     items: [
       { href: "/api-playground", label: "Jukebox API" },
       { href: "/examples", label: "Examples" },
     ],
+  },
+  {
+    title: "Headless",
+    items: [{ href: "/headless-hooks", label: "Hooks" }],
   },
 ] as const;

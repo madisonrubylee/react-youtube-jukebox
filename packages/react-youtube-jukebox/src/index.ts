@@ -1,5 +1,7 @@
 export { Jukebox } from "./components/Jukebox";
 export { PlayList } from "./components/PlayList";
+export { useJukebox } from "./hooks/useJukebox";
+export { usePlayList } from "./hooks/usePlayList";
 export type {
   JukeboxChrome,
   JukeboxExpandedRenderProps,
@@ -16,4 +18,8 @@ export type {
   PlayListSize,
   PlayListTheme,
   PlayListTrack,
+  UseJukeboxOptions,
+  UseJukeboxResult,
+  UsePlayListOptions,
+  UsePlayListResult,
 } from "./lib/shared";

@@ -74,6 +74,64 @@ export function Page() {
 
 `PlayList` stays inline in your layout and includes a built-in seek bar so users can scrub playback without opening a separate player view.
 
+## Headless Hooks
+
+If you want to build your own UI, use the headless hooks and render the controls yourself.
+
+```tsx
+import { useJukebox } from "react-youtube-jukebox";
+
+function CustomJukebox({ tracks }) {
+  const { player, currentTrack, expanded, toggleExpanded } = useJukebox({
+    tracks,
+    autoplay: false,
+  });
+
+  return (
+    <section>
+      <button onClick={toggleExpanded}>
+        {expanded ? "Collapse" : "Expand"}
+      </button>
+      <button onClick={player.togglePlay}>
+        {player.isPlaying ? "Pause" : "Play"}
+      </button>
+      <div>{currentTrack?.title ?? "No track selected"}</div>
+      <div ref={player.playerMountRef} style={{ aspectRatio: "16 / 9" }} />
+    </section>
+  );
+}
+```
+
+```tsx
+import { usePlayList } from "react-youtube-jukebox";
+
+function CustomPlayList({ playlist }) {
+  const { player, activeTracks, currentTrack, setActiveTabIndex, selectTrack } =
+    usePlayList({
+      playlist,
+      autoplay: false,
+    });
+
+  return (
+    <section>
+      <button onClick={() => setActiveTabIndex(0)}>First playlist</button>
+      <ul>
+        {activeTracks.map((track, index) => (
+          <li key={track.videoId}>
+            <button onClick={() => selectTrack(index)}>{track.title}</button>
+          </li>
+        ))}
+      </ul>
+      <button onClick={player.togglePlay}>
+        {player.isPlaying ? "Pause" : "Play"}
+      </button>
+      <div>{currentTrack?.title ?? "No track selected"}</div>
+      <div ref={player.playerMountRef} style={{ aspectRatio: "16 / 9" }} />
+    </section>
+  );
+}
+```
+
 ## Custom Expanded Panel
 
 ```tsx
@@ -169,6 +227,23 @@ type JukeboxProps = {
 };
 ```
 
+```ts
+type UseJukeboxOptions = {
+  tracks: JukeboxTrack[];
+  autoplay?: boolean;
+  defaultIndex?: number;
+  currentIndex?: number;
+  onCurrentIndexChange?: (index: number) => void;
+  onPlay?: () => void;
+  onPause?: () => void;
+  onTrackChange?: (track: JukeboxTrack, index: number) => void;
+  onEnd?: () => void;
+  defaultExpanded?: boolean;
+  expanded?: boolean;
+  onExpandedChange?: (expanded: boolean) => void;
+};
+```
+
 By default, the player renders through a portal positioned relative to the viewport. Use `portal={false}` only when you need to place it inline within your layout. With `position="bottom-center"` or `position="top-center"`, the player is centered horizontally and `offset` applies to the top or bottom margin as-is. `autoplay` defaults to `true` and starts playback muted on first visit. Pass `autoplay={false}` to disable it. If you need to hide the built-in progress slider, pass `showSeekBar={false}`.
 
 ## PlayList Props
@@ -207,6 +282,26 @@ type PlayListProps = {
   offset?: number | { x: number; y: number };
   portal?: boolean;
   className?: string;
+};
+```
+
+```ts
+type UsePlayListOptions = {
+  playlist: PlayListItem[];
+  autoplay?: boolean;
+  defaultTabIndex?: number;
+  activeTabIndex?: number;
+  onActiveTabIndexChange?: (index: number) => void;
+  defaultSize?: PlayListSize;
+  size?: PlayListSize;
+  onSizeChange?: (size: PlayListSize) => void;
+  defaultIndex?: number;
+  currentIndex?: number;
+  onCurrentIndexChange?: (index: number) => void;
+  onPlay?: () => void;
+  onPause?: () => void;
+  onTrackChange?: (track: PlayListTrack, index: number) => void;
+  onEnd?: () => void;
 };
 ```
 

@@ -1,19 +1,15 @@
 import {
   useEffect,
-  useMemo,
-  useRef,
   useState,
   useSyncExternalStore,
 } from "react";
 import { createPortal } from "react-dom";
 import clsx from "clsx";
 
-import { useJukeboxPlayer } from "../hooks/useJukeboxPlayer";
+import { usePlayList } from "../hooks/usePlayList";
 import {
-  DEFAULT_PLAYLIST_SIZE,
   DEFAULT_PLAYLIST_THEME,
   getPositionStyle,
-  type JukeboxTrack,
   type PlayListItem,
   type PlayListProps,
   type PlayListSize,
@@ -367,14 +363,6 @@ function PlayListTrackList({
   );
 }
 
-function toJukeboxTracks(playlistTracks: PlayListTrack[]): JukeboxTrack[] {
-  return playlistTracks.map((track) => ({
-    videoId: track.videoId,
-    title: track.title,
-    artist: track.artist,
-  }));
-}
-
 const MOBILE_QUERY = "(hover: none) and (pointer: coarse), (max-width: 640px)";
 
 function getIsMobile() {
@@ -397,51 +385,6 @@ function useIsMobile() {
   }, []);
 
   return isMobile;
-}
-
-function usePlayListSize({
-  size: controlledSize,
-  defaultSize = DEFAULT_PLAYLIST_SIZE,
-  onSizeChange,
-}: {
-  size: PlayListSize | undefined;
-  defaultSize: PlayListSize | undefined;
-  onSizeChange: ((size: PlayListSize) => void) | undefined;
-}) {
-  const [internalSize, setInternalSize] = useState<PlayListSize>(defaultSize);
-  const previousSizeRef = useRef<PlayListSize>("compact");
-  const isControlled = controlledSize !== undefined;
-  const resolvedSize = isControlled ? controlledSize : internalSize;
-
-  const applySize = (nextSize: PlayListSize) => {
-    if (!isControlled) {
-      setInternalSize(nextSize);
-    }
-
-    onSizeChange?.(nextSize);
-  };
-
-  const toggleSize = () => {
-    const nextSize: PlayListSize =
-      resolvedSize === "compact" ? "expanded" : "compact";
-    applySize(nextSize);
-  };
-
-  const minimize = () => {
-    if (resolvedSize !== "mini") {
-      previousSizeRef.current = resolvedSize;
-    }
-
-    applySize("mini");
-  };
-
-  const restore = () => {
-    const target =
-      previousSizeRef.current === "mini" ? "compact" : previousSizeRef.current;
-    applySize(target);
-  };
-
-  return { resolvedSize, toggleSize, minimize, restore } as const;
 }
 
 function MiniVolumeIcon({ isMuted }: { isMuted: boolean }) {
@@ -480,38 +423,30 @@ export function PlayList({
     getClientRenderSnapshot,
     getServerRenderSnapshot,
   );
-  const { resolvedSize, toggleSize, minimize, restore } = usePlayListSize({
-    size,
-    defaultSize,
-    onSizeChange,
-  });
   const isMobile = useIsMobile();
-  const [activeTabIndex, setActiveTabIndex] = useState(0);
-
-  const isMini = resolvedSize === "mini";
-  const isExpanded = resolvedSize === "expanded";
-  const safeTabIndex =
-    playlist.length > 0 ? Math.min(activeTabIndex, playlist.length - 1) : 0;
-
-  const activePlaylist = playlist[safeTabIndex];
-  const activeTracks = useMemo(
-    () => activePlaylist?.data ?? [],
-    [activePlaylist],
-  );
-  const previousPlaylistIndexRef = useRef(safeTabIndex);
-
-  const jukeboxTracks = useMemo(
-    () => toJukeboxTracks(activeTracks),
-    [activeTracks],
-  );
-
-  const playerState = useJukeboxPlayer({
+  const {
+    player: playerState,
+    activeTabIndex,
+    activePlaylist,
+    activeTracks,
+    currentTrack,
+    size: resolvedSize,
+    isMini,
+    isExpanded,
+    setActiveTabIndex,
+    selectTrack,
+    toggleSize,
+    minimize,
+    restore,
+  } = usePlayList({
+    playlist,
     autoplay,
-    tracks: jukeboxTracks,
+    ...(defaultSize !== undefined ? { defaultSize } : {}),
+    ...(size !== undefined ? { size } : {}),
+    ...(onSizeChange !== undefined ? { onSizeChange } : {}),
   });
 
   const {
-    currentIndex,
     isMuted,
     isPlaying,
     volume,
@@ -519,34 +454,7 @@ export function PlayList({
     toggleMute,
     playerMountRef,
     togglePlay,
-    playTrackAt,
   } = playerState;
-
-  const currentTrack = activeTracks[currentIndex];
-
-  useEffect(() => {
-    if (previousPlaylistIndexRef.current === safeTabIndex) {
-      return;
-    }
-
-    previousPlaylistIndexRef.current = safeTabIndex;
-    playTrackAt(0);
-  }, [playTrackAt, safeTabIndex]);
-
-  const handleTabChange = (index: number) => {
-    setActiveTabIndex(index);
-  };
-
-  const handleTrackSelect = (trackIndex: number) => {
-    const isAlreadyPlaying = trackIndex === currentIndex;
-
-    if (isAlreadyPlaying) {
-      togglePlay();
-      return;
-    }
-
-    playTrackAt(trackIndex);
-  };
 
   const positionStyle = position
     ? getPositionStyle(position, offset, portal)
@@ -634,22 +542,22 @@ export function PlayList({
         <div className="rp-panel rp-panel--nav">
           <PlayListNav
             playlist={playlist}
-            activeIndex={safeTabIndex}
-            onSelect={handleTabChange}
+            activeIndex={activeTabIndex}
+            onSelect={setActiveTabIndex}
           />
         </div>
         <div className="rp-panel rp-panel--main">
           <PlayListTabs
             playlist={playlist}
-            activeIndex={safeTabIndex}
-            onTabChange={handleTabChange}
+            activeIndex={activeTabIndex}
+            onTabChange={setActiveTabIndex}
           />
           <MainPanelHeader playlistItem={activePlaylist} />
           <PlayListTrackList
             tracks={activeTracks}
-            currentGlobalIndex={currentIndex}
+            currentGlobalIndex={playerState.currentIndex}
             isPlaying={isPlaying}
-            onTrackSelect={handleTrackSelect}
+            onTrackSelect={selectTrack}
           />
         </div>
         <div className="rp-panel rp-panel--now-playing">

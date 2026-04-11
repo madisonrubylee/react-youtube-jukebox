@@ -39,6 +39,21 @@ export type JukeboxProps = {
   renderExpandedContent?: (props: JukeboxExpandedRenderProps) => ReactNode;
 };
 
+export type UseJukeboxOptions = {
+  tracks: JukeboxTrack[];
+  autoplay?: boolean;
+  defaultIndex?: number;
+  currentIndex?: number;
+  onCurrentIndexChange?: (index: number) => void;
+  onPlay?: () => void;
+  onPause?: () => void;
+  onTrackChange?: (track: JukeboxTrack, index: number) => void;
+  onEnd?: () => void;
+  defaultExpanded?: boolean;
+  expanded?: boolean;
+  onExpandedChange?: (expanded: boolean) => void;
+};
+
 export type JukeboxPlayerState = {
   currentIndex: number;
   isMuted: boolean;
@@ -69,6 +84,19 @@ export type JukeboxExpandedRenderProps = Omit<
   isExpanded: boolean;
   nextTrack: JukeboxTrack | undefined;
   totalTracks: number;
+};
+
+export type UseJukeboxResult = {
+  player: JukeboxPlayerState;
+  currentTrack: JukeboxTrack | undefined;
+  nextTrack: JukeboxTrack | undefined;
+  totalTracks: number;
+  hasTracks: boolean;
+  hasMultipleTracks: boolean;
+  expanded: boolean;
+  openExpanded: () => void;
+  closeExpanded: () => void;
+  toggleExpanded: () => void;
 };
 
 export const DEFAULT_POSITION: JukeboxPosition = "bottom-right";
@@ -111,6 +139,40 @@ export type PlayListProps = {
   offset?: PlayListOffset;
   portal?: boolean;
   className?: string;
+};
+
+export type UsePlayListOptions = {
+  playlist: PlayListItem[];
+  autoplay?: boolean;
+  defaultTabIndex?: number;
+  activeTabIndex?: number;
+  onActiveTabIndexChange?: (index: number) => void;
+  defaultSize?: PlayListSize;
+  size?: PlayListSize;
+  onSizeChange?: (size: PlayListSize) => void;
+  defaultIndex?: number;
+  currentIndex?: number;
+  onCurrentIndexChange?: (index: number) => void;
+  onPlay?: () => void;
+  onPause?: () => void;
+  onTrackChange?: (track: PlayListTrack, index: number) => void;
+  onEnd?: () => void;
+};
+
+export type UsePlayListResult = {
+  player: JukeboxPlayerState;
+  activeTabIndex: number;
+  activePlaylist: PlayListItem | undefined;
+  activeTracks: PlayListTrack[];
+  currentTrack: PlayListTrack | undefined;
+  size: PlayListSize;
+  isMini: boolean;
+  isExpanded: boolean;
+  setActiveTabIndex: (index: number) => void;
+  selectTrack: (index: number) => void;
+  toggleSize: () => void;
+  minimize: () => void;
+  restore: () => void;
 };
 
 export const DEFAULT_PLAYLIST_THEME: PlayListTheme = "dark";
