@@ -2,7 +2,7 @@
 
 <p align="center">
   <a href="https://react-youtube-jukebox.com/">
-    <img src="apps/docs/public/react-youtube-sample.gif" alt="react-youtube-jukebox demo" width="720" />
+    <img src="apps/docs/public/react-playlist-sample.gif" alt="react-youtube-jukebox demo" width="720" />
   </a>
 </p>
 

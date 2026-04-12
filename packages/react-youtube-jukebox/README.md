@@ -2,7 +2,7 @@
 
 <p align="center">
   <a href="https://react-youtube-jukebox.com/">
-    <img src="https://raw.githubusercontent.com/madisonrubylee/react-youtube-jukebox/main/apps/docs/public/react-youtube-sample.gif" alt="react-youtube-jukebox demo" width="720" />
+    <img src="https://raw.githubusercontent.com/madisonrubylee/react-youtube-jukebox/main/apps/docs/public/react-playlist-sample.gif" alt="react-youtube-jukebox demo" width="720" />
   </a>
 </p>
 
@@ -315,7 +315,7 @@ type UsePlayListOptions = {
 
 <p align="center">
   <a href="https://react-youtube-jukebox.com/">
-    <img src="https://raw.githubusercontent.com/madisonrubylee/react-youtube-jukebox/main/apps/docs/public/react-youtube-sample.gif" alt="react-youtube-jukebox 데모" width="720" />
+    <img src="https://raw.githubusercontent.com/madisonrubylee/react-youtube-jukebox/main/apps/docs/public/react-playlist-sample.gif" alt="react-youtube-jukebox 데모" width="720" />
   </a>
 </p>
 
