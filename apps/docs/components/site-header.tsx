@@ -17,9 +17,16 @@ export function SiteHeader({ locale }: SiteHeaderProps) {
   const copy = getDocsCopy(locale);
   const navigationItems = getTopNavigation(locale);
   const [searchOpen, setSearchOpen] = useState(false);
+  const [isMobileNavigationOpen, setIsMobileNavigationOpen] = useState(false);
 
   const openSearch = useCallback(() => setSearchOpen(true), []);
   const closeSearch = useCallback(() => setSearchOpen(false), []);
+  const closeMobileNavigation = useCallback(() => {
+    setIsMobileNavigationOpen(false);
+  }, []);
+  const toggleMobileNavigation = useCallback(() => {
+    setIsMobileNavigationOpen((prev) => !prev);
+  }, []);
 
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {
@@ -46,30 +53,102 @@ export function SiteHeader({ locale }: SiteHeaderProps) {
       value: "ko" as const,
     },
   ];
+  const mobileMenuLabel =
+    locale === "ko"
+      ? isMobileNavigationOpen
+        ? "문서 메뉴 닫기"
+        : "문서 메뉴 열기"
+      : isMobileNavigationOpen
+        ? "Close documentation menu"
+        : "Open documentation menu";
 
   return (
-    <header className="docs-header">
-      <Link
-        href="/"
-        className="docs-brand"
-        aria-label={copy.header.homeAriaLabel}>
-        <svg
-          className="docs-brand__icon"
-          viewBox="0 0 128 128"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          aria-hidden="true">
-          <rect x="4" y="4" width="120" height="120" rx="32" fill="#4F46E5" />
-          <rect x="24" y="24" width="80" height="14" rx="7" fill="#E0E7FF" />
-          <circle cx="44" cy="76" r="20" fill="#E0E7FF" />
-          <path d="M39 66V86L55 76L39 66Z" fill="#4F46E5" />
-          <rect x="72" y="59" width="6" height="34" rx="3" fill="#E0E7FF" />
-          <rect x="84" y="51" width="6" height="50" rx="3" fill="#E0E7FF" />
-          <rect x="96" y="63" width="6" height="26" rx="3" fill="#E0E7FF" />
-        </svg>
-        <span>react-youtube-jukebox</span>
-      </Link>
-      <nav className="docs-nav" aria-label={copy.header.navigationAriaLabel}>
+    <header
+      className={`docs-header${isMobileNavigationOpen ? " docs-header--mobile-open" : ""}`}
+    >
+      <div className="docs-header__bar">
+        <Link
+          href="/"
+          className="docs-brand"
+          onClick={closeMobileNavigation}
+          aria-label={copy.header.homeAriaLabel}>
+          <svg
+            className="docs-brand__icon"
+            viewBox="0 0 128 128"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            aria-hidden="true">
+            <rect x="4" y="4" width="120" height="120" rx="32" fill="#4F46E5" />
+            <rect x="24" y="24" width="80" height="14" rx="7" fill="#E0E7FF" />
+            <circle cx="44" cy="76" r="20" fill="#E0E7FF" />
+            <path d="M39 66V86L55 76L39 66Z" fill="#4F46E5" />
+            <rect x="72" y="59" width="6" height="34" rx="3" fill="#E0E7FF" />
+            <rect x="84" y="51" width="6" height="50" rx="3" fill="#E0E7FF" />
+            <rect x="96" y="63" width="6" height="26" rx="3" fill="#E0E7FF" />
+          </svg>
+          <span>react-youtube-jukebox</span>
+        </Link>
+        <div className="docs-header__mobile-controls">
+          <button
+            type="button"
+            className="docs-search docs-search--icon"
+            onClick={openSearch}
+            aria-label={copy.header.searchPlaceholder}>
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              aria-hidden="true">
+              <path
+                d="M21 21L16.65 16.65M18 11C18 14.866 14.866 18 11 18C7.13401 18 4 14.866 4 11C4 7.13401 7.13401 4 11 4C14.866 4 18 7.13401 18 11Z"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </button>
+          <button
+            type="button"
+            className="docs-menu-toggle"
+            onClick={toggleMobileNavigation}
+            aria-expanded={isMobileNavigationOpen}
+            aria-controls="docs-mobile-navigation"
+            aria-label={mobileMenuLabel}>
+            {isMobileNavigationOpen ? (
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                aria-hidden="true">
+                <path
+                  d="M6 6L18 18M18 6L6 18"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                  strokeLinecap="round"
+                />
+              </svg>
+            ) : (
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                aria-hidden="true">
+                <path
+                  d="M4 7H20M4 12H20M4 17H20"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                  strokeLinecap="round"
+                />
+              </svg>
+            )}
+          </button>
+        </div>
+      </div>
+      <nav
+        id="docs-mobile-navigation"
+        className={`docs-nav${isMobileNavigationOpen ? " docs-nav--mobile-open" : ""}`}
+        aria-label={copy.header.navigationAriaLabel}>
         {navigationItems.map((item) => {
           const isActive = pathname === item.href;
 
@@ -77,24 +156,23 @@ export function SiteHeader({ locale }: SiteHeaderProps) {
             <Link
               key={item.href}
               href={item.href}
+              onClick={closeMobileNavigation}
               className={`docs-nav__link${isActive ? " docs-nav__link--active" : ""}`}>
               {item.label}
             </Link>
           );
         })}
       </nav>
-      <div className="docs-header__actions">
+      <div
+        className={`docs-header__actions${isMobileNavigationOpen ? " docs-header__actions--mobile-open" : ""}`}>
         <button
           type="button"
-          className="docs-search"
+          className="docs-search docs-search--desktop"
           onClick={openSearch}
           aria-label={copy.header.searchPlaceholder}>
           <span>{copy.header.searchPlaceholder}</span>
           <code>⌘ K</code>
         </button>
-        {searchOpen ? (
-          <SearchDialog locale={locale} open={searchOpen} onClose={closeSearch} />
-        ) : null}
         <a
           href="https://github.com/madisonrubylee/react-youtube-jukebox"
           target="_blank"
@@ -116,6 +194,9 @@ export function SiteHeader({ locale }: SiteHeaderProps) {
           options={localeOptions}
         />
       </div>
+      {searchOpen ? (
+        <SearchDialog locale={locale} open={searchOpen} onClose={closeSearch} />
+      ) : null}
     </header>
   );
 }
