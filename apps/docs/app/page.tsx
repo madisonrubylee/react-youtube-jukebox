@@ -74,10 +74,10 @@ export default async function HomePage() {
 
         <div className="docs-home-preview-image">
           <Image
-            src="/react-youtube-jukebox-sample.png"
+            src="/react-youtube-sample.gif"
             alt="React YouTube Jukebox demo"
-            width={1044}
-            height={598}
+            width={800}
+            height={512}
             className="docs-home-preview-image__img"
           />
         </div>

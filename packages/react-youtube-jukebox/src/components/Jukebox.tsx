@@ -1,12 +1,12 @@
 import {
   useEffect,
-  useSyncExternalStore,
   type CSSProperties,
   type ReactNode,
 } from "react";
 import { createPortal } from "react-dom";
 import clsx from "clsx";
 
+import { useClientMounted } from "../hooks/useClientMounted";
 import { useJukebox } from "../hooks/useJukebox";
 import {
   DEFAULT_CHROME,
@@ -21,6 +21,7 @@ import {
   type JukeboxProps,
   type JukeboxTrack,
 } from "../lib/shared";
+import { VolumeHighIcon } from "./icons";
 
 function shouldIgnoreKeyboardShortcut(target: EventTarget | null) {
   if (!(target instanceof Element)) {
@@ -40,36 +41,6 @@ function shouldIgnoreKeyboardShortcut(target: EventTarget | null) {
 import { JukeboxExpandedPlayer } from "./JukeboxExpandedPlayer";
 import "../styles/jukebox.css";
 
-function subscribeToClientRender() {
-  return () => undefined;
-}
-
-function getClientRenderSnapshot() {
-  return true;
-}
-
-function getServerRenderSnapshot() {
-  return false;
-}
-
-function VolumeIcon({ isMuted }: { isMuted: boolean }) {
-  if (isMuted) {
-    return (
-      <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
-        <path d="M7.06 3.22a.75.75 0 0 1 1.19.61v8.34a.75.75 0 0 1-1.19.61L4.26 10.5H2.75A.75.75 0 0 1 2 9.75v-3.5c0-.41.34-.75.75-.75h1.51l2.8-2.28Z" />
-        <path d="M10.28 5.22a.75.75 0 0 1 1.06 0L12 5.88l.66-.66a.75.75 0 1 1 1.06 1.06l-.66.66.66.66a.75.75 0 1 1-1.06 1.06L12 7.94l-.66.66a.75.75 0 0 1-1.06-1.06l.66-.66-.66-.66a.75.75 0 0 1 0-1.06Z" />
-      </svg>
-    );
-  }
-
-  return (
-    <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
-      <path d="M7.06 3.22a.75.75 0 0 1 1.19.61v8.34a.75.75 0 0 1-1.19.61L4.26 10.5H2.75A.75.75 0 0 1 2 9.75v-3.5c0-.41.34-.75.75-.75h1.51l2.8-2.28Z" />
-      <path d="M10.5 5.02a.75.75 0 0 1 1.06 0 3.86 3.86 0 0 1 0 5.46.75.75 0 1 1-1.06-1.06 2.36 2.36 0 0 0 0-3.34.75.75 0 0 1 0-1.06Z" />
-      <path d="M11.9 3.62a.75.75 0 0 1 1.06 0 5.84 5.84 0 0 1 0 8.76.75.75 0 1 1-1.06-1.06 4.34 4.34 0 0 0 0-6.64.75.75 0 0 1 0-1.06Z" />
-    </svg>
-  );
-}
 
 function ChevronIcon({ isExpanded }: { isExpanded: boolean }) {
   return (
@@ -191,11 +162,7 @@ export function Jukebox({
   className,
   renderExpandedContent,
 }: JukeboxProps) {
-  const isMounted = useSyncExternalStore(
-    subscribeToClientRender,
-    getClientRenderSnapshot,
-    getServerRenderSnapshot,
-  );
+  const isMounted = useClientMounted();
   const {
     player,
     currentTrack,
@@ -348,7 +315,7 @@ export function Jukebox({
             aria-label={isMuted ? "Unmute" : "Mute"}
             className="rj-icon-button">
             <span className="rj-icon-button__icon">
-              <VolumeIcon isMuted={isMuted} />
+              <VolumeHighIcon isMuted={isMuted} />
             </span>
           </button>
         </div>

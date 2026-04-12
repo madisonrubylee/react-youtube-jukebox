@@ -1,273 +1,45 @@
-import type { CSSProperties, ReactNode } from "react";
-
-export type JukeboxTrack = {
-  videoId: string;
-  title: string;
-  artist?: string;
-};
-
-export type JukeboxPosition =
-  | "bottom-right"
-  | "bottom-left"
-  | "bottom-center"
-  | "top-right"
-  | "top-left"
-  | "top-center";
-
-export type JukeboxTheme = "glass" | "simple" | "sunset" | "ride";
-export type JukeboxChrome = "classic" | "wallet" | "ride";
-
-export type JukeboxOffset = number | { x: number; y: number };
-
-export type RepeatMode = "none" | "all" | "one";
-
-export type JukeboxProps = {
-  tracks: JukeboxTrack[];
-  autoplay?: boolean;
-  showSeekBar?: boolean;
-  onPlay?: () => void;
-  onPause?: () => void;
-  onTrackChange?: (track: JukeboxTrack, index: number) => void;
-  onEnd?: () => void;
-  keyboard?: boolean;
-  position?: JukeboxPosition;
-  theme?: JukeboxTheme;
-  chrome?: JukeboxChrome;
-  offset?: JukeboxOffset;
-  portal?: boolean;
-  className?: string;
-  renderExpandedContent?: (props: JukeboxExpandedRenderProps) => ReactNode;
-};
-
-export type UseJukeboxOptions = {
-  tracks: JukeboxTrack[];
-  autoplay?: boolean;
-  defaultIndex?: number;
-  currentIndex?: number;
-  onCurrentIndexChange?: (index: number) => void;
-  onPlay?: () => void;
-  onPause?: () => void;
-  onTrackChange?: (track: JukeboxTrack, index: number) => void;
-  onEnd?: () => void;
-  defaultExpanded?: boolean;
-  expanded?: boolean;
-  onExpandedChange?: (expanded: boolean) => void;
-};
-
-export type JukeboxPlayerState = {
-  currentIndex: number;
-  isMuted: boolean;
-  isPlaying: boolean;
-  playerMountRef: (node: HTMLDivElement | null) => void;
-  volume: number;
-  setVolume: (nextVolume: number) => void;
-  toggleMute: () => void;
-  togglePlay: () => void;
-  playNext: () => void;
-  playPrev: () => void;
-  playTrackAt: (index: number) => void;
-  shuffle: boolean;
-  toggleShuffle: () => void;
-  repeat: RepeatMode;
-  cycleRepeat: () => void;
-  progress: number;
-  duration: number;
-  currentTime: number;
-  seek: (seconds: number) => void;
-};
-
-export type JukeboxExpandedRenderProps = Omit<
+export type {
+  JukeboxChrome,
+  JukeboxExpandedRenderProps,
+  JukeboxOffset,
   JukeboxPlayerState,
-  "shuffle" | "toggleShuffle" | "repeat" | "cycleRepeat"
-> & {
-  currentTrack: JukeboxTrack;
-  isExpanded: boolean;
-  nextTrack: JukeboxTrack | undefined;
-  totalTracks: number;
-};
+  JukeboxPosition,
+  JukeboxProps,
+  JukeboxTheme,
+  JukeboxTrack,
+  PlayListItem,
+  PlayListOffset,
+  PlayListPosition,
+  PlayListProps,
+  PlayListSize,
+  PlayListTheme,
+  PlayListTrack,
+  RepeatMode,
+  UseJukeboxOptions,
+  UseJukeboxResult,
+  UsePlayListOptions,
+  UsePlayListResult,
+} from "./types";
 
-export type UseJukeboxResult = {
-  player: JukeboxPlayerState;
-  currentTrack: JukeboxTrack | undefined;
-  nextTrack: JukeboxTrack | undefined;
-  totalTracks: number;
-  hasTracks: boolean;
-  hasMultipleTracks: boolean;
-  expanded: boolean;
-  openExpanded: () => void;
-  closeExpanded: () => void;
-  toggleExpanded: () => void;
-};
+export {
+  DEFAULT_CHROME,
+  DEFAULT_OFFSET_PX,
+  DEFAULT_PLAYLIST_SIZE,
+  DEFAULT_PLAYLIST_THEME,
+  DEFAULT_POSITION,
+  DEFAULT_THEME,
+  DEFAULT_VOLUME,
+  LEVEL_BAR_ANIMATION_DELAY_MS,
+  LEVEL_BAR_HEIGHTS,
+  LEVEL_BAR_REST_HEIGHT,
+  TEMPORARILY_DISABLED_CHROMES,
+} from "./constants";
 
-export const DEFAULT_POSITION: JukeboxPosition = "bottom-right";
-export const DEFAULT_THEME: JukeboxTheme = "glass";
-export const DEFAULT_CHROME: JukeboxChrome = "classic";
-export const TEMPORARILY_DISABLED_CHROMES = ["wallet", "ride"] as const;
-export const DEFAULT_OFFSET_PX = 20;
-export const DEFAULT_VOLUME = 100;
-export const LEVEL_BAR_HEIGHTS = [12, 18, 14] as const;
-export const LEVEL_BAR_REST_HEIGHT = 8;
-export const LEVEL_BAR_ANIMATION_DELAY_MS = 120;
-
-export type PlayListTrack = {
-  title: string;
-  artist: string;
-  videoId: string;
-};
-
-export type PlayListItem = {
-  title: string;
-  image?: string;
-  data: PlayListTrack[];
-};
-
-export type PlayListTheme = "light" | "dark";
-export type PlayListSize = "mini" | "compact" | "expanded";
-
-export type PlayListPosition = JukeboxPosition;
-export type PlayListOffset = JukeboxOffset;
-
-export type PlayListProps = {
-  playlist: PlayListItem[];
-  autoplay?: boolean;
-  showSeekBar?: boolean;
-  theme?: PlayListTheme;
-  size?: PlayListSize;
-  defaultSize?: PlayListSize;
-  onSizeChange?: (size: PlayListSize) => void;
-  position?: PlayListPosition;
-  offset?: PlayListOffset;
-  portal?: boolean;
-  className?: string;
-};
-
-export type UsePlayListOptions = {
-  playlist: PlayListItem[];
-  autoplay?: boolean;
-  defaultTabIndex?: number;
-  activeTabIndex?: number;
-  onActiveTabIndexChange?: (index: number) => void;
-  defaultSize?: PlayListSize;
-  size?: PlayListSize;
-  onSizeChange?: (size: PlayListSize) => void;
-  defaultIndex?: number;
-  currentIndex?: number;
-  onCurrentIndexChange?: (index: number) => void;
-  onPlay?: () => void;
-  onPause?: () => void;
-  onTrackChange?: (track: PlayListTrack, index: number) => void;
-  onEnd?: () => void;
-};
-
-export type UsePlayListResult = {
-  player: JukeboxPlayerState;
-  activeTabIndex: number;
-  activePlaylist: PlayListItem | undefined;
-  activeTracks: PlayListTrack[];
-  currentTrack: PlayListTrack | undefined;
-  size: PlayListSize;
-  isMini: boolean;
-  isExpanded: boolean;
-  setActiveTabIndex: (index: number) => void;
-  selectTrack: (index: number) => void;
-  toggleSize: () => void;
-  minimize: () => void;
-  restore: () => void;
-};
-
-export const DEFAULT_PLAYLIST_THEME: PlayListTheme = "dark";
-export const DEFAULT_PLAYLIST_SIZE: PlayListSize = "compact";
-
-export function getEffectiveChrome(chrome: JukeboxChrome): JukeboxChrome {
-  const isTemporarilyDisabledChrome = chrome === "wallet" || chrome === "ride";
-
-  if (isTemporarilyDisabledChrome) {
-    return DEFAULT_CHROME;
-  }
-
-  return chrome;
-}
-
-export function getNextTrackIndex(
-  index: number,
-  step: number,
-  totalTracks: number,
-) {
-  if (totalTracks <= 0) {
-    return 0;
-  }
-
-  return (index + step + totalTracks) % totalTracks;
-}
-
-/** Picks a random track index in `[0, totalTracks)` other than `currentIndex`. */
-export function getRandomTrackIndex(
-  currentIndex: number,
-  totalTracks: number,
-): number {
-  if (totalTracks <= 1) {
-    return 0;
-  }
-
-  if (totalTracks === 2) {
-    return currentIndex === 0 ? 1 : 0;
-  }
-
-  let nextIndex = currentIndex;
-
-  while (nextIndex === currentIndex) {
-    nextIndex = Math.floor(Math.random() * totalTracks);
-  }
-
-  return nextIndex;
-}
-
-export function clampVolume(value: number) {
-  return Math.min(Math.max(Math.round(value), 0), 100);
-}
-
-export function normalizeOffset(offset: JukeboxOffset | undefined) {
-  if (typeof offset === "number") {
-    return { x: offset, y: offset };
-  }
-
-  if (offset) {
-    return { x: offset.x, y: offset.y };
-  }
-
-  return { x: DEFAULT_OFFSET_PX, y: DEFAULT_OFFSET_PX };
-}
-
-export function getPositionStyle(
-  position: JukeboxPosition,
-  offset: JukeboxOffset | undefined,
-  isPortal: boolean,
-): CSSProperties {
-  const normalizedOffset = normalizeOffset(offset);
-  const isTopPosition = position.startsWith("top");
-  const isCenterPosition = position.endsWith("center");
-  const isLeftPosition = position.endsWith("left");
-  const style: CSSProperties = {
-    position: isPortal ? "fixed" : "absolute",
-  };
-
-  if (isTopPosition) {
-    style.top = normalizedOffset.y;
-  } else {
-    style.bottom = normalizedOffset.y;
-  }
-
-  if (isCenterPosition) {
-    style.left = "50%";
-    style.transform = "translateX(-50%)";
-    return style;
-  }
-
-  if (isLeftPosition) {
-    style.left = normalizedOffset.x;
-  } else {
-    style.right = normalizedOffset.x;
-  }
-
-  return style;
-}
+export {
+  clampVolume,
+  getEffectiveChrome,
+  getNextTrackIndex,
+  getPositionStyle,
+  getRandomTrackIndex,
+  normalizeOffset,
+} from "./utils";

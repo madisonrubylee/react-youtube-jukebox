@@ -1,28 +1,11 @@
 import type { ChangeEvent } from "react";
 
 import type { JukeboxExpandedRenderProps } from "../lib/shared";
+import { VolumeLowIcon } from "./icons";
 
 type JukeboxExpandedPlayerViewProps = JukeboxExpandedRenderProps & {
   showSeekBar?: boolean;
 };
-
-function SpeakerIcon({ isMuted }: { isMuted: boolean }) {
-  if (isMuted) {
-    return (
-      <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
-        <path d="M7.06 3.22a.75.75 0 0 1 1.19.61v8.34a.75.75 0 0 1-1.19.61L4.26 10.5H2.75A.75.75 0 0 1 2 9.75v-3.5c0-.41.34-.75.75-.75h1.51l2.8-2.28Z" />
-        <path d="M10.28 5.22a.75.75 0 0 1 1.06 0L12 5.88l.66-.66a.75.75 0 1 1 1.06 1.06l-.66.66.66.66a.75.75 0 1 1-1.06 1.06L12 7.94l-.66.66a.75.75 0 0 1-1.06-1.06l.66-.66-.66-.66a.75.75 0 0 1 0-1.06Z" />
-      </svg>
-    );
-  }
-
-  return (
-    <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
-      <path d="M7.06 3.22a.75.75 0 0 1 1.19.61v8.34a.75.75 0 0 1-1.19.61L4.26 10.5H2.75A.75.75 0 0 1 2 9.75v-3.5c0-.41.34-.75.75-.75h1.51l2.8-2.28Z" />
-      <path d="M10.5 5.02a.75.75 0 0 1 1.06 0 3.86 3.86 0 0 1 0 5.46.75.75 0 1 1-1.06-1.06 2.36 2.36 0 0 0 0-3.34.75.75 0 0 1 0-1.06Z" />
-    </svg>
-  );
-}
 
 export function JukeboxExpandedPlayer({
   currentIndex,
@@ -111,7 +94,7 @@ export function JukeboxExpandedPlayer({
                 aria-label={isMuted ? "Unmute" : "Mute"}
                 className="rj-icon-button">
                 <span className="rj-icon-button__icon">
-                  <SpeakerIcon isMuted={isMuted} />
+                  <VolumeLowIcon isMuted={isMuted} />
                 </span>
               </button>
               <input

@@ -1,11 +1,11 @@
 import { useCallback, useState } from "react";
 
-import { useJukeboxPlayer } from "./useJukeboxPlayer";
 import {
   getNextTrackIndex,
   type UseJukeboxOptions,
   type UseJukeboxResult,
 } from "../lib/shared";
+import { useJukeboxPlayer } from "./useJukeboxPlayer";
 
 export function useJukebox({
   tracks,

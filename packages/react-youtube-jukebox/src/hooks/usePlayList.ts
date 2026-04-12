@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
-import { useJukeboxPlayer } from "./useJukeboxPlayer";
 import {
   DEFAULT_PLAYLIST_SIZE,
   type JukeboxTrack,
@@ -9,6 +8,7 @@ import {
   type UsePlayListOptions,
   type UsePlayListResult,
 } from "../lib/shared";
+import { useJukeboxPlayer } from "./useJukeboxPlayer";
 
 function toJukeboxTracks(playlistTracks: PlayListTrack[]): JukeboxTrack[] {
   return playlistTracks.map((track) => ({
