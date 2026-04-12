@@ -116,6 +116,17 @@ describe("PlayList", () => {
     expect(screen.getAllByText("Track Three").length).toBeGreaterThan(0);
   });
 
+  it("resets the track list scroll position when switching playlists", () => {
+    render(<PlayList playlist={[...PLAYLIST]} portal={false} />);
+
+    const trackList = document.querySelector(".rp-track-list") as HTMLDivElement;
+    trackList.scrollTop = 240;
+
+    fireEvent.click(screen.getByRole("tab", { name: "Night Drive" }));
+
+    expect(trackList.scrollTop).toBe(0);
+  });
+
   it("calls playTrackAt when a different track is selected", () => {
     const playTrackAt = vi.fn();
 

@@ -1,4 +1,5 @@
 import clsx from "clsx";
+import { useEffect, useLayoutEffect, useRef } from "react";
 
 import type { PlayListItem, PlayListSize, PlayListTrack } from "../../lib/types";
 import { PauseIcon, PlayIcon, VolumeLowIcon } from "../icons";
@@ -9,6 +10,9 @@ import {
   MusicNoteIcon,
   PlayingIndicator,
 } from "./PlayListIcons";
+
+const useSafeLayoutEffect =
+  typeof window === "undefined" ? useEffect : useLayoutEffect;
 
 type SizeToggleButtonProps = {
   currentSize: PlayListSize;
@@ -215,25 +219,39 @@ export function PlayListTabs({
 
 export function PlayListTrackList({
   tracks,
+  activePlaylistIndex,
   currentGlobalIndex,
   isPlaying,
   onTrackSelect,
 }: {
   tracks: PlayListTrack[];
+  activePlaylistIndex: number;
   currentGlobalIndex: number;
   isPlaying: boolean;
   onTrackSelect: (index: number) => void;
 }) {
+  const trackListRef = useRef<HTMLDivElement | null>(null);
+
+  useSafeLayoutEffect(() => {
+    const trackListElement = trackListRef.current;
+
+    if (!trackListElement) {
+      return;
+    }
+
+    trackListElement.scrollTop = 0;
+  }, [activePlaylistIndex]);
+
   if (tracks.length === 0) {
     return (
-      <div className="rp-track-list">
+      <div ref={trackListRef} className="rp-track-list">
         <div className="rp-track-list__empty">No tracks in this playlist</div>
       </div>
     );
   }
 
   return (
-    <div className="rp-track-list" role="list">
+    <div ref={trackListRef} className="rp-track-list" role="list">
       {tracks.map((track, index) => {
         const isActive = index === currentGlobalIndex;
 

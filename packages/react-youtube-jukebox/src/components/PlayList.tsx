@@ -119,6 +119,7 @@ export function PlayList({
           <MainPanelHeader playlistItem={activePlaylist} />
           <PlayListTrackList
             tracks={activeTracks}
+            activePlaylistIndex={activeTabIndex}
             currentGlobalIndex={playerState.currentIndex}
             isPlaying={isPlaying}
             onTrackSelect={selectTrack}
