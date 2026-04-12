@@ -24,18 +24,14 @@ export function useVolumeControl(
   const setVolume = useCallback(
     (nextVolume: number) => {
       const clampedVolume = clampVolume(nextVolume);
-      const player = playerRef.current;
+      const isSilent = clampedVolume === 0;
 
       setVolumeState(clampedVolume);
       volumeRef.current = clampedVolume;
+      mutedPreferenceRef.current = isSilent;
+      setIsMuted(isSilent);
 
-      if (clampedVolume === 0) {
-        mutedPreferenceRef.current = true;
-        setIsMuted(true);
-      } else {
-        mutedPreferenceRef.current = false;
-        setIsMuted(false);
-      }
+      const player = playerRef.current;
 
       if (!player) {
         return;
@@ -43,7 +39,7 @@ export function useVolumeControl(
 
       player.setVolume(clampedVolume);
 
-      if (clampedVolume === 0) {
+      if (isSilent) {
         player.mute();
         return;
       }

@@ -7,15 +7,7 @@ import {
   type RefObject,
 } from "react";
 
-import type { JukeboxTrack } from "../lib/shared";
-
-function clampTrackIndex(index: number, totalTracks: number) {
-  if (totalTracks <= 0) {
-    return 0;
-  }
-
-  return Math.max(0, Math.min(index, totalTracks - 1));
-}
+import { clampIndex, type JukeboxTrack } from "../lib/shared";
 
 type UseTrackIndexControllerOptions = {
   tracks: JukeboxTrack[];
@@ -60,7 +52,7 @@ export function useTrackIndexController({
     ? controlledCurrentIndex
     : internalCurrentIndex;
   const safeCurrentIndex = hasTracks
-    ? clampTrackIndex(resolvedCurrentIndex, trackCount)
+    ? clampIndex(resolvedCurrentIndex, trackCount)
     : 0;
   const currentTrack = tracks[safeCurrentIndex];
   const currentVideoId = currentTrack?.videoId;
@@ -76,7 +68,7 @@ export function useTrackIndexController({
         return;
       }
 
-      const safeNextIndex = clampTrackIndex(nextIndex, trackCount);
+      const safeNextIndex = clampIndex(nextIndex, trackCount);
 
       if (!isCurrentIndexControlled) {
         setInternalState({

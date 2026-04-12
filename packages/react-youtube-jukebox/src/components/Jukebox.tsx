@@ -3,8 +3,8 @@ import {
   type CSSProperties,
   type ReactNode,
 } from "react";
-import { createPortal } from "react-dom";
 import clsx from "clsx";
+import { createPortal } from "react-dom";
 
 import { useClientMounted } from "../hooks/useClientMounted";
 import { useJukebox } from "../hooks/useJukebox";
@@ -21,6 +21,8 @@ import {
   type JukeboxProps,
   type JukeboxTrack,
 } from "../lib/shared";
+import "../styles/jukebox.css";
+import { JukeboxExpandedPlayer } from "./JukeboxExpandedPlayer";
 import { VolumeHighIcon } from "./icons";
 
 function shouldIgnoreKeyboardShortcut(target: EventTarget | null) {
@@ -38,9 +40,6 @@ function shouldIgnoreKeyboardShortcut(target: EventTarget | null) {
 
   return false;
 }
-import { JukeboxExpandedPlayer } from "./JukeboxExpandedPlayer";
-import "../styles/jukebox.css";
-
 
 function ChevronIcon({ isExpanded }: { isExpanded: boolean }) {
   return (

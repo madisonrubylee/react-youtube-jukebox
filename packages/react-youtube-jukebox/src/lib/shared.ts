@@ -36,6 +36,7 @@ export {
 } from "./constants";
 
 export {
+  clampIndex,
   clampVolume,
   getEffectiveChrome,
   getNextTrackIndex,

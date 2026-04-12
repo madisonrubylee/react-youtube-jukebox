@@ -1,10 +1,15 @@
 import type { CSSProperties } from "react";
 
-import { DEFAULT_CHROME, DEFAULT_OFFSET_PX } from "./constants";
+import {
+  DEFAULT_CHROME,
+  DEFAULT_OFFSET_PX,
+  TEMPORARILY_DISABLED_CHROMES,
+} from "./constants";
 import type { JukeboxChrome, JukeboxOffset, JukeboxPosition } from "./types";
 
 export function getEffectiveChrome(chrome: JukeboxChrome): JukeboxChrome {
-  const isTemporarilyDisabledChrome = chrome === "wallet" || chrome === "ride";
+  const isTemporarilyDisabledChrome =
+    TEMPORARILY_DISABLED_CHROMES.includes(chrome);
 
   if (isTemporarilyDisabledChrome) {
     return DEFAULT_CHROME;
@@ -49,6 +54,14 @@ export function getRandomTrackIndex(
 
 export function clampVolume(value: number) {
   return Math.min(Math.max(Math.round(value), 0), 100);
+}
+
+export function clampIndex(index: number, total: number) {
+  if (total <= 0) {
+    return 0;
+  }
+
+  return Math.max(0, Math.min(index, total - 1));
 }
 
 export function normalizeOffset(offset: JukeboxOffset | undefined) {

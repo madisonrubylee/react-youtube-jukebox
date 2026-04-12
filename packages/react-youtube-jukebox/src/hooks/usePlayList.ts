@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import {
+  clampIndex,
   DEFAULT_PLAYLIST_SIZE,
   type JukeboxTrack,
   type PlayListSize,
@@ -16,14 +17,6 @@ function toJukeboxTracks(playlistTracks: PlayListTrack[]): JukeboxTrack[] {
     title: track.title,
     artist: track.artist,
   }));
-}
-
-function clampPlaylistIndex(index: number, total: number) {
-  if (total <= 0) {
-    return 0;
-  }
-
-  return Math.max(0, Math.min(index, total - 1));
 }
 
 function usePlayListSize({
@@ -98,10 +91,7 @@ export function usePlayList({
   const resolvedActiveTabIndex = isActiveTabControlled
     ? controlledActiveTabIndex
     : internalActiveTabIndex;
-  const safeActiveTabIndex = clampPlaylistIndex(
-    resolvedActiveTabIndex,
-    playlist.length,
-  );
+  const safeActiveTabIndex = clampIndex(resolvedActiveTabIndex, playlist.length);
 
   const activePlaylist = playlist[safeActiveTabIndex];
   const activeTracks = useMemo(() => activePlaylist?.data ?? [], [activePlaylist]);
@@ -158,7 +148,7 @@ export function usePlayList({
 
   const setActiveTabIndex = useCallback(
     (index: number) => {
-      const safeIndex = clampPlaylistIndex(index, playlist.length);
+      const safeIndex = clampIndex(index, playlist.length);
 
       if (!isActiveTabControlled) {
         setInternalActiveTabIndex(safeIndex);
