@@ -1,10 +1,6 @@
 import clsx from "clsx";
 
-import type {
-  PlayListItem,
-  PlayListSize,
-  PlayListTrack,
-} from "../../lib/shared";
+import type { PlayListItem, PlayListSize, PlayListTrack } from "../../lib/types";
 import { PauseIcon, PlayIcon, VolumeLowIcon } from "../icons";
 import {
   CompactIcon,

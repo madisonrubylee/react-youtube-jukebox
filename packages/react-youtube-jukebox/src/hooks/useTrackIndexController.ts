@@ -7,7 +7,8 @@ import {
   type RefObject,
 } from "react";
 
-import { clampIndex, type JukeboxTrack } from "../lib/shared";
+import type { JukeboxTrack } from "../lib/types";
+import { clampIndex } from "../lib/utils";
 
 type UseTrackIndexControllerOptions = {
   tracks: JukeboxTrack[];
@@ -71,10 +72,7 @@ export function useTrackIndexController({
       const safeNextIndex = clampIndex(nextIndex, trackCount);
 
       if (!isCurrentIndexControlled) {
-        setInternalState({
-          currentIndex: safeNextIndex,
-          trackSignature,
-        });
+        setInternalState({ currentIndex: safeNextIndex, trackSignature });
       }
 
       onCurrentIndexChange?.(safeNextIndex);

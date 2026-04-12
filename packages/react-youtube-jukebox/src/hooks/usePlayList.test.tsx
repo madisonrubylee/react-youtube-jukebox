@@ -3,7 +3,7 @@
 import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import type { PlayListItem } from "../lib/shared";
+import type { PlayListItem } from "../lib/types";
 import type { YouTubeNamespace, YouTubePlayerOptions } from "../lib/youtube";
 import { usePlayList } from "./usePlayList";
 
@@ -73,8 +73,8 @@ function HookHarness({
   } = usePlayList({
     playlist,
     autoplay: false,
-    ...(size !== undefined ? { size } : {}),
-    ...(onSizeChange !== undefined ? { onSizeChange } : {}),
+    size,
+    onSizeChange,
   });
   const { playerMountRef, currentIndex } = player;
 

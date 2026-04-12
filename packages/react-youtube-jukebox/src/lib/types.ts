@@ -41,17 +41,17 @@ export type JukeboxProps = {
 
 export type UseJukeboxOptions = {
   tracks: JukeboxTrack[];
-  autoplay?: boolean;
-  defaultIndex?: number;
-  currentIndex?: number;
-  onCurrentIndexChange?: (index: number) => void;
-  onPlay?: () => void;
-  onPause?: () => void;
-  onTrackChange?: (track: JukeboxTrack, index: number) => void;
-  onEnd?: () => void;
-  defaultExpanded?: boolean;
-  expanded?: boolean;
-  onExpandedChange?: (expanded: boolean) => void;
+  autoplay?: boolean | undefined;
+  defaultIndex?: number | undefined;
+  currentIndex?: number | undefined;
+  onCurrentIndexChange?: ((index: number) => void) | undefined;
+  onPlay?: (() => void) | undefined;
+  onPause?: (() => void) | undefined;
+  onTrackChange?: ((track: JukeboxTrack, index: number) => void) | undefined;
+  onEnd?: (() => void) | undefined;
+  defaultExpanded?: boolean | undefined;
+  expanded?: boolean | undefined;
+  onExpandedChange?: ((expanded: boolean) => void) | undefined;
 };
 
 export type JukeboxPlayerState = {
@@ -133,20 +133,20 @@ export type PlayListProps = {
 
 export type UsePlayListOptions = {
   playlist: PlayListItem[];
-  autoplay?: boolean;
-  defaultTabIndex?: number;
-  activeTabIndex?: number;
-  onActiveTabIndexChange?: (index: number) => void;
-  defaultSize?: PlayListSize;
-  size?: PlayListSize;
-  onSizeChange?: (size: PlayListSize) => void;
-  defaultIndex?: number;
-  currentIndex?: number;
-  onCurrentIndexChange?: (index: number) => void;
-  onPlay?: () => void;
-  onPause?: () => void;
-  onTrackChange?: (track: PlayListTrack, index: number) => void;
-  onEnd?: () => void;
+  autoplay?: boolean | undefined;
+  defaultTabIndex?: number | undefined;
+  activeTabIndex?: number | undefined;
+  onActiveTabIndexChange?: ((index: number) => void) | undefined;
+  defaultSize?: PlayListSize | undefined;
+  size?: PlayListSize | undefined;
+  onSizeChange?: ((size: PlayListSize) => void) | undefined;
+  defaultIndex?: number | undefined;
+  currentIndex?: number | undefined;
+  onCurrentIndexChange?: ((index: number) => void) | undefined;
+  onPlay?: (() => void) | undefined;
+  onPause?: (() => void) | undefined;
+  onTrackChange?: ((track: PlayListTrack, index: number) => void) | undefined;
+  onEnd?: (() => void) | undefined;
 };
 
 export type UsePlayListResult = {

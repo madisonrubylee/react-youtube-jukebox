@@ -12,15 +12,16 @@ import {
   DEFAULT_CHROME,
   DEFAULT_POSITION,
   DEFAULT_THEME,
-  getEffectiveChrome,
-  getPositionStyle,
   LEVEL_BAR_ANIMATION_DELAY_MS,
   LEVEL_BAR_HEIGHTS,
   LEVEL_BAR_REST_HEIGHT,
-  type JukeboxExpandedRenderProps,
-  type JukeboxProps,
-  type JukeboxTrack,
-} from "../lib/shared";
+} from "../lib/constants";
+import type {
+  JukeboxExpandedRenderProps,
+  JukeboxProps,
+  JukeboxTrack,
+} from "../lib/types";
+import { getEffectiveChrome, getPositionStyle } from "../lib/utils";
 import "../styles/jukebox.css";
 import { JukeboxExpandedPlayer } from "./JukeboxExpandedPlayer";
 import { VolumeHighIcon } from "./icons";
@@ -172,10 +173,10 @@ export function Jukebox({
   } = useJukebox({
     tracks,
     autoplay,
-    ...(onPlay !== undefined ? { onPlay } : {}),
-    ...(onPause !== undefined ? { onPause } : {}),
-    ...(onTrackChange !== undefined ? { onTrackChange } : {}),
-    ...(onEnd !== undefined ? { onEnd } : {}),
+    onPlay,
+    onPause,
+    onTrackChange,
+    onEnd,
   });
   const {
     playerMountRef,
@@ -236,13 +237,7 @@ export function Jukebox({
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [
-    keyboard,
-    togglePlay,
-    playNext,
-    playPrev,
-    toggleMute,
-  ]);
+  }, [keyboard, togglePlay, playNext, playPrev, toggleMute]);
   const effectiveChrome = getEffectiveChrome(chrome);
 
   const expandedRenderProps: JukeboxExpandedRenderProps | undefined =

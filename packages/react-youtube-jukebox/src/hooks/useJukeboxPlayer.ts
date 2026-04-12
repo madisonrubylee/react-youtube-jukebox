@@ -1,12 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
-import {
-  getNextTrackIndex,
-  getRandomTrackIndex,
-  type JukeboxPlayerState,
-  type JukeboxTrack,
-  type RepeatMode,
-} from "../lib/shared";
+import type { JukeboxPlayerState, JukeboxTrack, RepeatMode } from "../lib/types";
+import { getNextTrackIndex, getRandomTrackIndex } from "../lib/utils";
 import {
   canControlPlayer,
   loadYouTubeIframeApi,
@@ -32,15 +27,15 @@ const REPEAT_CYCLE: Record<RepeatMode, RepeatMode> = {
 type UseJukeboxPlayerOptions = {
   autoplay: boolean;
   tracks: JukeboxTrack[];
-  defaultIndex?: number;
-  currentIndex?: number;
-  onCurrentIndexChange?: (index: number) => void;
-  shuffle?: boolean;
-  repeat?: RepeatMode;
-  onPlay?: () => void;
-  onPause?: () => void;
-  onTrackChange?: (track: JukeboxTrack, index: number) => void;
-  onEnd?: () => void;
+  defaultIndex?: number | undefined;
+  currentIndex?: number | undefined;
+  onCurrentIndexChange?: ((index: number) => void) | undefined;
+  shuffle?: boolean | undefined;
+  repeat?: RepeatMode | undefined;
+  onPlay?: (() => void) | undefined;
+  onPause?: (() => void) | undefined;
+  onTrackChange?: ((track: JukeboxTrack, index: number) => void) | undefined;
+  onEnd?: (() => void) | undefined;
 };
 
 type TrackEndedAction =
@@ -123,11 +118,9 @@ export function useJukeboxPlayer({
   const {
     isMuted,
     volume,
-    volumeRef,
-    mutedPreferenceRef,
     setVolume,
     toggleMute,
-    setIsMuted,
+    syncPlayerAudioState,
   } = useVolumeControl(playerRef);
 
   const {
@@ -254,15 +247,7 @@ export function useJukeboxPlayer({
                 return;
               }
 
-              player.setVolume(volumeRef.current);
-
-              if (mutedPreferenceRef.current) {
-                player.mute();
-              } else {
-                player.unMute();
-              }
-
-              setIsMuted(mutedPreferenceRef.current);
+              syncPlayerAudioState(player);
               setIsReady(true);
             },
             onStateChange: (event) => {
@@ -346,9 +331,7 @@ export function useJukeboxPlayer({
     onPlayRef,
     persistentWrapperRef,
     resetProgress,
-    mutedPreferenceRef,
-    setIsMuted,
-    volumeRef,
+    syncPlayerAudioState,
   ]);
 
   useEffect(() => {

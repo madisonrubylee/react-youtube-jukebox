@@ -1,16 +1,15 @@
 import { useCallback, useRef, useState, type RefObject } from "react";
 
-import { clampVolume, DEFAULT_VOLUME } from "../lib/shared";
+import { DEFAULT_VOLUME } from "../lib/constants";
+import { clampVolume } from "../lib/utils";
 import type { YouTubePlayer } from "../lib/youtube";
 
 type UseVolumeControlResult = {
   isMuted: boolean;
   volume: number;
-  volumeRef: RefObject<number>;
-  mutedPreferenceRef: RefObject<boolean>;
   setVolume: (nextVolume: number) => void;
   toggleMute: () => void;
-  setIsMuted: (muted: boolean) => void;
+  syncPlayerAudioState: (player: YouTubePlayer) => void;
 };
 
 export function useVolumeControl(
@@ -20,6 +19,17 @@ export function useVolumeControl(
   const [volume, setVolumeState] = useState(DEFAULT_VOLUME);
   const mutedPreferenceRef = useRef(true);
   const volumeRef = useRef(DEFAULT_VOLUME);
+
+  const syncPlayerAudioState = useCallback((player: YouTubePlayer) => {
+    player.setVolume(volumeRef.current);
+
+    if (mutedPreferenceRef.current) {
+      player.mute();
+      return;
+    }
+
+    player.unMute();
+  }, []);
 
   const setVolume = useCallback(
     (nextVolume: number) => {
@@ -71,10 +81,8 @@ export function useVolumeControl(
   return {
     isMuted,
     volume,
-    volumeRef,
-    mutedPreferenceRef,
     setVolume,
     toggleMute,
-    setIsMuted,
+    syncPlayerAudioState,
   };
 }

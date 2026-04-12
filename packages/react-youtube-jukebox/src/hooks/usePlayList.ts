@@ -1,15 +1,15 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
 
-import {
-  clampIndex,
-  DEFAULT_PLAYLIST_SIZE,
-  type JukeboxTrack,
-  type PlayListSize,
-  type PlayListTrack,
-  type UsePlayListOptions,
-  type UsePlayListResult,
-} from "../lib/shared";
+import { clampIndex } from "../lib/utils";
+import type {
+  JukeboxTrack,
+  PlayListTrack,
+  UsePlayListOptions,
+  UsePlayListResult,
+} from "../lib/types";
 import { useJukeboxPlayer } from "./useJukeboxPlayer";
+import { useControllableState } from "./useControllableState";
+import { usePlayListSize } from "./usePlayListSize";
 
 function toJukeboxTracks(playlistTracks: PlayListTrack[]): JukeboxTrack[] {
   return playlistTracks.map((track) => ({
@@ -17,54 +17,6 @@ function toJukeboxTracks(playlistTracks: PlayListTrack[]): JukeboxTrack[] {
     title: track.title,
     artist: track.artist,
   }));
-}
-
-function usePlayListSize({
-  size: controlledSize,
-  defaultSize = DEFAULT_PLAYLIST_SIZE,
-  onSizeChange,
-}: {
-  size: PlayListSize | undefined;
-  defaultSize: PlayListSize | undefined;
-  onSizeChange: ((size: PlayListSize) => void) | undefined;
-}) {
-  const [internalSize, setInternalSize] = useState<PlayListSize>(defaultSize);
-  const previousSizeRef = useRef<PlayListSize>("compact");
-  const isControlled = controlledSize !== undefined;
-  const resolvedSize = isControlled ? controlledSize : internalSize;
-
-  const applySize = useCallback(
-    (nextSize: PlayListSize) => {
-      if (!isControlled) {
-        setInternalSize(nextSize);
-      }
-
-      onSizeChange?.(nextSize);
-    },
-    [isControlled, onSizeChange],
-  );
-
-  const toggleSize = useCallback(() => {
-    const nextSize: PlayListSize =
-      resolvedSize === "compact" ? "expanded" : "compact";
-    applySize(nextSize);
-  }, [applySize, resolvedSize]);
-
-  const minimize = useCallback(() => {
-    if (resolvedSize !== "mini") {
-      previousSizeRef.current = resolvedSize;
-    }
-
-    applySize("mini");
-  }, [applySize, resolvedSize]);
-
-  const restore = useCallback(() => {
-    const nextSize =
-      previousSizeRef.current === "mini" ? "compact" : previousSizeRef.current;
-    applySize(nextSize);
-  }, [applySize]);
-
-  return { resolvedSize, toggleSize, minimize, restore } as const;
 }
 
 export function usePlayList({
@@ -84,13 +36,12 @@ export function usePlayList({
   onTrackChange,
   onEnd,
 }: UsePlayListOptions): UsePlayListResult {
-  const [internalActiveTabIndex, setInternalActiveTabIndex] = useState(
-    defaultTabIndex,
-  );
-  const isActiveTabControlled = controlledActiveTabIndex !== undefined;
-  const resolvedActiveTabIndex = isActiveTabControlled
-    ? controlledActiveTabIndex
-    : internalActiveTabIndex;
+  const [resolvedActiveTabIndex, setResolvedActiveTabIndex] =
+    useControllableState({
+      value: controlledActiveTabIndex,
+      defaultValue: defaultTabIndex,
+      onChange: onActiveTabIndexChange,
+    });
   const safeActiveTabIndex = clampIndex(resolvedActiveTabIndex, playlist.length);
 
   const activePlaylist = playlist[safeActiveTabIndex];
@@ -123,13 +74,13 @@ export function usePlayList({
   const player = useJukeboxPlayer({
     autoplay,
     tracks: jukeboxTracks,
-    ...(defaultIndex !== undefined ? { defaultIndex } : {}),
-    ...(currentIndex !== undefined ? { currentIndex } : {}),
-    ...(onCurrentIndexChange !== undefined ? { onCurrentIndexChange } : {}),
-    ...(onPlay !== undefined ? { onPlay } : {}),
-    ...(onPause !== undefined ? { onPause } : {}),
-    ...(onTrackChange !== undefined ? { onTrackChange: handleTrackChange } : {}),
-    ...(onEnd !== undefined ? { onEnd } : {}),
+    defaultIndex,
+    currentIndex,
+    onCurrentIndexChange,
+    onPlay,
+    onPause,
+    onTrackChange: onTrackChange ? handleTrackChange : undefined,
+    onEnd,
   });
   const {
     currentIndex: currentTrackIndex,
@@ -149,14 +100,9 @@ export function usePlayList({
   const setActiveTabIndex = useCallback(
     (index: number) => {
       const safeIndex = clampIndex(index, playlist.length);
-
-      if (!isActiveTabControlled) {
-        setInternalActiveTabIndex(safeIndex);
-      }
-
-      onActiveTabIndexChange?.(safeIndex);
+      setResolvedActiveTabIndex(safeIndex);
     },
-    [isActiveTabControlled, onActiveTabIndexChange, playlist.length],
+    [playlist.length, setResolvedActiveTabIndex],
   );
 
   const selectTrack = useCallback(

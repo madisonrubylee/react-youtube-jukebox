@@ -4,11 +4,9 @@ import clsx from "clsx";
 import { useClientMounted } from "../hooks/useClientMounted";
 import { usePlayListMobile } from "../hooks/usePlayListMobile";
 import { usePlayList } from "../hooks/usePlayList";
-import {
-  DEFAULT_PLAYLIST_THEME,
-  getPositionStyle,
-  type PlayListProps,
-} from "../lib/shared";
+import { DEFAULT_PLAYLIST_THEME } from "../lib/constants";
+import type { PlayListProps } from "../lib/types";
+import { getPositionStyle } from "../lib/utils";
 import { PlayListPlayer } from "./PlayListPlayer";
 import {
   MainPanelHeader,
@@ -54,9 +52,9 @@ export function PlayList({
   } = usePlayList({
     playlist,
     autoplay,
-    ...(defaultSize !== undefined ? { defaultSize } : {}),
-    ...(size !== undefined ? { size } : {}),
-    ...(onSizeChange !== undefined ? { onSizeChange } : {}),
+    defaultSize,
+    size,
+    onSizeChange,
   });
 
   const {

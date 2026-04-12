@@ -1,6 +1,6 @@
 import type { ChangeEvent } from "react";
 
-import type { JukeboxPlayerState, PlayListTrack } from "../lib/shared";
+import type { JukeboxPlayerState, PlayListTrack } from "../lib/types";
 import {
   NextIcon,
   PauseIcon,

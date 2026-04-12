@@ -3,7 +3,7 @@
 import { cleanup, render, screen, waitFor } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import type { JukeboxTrack } from "../lib/shared";
+import type { JukeboxTrack } from "../lib/types";
 import type { YouTubeNamespace, YouTubePlayerOptions } from "../lib/youtube";
 import {
   PLAYER_STATE_ENDED,
@@ -34,6 +34,7 @@ const THREE_TRACKS: JukeboxTrack[] = [
 ];
 
 class MockYouTubePlayer {
+  static autoReady = true;
   static instances: MockYouTubePlayer[] = [];
 
   readonly cueVideoById = vi.fn();
@@ -53,9 +54,12 @@ class MockYouTubePlayer {
     readonly options: YouTubePlayerOptions,
   ) {
     MockYouTubePlayer.instances.push(this);
-    queueMicrotask(() => {
-      this.options.events.onReady();
-    });
+
+    if (MockYouTubePlayer.autoReady) {
+      queueMicrotask(() => {
+        this.options.events.onReady();
+      });
+    }
   }
 }
 
@@ -81,14 +85,12 @@ function HookHarness({
   const { currentIndex, playerMountRef } = useJukeboxPlayer({
     autoplay,
     tracks,
-    ...(controlledCurrentIndex !== undefined
-      ? { currentIndex: controlledCurrentIndex }
-      : {}),
-    ...(onCurrentIndexChange !== undefined ? { onCurrentIndexChange } : {}),
-    ...(repeat !== undefined ? { repeat } : {}),
-    ...(shuffle !== undefined ? { shuffle } : {}),
-    ...(onPlay !== undefined ? { onPlay } : {}),
-    ...(onTrackChange !== undefined ? { onTrackChange } : {}),
+    currentIndex: controlledCurrentIndex,
+    onCurrentIndexChange,
+    repeat,
+    shuffle,
+    onPlay,
+    onTrackChange,
   });
 
   return (
@@ -140,8 +142,25 @@ function ShuffleHarness({
   );
 }
 
+function AudioSyncHarness({ tracks }: { tracks: JukeboxTrack[] }) {
+  const { playerMountRef, setVolume } = useJukeboxPlayer({
+    autoplay: false,
+    tracks,
+  });
+
+  return (
+    <>
+      <div ref={playerMountRef} />
+      <button type="button" data-testid="set-volume" onClick={() => setVolume(30)}>
+        Set Volume
+      </button>
+    </>
+  );
+}
+
 describe("useJukeboxPlayer", () => {
   beforeEach(() => {
+    MockYouTubePlayer.autoReady = true;
     MockYouTubePlayer.instances = [];
     window.YT = {
       Player: MockYouTubePlayer as unknown as YouTubeNamespace["Player"],
@@ -256,6 +275,29 @@ describe("useJukeboxPlayer", () => {
     instance?.options.events.onStateChange({ data: PLAYER_STATE_PLAYING });
 
     expect(onPlay).toHaveBeenCalledTimes(1);
+  });
+
+  it("syncs the latest mute and volume state when the player becomes ready", async () => {
+    MockYouTubePlayer.autoReady = false;
+
+    render(<AudioSyncHarness tracks={BASE_TRACKS} />);
+
+    await waitFor(() => {
+      expect(MockYouTubePlayer.instances).toHaveLength(1);
+    });
+
+    const instance = MockYouTubePlayer.instances[0];
+
+    screen.getByTestId("set-volume").click();
+
+    instance?.setVolume.mockClear();
+    instance?.unMute.mockClear();
+    instance?.mute.mockClear();
+    instance?.options.events.onReady();
+
+    expect(instance?.setVolume).toHaveBeenCalledWith(30);
+    expect(instance?.unMute).toHaveBeenCalledTimes(1);
+    expect(instance?.mute).not.toHaveBeenCalled();
   });
 
   it("notifies onTrackChange for the initial track", async () => {

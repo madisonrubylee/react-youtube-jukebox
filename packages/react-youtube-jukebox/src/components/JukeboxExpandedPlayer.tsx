@@ -1,6 +1,6 @@
 import type { ChangeEvent } from "react";
 
-import type { JukeboxExpandedRenderProps } from "../lib/shared";
+import type { JukeboxExpandedRenderProps } from "../lib/types";
 import { VolumeLowIcon } from "./icons";
 
 type JukeboxExpandedPlayerViewProps = JukeboxExpandedRenderProps & {

@@ -1,11 +1,9 @@
-import { useCallback, useState } from "react";
+import { useCallback } from "react";
 
-import {
-  getNextTrackIndex,
-  type UseJukeboxOptions,
-  type UseJukeboxResult,
-} from "../lib/shared";
+import type { UseJukeboxOptions, UseJukeboxResult } from "../lib/types";
+import { getNextTrackIndex } from "../lib/utils";
 import { useJukeboxPlayer } from "./useJukeboxPlayer";
+import { useControllableState } from "./useControllableState";
 
 export function useJukebox({
   tracks,
@@ -24,13 +22,13 @@ export function useJukebox({
   const player = useJukeboxPlayer({
     autoplay,
     tracks,
-    ...(defaultIndex !== undefined ? { defaultIndex } : {}),
-    ...(currentIndex !== undefined ? { currentIndex } : {}),
-    ...(onCurrentIndexChange !== undefined ? { onCurrentIndexChange } : {}),
-    ...(onPlay !== undefined ? { onPlay } : {}),
-    ...(onPause !== undefined ? { onPause } : {}),
-    ...(onTrackChange !== undefined ? { onTrackChange } : {}),
-    ...(onEnd !== undefined ? { onEnd } : {}),
+    defaultIndex,
+    currentIndex,
+    onCurrentIndexChange,
+    onPlay,
+    onPause,
+    onTrackChange,
+    onEnd,
   });
 
   const totalTracks = tracks.length;
@@ -41,11 +39,11 @@ export function useJukebox({
     ? tracks[getNextTrackIndex(player.currentIndex, 1, totalTracks)]
     : undefined;
 
-  const [internalExpanded, setInternalExpanded] = useState(defaultExpanded);
-  const isExpandedControlled = controlledExpanded !== undefined;
-  const resolvedExpanded = isExpandedControlled
-    ? controlledExpanded
-    : internalExpanded;
+  const [resolvedExpanded, setResolvedExpanded] = useControllableState({
+    value: controlledExpanded,
+    defaultValue: defaultExpanded,
+    onChange: onExpandedChange,
+  });
   const expanded = hasTracks ? resolvedExpanded : false;
 
   const applyExpanded = useCallback(
@@ -54,13 +52,9 @@ export function useJukebox({
         return;
       }
 
-      if (!isExpandedControlled) {
-        setInternalExpanded(nextExpanded);
-      }
-
-      onExpandedChange?.(nextExpanded);
+      setResolvedExpanded(nextExpanded);
     },
-    [hasTracks, isExpandedControlled, onExpandedChange],
+    [hasTracks, setResolvedExpanded],
   );
 
   const openExpanded = useCallback(() => {

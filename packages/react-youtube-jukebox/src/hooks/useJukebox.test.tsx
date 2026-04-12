@@ -3,7 +3,7 @@
 import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import type { JukeboxTrack } from "../lib/shared";
+import type { JukeboxTrack } from "../lib/types";
 import type { YouTubeNamespace, YouTubePlayerOptions } from "../lib/youtube";
 import { useJukebox } from "./useJukebox";
 
@@ -69,10 +69,10 @@ function HookHarness({
   } = useJukebox({
     tracks,
     autoplay: false,
-    ...(currentIndex !== undefined ? { currentIndex } : {}),
-    ...(onCurrentIndexChange !== undefined ? { onCurrentIndexChange } : {}),
-    ...(expanded !== undefined ? { expanded } : {}),
-    ...(onExpandedChange !== undefined ? { onExpandedChange } : {}),
+    currentIndex,
+    onCurrentIndexChange,
+    expanded,
+    onExpandedChange,
   });
   const { playerMountRef, playNext } = player;
 
