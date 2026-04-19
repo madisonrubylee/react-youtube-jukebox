@@ -19,8 +19,6 @@ export type JukeboxChrome = "classic" | "wallet" | "ride";
 
 export type JukeboxOffset = number | { x: number; y: number };
 
-export type RepeatMode = "none" | "all" | "one";
-
 export type JukeboxProps = {
   tracks: JukeboxTrack[];
   autoplay?: boolean;
@@ -29,6 +27,7 @@ export type JukeboxProps = {
   onPause?: () => void;
   onTrackChange?: (track: JukeboxTrack, index: number) => void;
   onEnd?: () => void;
+  onError?: (error: unknown) => void;
   keyboard?: boolean;
   position?: JukeboxPosition;
   theme?: JukeboxTheme;
@@ -49,6 +48,7 @@ export type UseJukeboxOptions = {
   onPause?: (() => void) | undefined;
   onTrackChange?: ((track: JukeboxTrack, index: number) => void) | undefined;
   onEnd?: (() => void) | undefined;
+  onError?: ((error: unknown) => void) | undefined;
   defaultExpanded?: boolean | undefined;
   expanded?: boolean | undefined;
   onExpandedChange?: ((expanded: boolean) => void) | undefined;
@@ -66,20 +66,13 @@ export type JukeboxPlayerState = {
   playNext: () => void;
   playPrev: () => void;
   playTrackAt: (index: number) => void;
-  shuffle: boolean;
-  toggleShuffle: () => void;
-  repeat: RepeatMode;
-  cycleRepeat: () => void;
   progress: number;
   duration: number;
   currentTime: number;
   seek: (seconds: number) => void;
 };
 
-export type JukeboxExpandedRenderProps = Omit<
-  JukeboxPlayerState,
-  "shuffle" | "toggleShuffle" | "repeat" | "cycleRepeat"
-> & {
+export type JukeboxExpandedRenderProps = JukeboxPlayerState & {
   currentTrack: JukeboxTrack;
   isExpanded: boolean;
   nextTrack: JukeboxTrack | undefined;
@@ -126,6 +119,7 @@ export type PlayListProps = {
   size?: PlayListSize;
   defaultSize?: PlayListSize;
   onSizeChange?: (size: PlayListSize) => void;
+  onError?: (error: unknown) => void;
   position?: PlayListPosition;
   offset?: PlayListOffset;
   portal?: boolean;
@@ -148,6 +142,7 @@ export type UsePlayListOptions = {
   onPause?: (() => void) | undefined;
   onTrackChange?: ((track: PlayListTrack, index: number) => void) | undefined;
   onEnd?: (() => void) | undefined;
+  onError?: ((error: unknown) => void) | undefined;
 };
 
 export type UsePlayListResult = {

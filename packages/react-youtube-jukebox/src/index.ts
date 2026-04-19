@@ -1,7 +1,7 @@
-export { Jukebox } from "./components/Jukebox";
-export { PlayList } from "./components/PlayList";
-export { useJukebox } from "./hooks/useJukebox";
-export { usePlayList } from "./hooks/usePlayList";
+export { Jukebox } from "./domains/jukebox/components/Jukebox";
+export { PlayList } from "./domains/playlist/components/PlayList";
+export { useJukebox } from "./domains/jukebox/hooks/useJukebox";
+export { usePlayList } from "./domains/playlist/hooks/usePlayList";
 export type {
   JukeboxChrome,
   JukeboxExpandedRenderProps,
@@ -10,7 +10,6 @@ export type {
   JukeboxProps,
   JukeboxTheme,
   JukeboxTrack,
-  RepeatMode,
   PlayListItem,
   PlayListOffset,
   PlayListPosition,
@@ -22,4 +21,4 @@ export type {
   UseJukeboxResult,
   UsePlayListOptions,
   UsePlayListResult,
-} from "./lib/shared";
+} from "./lib/types";

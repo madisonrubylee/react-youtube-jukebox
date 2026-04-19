@@ -2,25 +2,34 @@ import type { CSSProperties } from "react";
 import { createPortal } from "react-dom";
 import clsx from "clsx";
 
-import { useClientMounted } from "../hooks/useClientMounted";
-import { usePlayListMobile } from "../hooks/usePlayListMobile";
+import { useClientMounted } from "../../../hooks/useClientMounted";
+import { DEFAULT_PLAYLIST_THEME } from "../../../lib/constants";
+import type { PlayListProps, PlayListSize } from "../../../lib/types";
+import { buildAccentOverrides, getPositionStyle } from "../../../lib/utils";
 import { usePlayList } from "../hooks/usePlayList";
-import { DEFAULT_PLAYLIST_THEME } from "../lib/constants";
-import type { PlayListProps } from "../lib/types";
-import { buildAccentOverrides, getPositionStyle } from "../lib/utils";
+import { usePlayListMobile } from "../hooks/usePlayListMobile";
+import { PlayListHeader } from "./PlayListHeader";
+import { PlayListMiniBar } from "./PlayListMiniBar";
+import { PlayListNav } from "./PlayListNav";
 import { PlayListPlayer } from "./PlayListPlayer";
 import {
   MainPanelHeader,
   MinimizeButton,
   NowPlaying,
-  PlayListHeader,
-  PlayListMiniBar,
-  PlayListNav,
-  PlayListTabs,
-  PlayListTrackList,
   SizeToggleButton,
-} from "./playlist/PlayListSections";
-import "../styles/playlist.css";
+} from "./PlayListSectionsCommon";
+import { PlayListTabs } from "./PlayListTabs";
+import { PlayListTrackList } from "./PlayListTrackList";
+import "../../../styles/playlist.css";
+
+const SIZE_DATA_ATTRIBUTE: Record<
+  PlayListSize,
+  "mini" | "expanded" | undefined
+> = {
+  mini: "mini",
+  compact: undefined,
+  expanded: "expanded",
+};
 
 export function PlayList({
   playlist,
@@ -31,6 +40,7 @@ export function PlayList({
   size,
   defaultSize,
   onSizeChange,
+  onError,
   position,
   offset,
   portal = false,
@@ -57,6 +67,7 @@ export function PlayList({
     defaultSize,
     size,
     onSizeChange,
+    onError,
   });
 
   const {
@@ -81,11 +92,7 @@ export function PlayList({
     ...(accentOverrides ?? {}),
   };
 
-  const dataSizeValue = (() => {
-    if (resolvedSize === "mini") return "mini";
-    if (resolvedSize === "expanded") return "expanded";
-    return undefined;
-  })();
+  const dataSizeValue = SIZE_DATA_ATTRIBUTE[resolvedSize];
 
   const content = (
     <div

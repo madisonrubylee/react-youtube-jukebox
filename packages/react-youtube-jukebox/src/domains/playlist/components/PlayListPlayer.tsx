@@ -1,13 +1,13 @@
-import type { ChangeEvent } from "react";
-
-import type { JukeboxPlayerState, PlayListTrack } from "../lib/types";
+import type { JukeboxPlayerState, PlayListTrack } from "../../../lib/types";
 import {
   NextIcon,
   PauseIcon,
   PlayIcon,
   PrevIcon,
   VolumeLowIcon as VolumeIcon,
-} from "./icons";
+} from "../../../components/icons";
+import { ProgressSlider } from "../../../components/player/ProgressSlider";
+import { VolumeSlider } from "../../../components/player/VolumeSlider";
 
 type PlayListPlayerProps = {
   playerState: JukeboxPlayerState;
@@ -51,15 +51,6 @@ export function PlayListPlayer({
   } = playerState;
 
   const hasMultipleTracks = totalTracks > 1;
-  const progressMax = duration > 0 ? duration : 1;
-
-  const handleVolumeInput = (event: ChangeEvent<HTMLInputElement>) => {
-    setVolume(Number(event.target.value));
-  };
-
-  const handleProgressInput = (event: ChangeEvent<HTMLInputElement>) => {
-    seek(Number(event.target.value));
-  };
 
   return (
     <div className="rp-player">
@@ -78,16 +69,12 @@ export function PlayListPlayer({
       {showSeekBar ? (
         <div className="rp-player__progress">
           <span className="rp-player__time">{formatTime(currentTime)}</span>
-          <input
-            type="range"
-            min={0}
-            max={progressMax}
-            step={0.1}
-            value={Math.min(currentTime, progressMax)}
-            onChange={handleProgressInput}
-            aria-label="Playback position"
+          <ProgressSlider
+            currentTime={currentTime}
+            duration={duration}
+            onSeek={seek}
+            disabled={!canSeek}
             className="rp-player__progress-slider"
-            disabled={!canSeek || !duration}
           />
           <span className="rp-player__time">{formatTime(duration)}</span>
         </div>
@@ -129,14 +116,9 @@ export function PlayListPlayer({
             className="rp-player__button">
             <VolumeIcon isMuted={isMuted} />
           </button>
-          <input
-            type="range"
-            min={0}
-            max={100}
-            step={1}
-            value={volume}
-            onChange={handleVolumeInput}
-            aria-label="Volume"
+          <VolumeSlider
+            volume={volume}
+            onVolumeChange={setVolume}
             className="rp-player__volume"
           />
         </div>

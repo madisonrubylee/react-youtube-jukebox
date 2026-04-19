@@ -1,14 +1,15 @@
 import { useCallback, useEffect, useMemo, useRef } from "react";
 
-import { clampIndex } from "../lib/utils";
+import { clampIndex } from "../../../lib/utils";
 import type {
   JukeboxTrack,
   PlayListTrack,
   UsePlayListOptions,
   UsePlayListResult,
-} from "../lib/types";
-import { useJukeboxPlayer } from "./useJukeboxPlayer";
-import { useControllableState } from "./useControllableState";
+} from "../../../lib/types";
+import { useJukeboxPlayer } from "../../../hooks/useJukeboxPlayer";
+import { useControllableState } from "../../../hooks/useControllableState";
+import { useLatestRef } from "../../../hooks/useLatestRef";
 import { usePlayListSize } from "./usePlayListSize";
 
 function toJukeboxTracks(playlistTracks: PlayListTrack[]): JukeboxTrack[] {
@@ -35,6 +36,7 @@ export function usePlayList({
   onPause,
   onTrackChange,
   onEnd,
+  onError,
 }: UsePlayListOptions): UsePlayListResult {
   const [resolvedActiveTabIndex, setResolvedActiveTabIndex] =
     useControllableState({
@@ -81,12 +83,17 @@ export function usePlayList({
     onPause,
     onTrackChange: onTrackChange ? handleTrackChange : undefined,
     onEnd,
+    onError,
   });
   const {
     currentIndex: currentTrackIndex,
     playTrackAt,
     togglePlay,
   } = player;
+
+  const currentTrackIndexRef = useLatestRef(currentTrackIndex);
+  const playTrackAtRef = useLatestRef(playTrackAt);
+  const togglePlayRef = useLatestRef(togglePlay);
 
   useEffect(() => {
     if (previousPlaylistIndexRef.current === safeActiveTabIndex) {
@@ -105,25 +112,20 @@ export function usePlayList({
     [playlist.length, setResolvedActiveTabIndex],
   );
 
-  const selectTrack = useCallback(
-    (index: number) => {
-      const nextTrack = activeTracksRef.current[index];
+  const selectTrack = useCallback((index: number) => {
+    const nextTrack = activeTracksRef.current[index];
 
-      if (!nextTrack) {
-        return;
-      }
+    if (!nextTrack) {
+      return;
+    }
 
-      const isCurrentTrackSelected = index === currentTrackIndex;
+    if (index === currentTrackIndexRef.current) {
+      togglePlayRef.current();
+      return;
+    }
 
-      if (isCurrentTrackSelected) {
-        togglePlay();
-        return;
-      }
-
-      playTrackAt(index);
-    },
-    [currentTrackIndex, playTrackAt, togglePlay],
-  );
+    playTrackAtRef.current(index);
+  }, [currentTrackIndexRef, playTrackAtRef, togglePlayRef]);
 
   const {
     resolvedSize,

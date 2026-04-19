@@ -5,7 +5,12 @@ import {
   DEFAULT_OFFSET_PX,
   TEMPORARILY_DISABLED_CHROMES,
 } from "./constants";
-import type { JukeboxChrome, JukeboxOffset, JukeboxPosition } from "./types";
+import type {
+  JukeboxChrome,
+  JukeboxOffset,
+  JukeboxPosition,
+  JukeboxTrack,
+} from "./types";
 
 export function getEffectiveChrome(chrome: JukeboxChrome): JukeboxChrome {
   const isTemporarilyDisabledChrome =
@@ -30,26 +35,36 @@ export function getNextTrackIndex(
   return (index + step + totalTracks) % totalTracks;
 }
 
-/** Picks a random track index in `[0, totalTracks)` other than `currentIndex`. */
-export function getRandomTrackIndex(
+export type TrackEndedAction =
+  | { type: "stop" }
+  | { type: "replay"; videoId: string }
+  | { type: "advance"; nextIndex: number };
+
+/**
+ * Decides what to do when a track finishes playing.
+ * - 0 tracks: stop
+ * - 1 track: replay the same video
+ * - 2+ tracks: advance to the next index (wraps around the list)
+ */
+export function resolveTrackEndedAction(
+  tracks: JukeboxTrack[],
   currentIndex: number,
-  totalTracks: number,
-): number {
-  if (totalTracks <= 1) {
-    return 0;
+): TrackEndedAction {
+  const trackCount = tracks.length;
+
+  if (trackCount <= 0) {
+    return { type: "stop" };
   }
 
-  if (totalTracks === 2) {
-    return currentIndex === 0 ? 1 : 0;
+  if (trackCount === 1) {
+    const videoId = tracks[0]?.videoId;
+    return videoId ? { type: "replay", videoId } : { type: "stop" };
   }
 
-  let nextIndex = currentIndex;
-
-  while (nextIndex === currentIndex) {
-    nextIndex = Math.floor(Math.random() * totalTracks);
-  }
-
-  return nextIndex;
+  return {
+    type: "advance",
+    nextIndex: getNextTrackIndex(currentIndex, 1, trackCount),
+  };
 }
 
 export function clampVolume(value: number) {
@@ -76,23 +91,43 @@ export function normalizeOffset(offset: JukeboxOffset | undefined) {
   return { x: DEFAULT_OFFSET_PX, y: DEFAULT_OFFSET_PX };
 }
 
-function parseHexColor(hex: string): [number, number, number] | null {
+const HEX_SHORT_LENGTH = 3;
+const HEX_LONG_LENGTH = 6;
+const HEX_COLOR_PATTERN = /^(?:[0-9a-f]{3}|[0-9a-f]{6})$/i;
+
+function parseHexChannel(value: string): number | null {
+  const parsed = parseInt(value, 16);
+  return Number.isNaN(parsed) ? null : parsed;
+}
+
+export function parseHexColor(hex: string): [number, number, number] | null {
   const clean = hex.replace(/^#/, "");
 
-  if (clean.length === 3) {
-    const redHex = clean.charAt(0);
-    const greenHex = clean.charAt(1);
-    const blueHex = clean.charAt(2);
-    const r = parseInt(redHex + redHex, 16);
-    const g = parseInt(greenHex + greenHex, 16);
-    const b = parseInt(blueHex + blueHex, 16);
+  if (!HEX_COLOR_PATTERN.test(clean)) {
+    return null;
+  }
+
+  if (clean.length === HEX_SHORT_LENGTH) {
+    const r = parseHexChannel(clean.charAt(0).repeat(2));
+    const g = parseHexChannel(clean.charAt(1).repeat(2));
+    const b = parseHexChannel(clean.charAt(2).repeat(2));
+
+    if (r === null || g === null || b === null) {
+      return null;
+    }
+
     return [r, g, b];
   }
 
-  if (clean.length === 6) {
-    const r = parseInt(clean.slice(0, 2), 16);
-    const g = parseInt(clean.slice(2, 4), 16);
-    const b = parseInt(clean.slice(4, 6), 16);
+  if (clean.length === HEX_LONG_LENGTH) {
+    const r = parseHexChannel(clean.slice(0, 2));
+    const g = parseHexChannel(clean.slice(2, 4));
+    const b = parseHexChannel(clean.slice(4, 6));
+
+    if (r === null || g === null || b === null) {
+      return null;
+    }
+
     return [r, g, b];
   }
 

@@ -1,8 +1,8 @@
 import { useCallback, useRef } from "react";
 
-import { DEFAULT_PLAYLIST_SIZE } from "../lib/constants";
-import type { PlayListSize } from "../lib/types";
-import { useControllableState } from "./useControllableState";
+import { DEFAULT_PLAYLIST_SIZE } from "../../../lib/constants";
+import type { PlayListSize } from "../../../lib/types";
+import { useControllableState } from "../../../hooks/useControllableState";
 
 type UsePlayListSizeOptions = {
   size: PlayListSize | undefined;

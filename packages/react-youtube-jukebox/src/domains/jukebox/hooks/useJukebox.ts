@@ -1,9 +1,9 @@
 import { useCallback } from "react";
 
-import type { UseJukeboxOptions, UseJukeboxResult } from "../lib/types";
-import { getNextTrackIndex } from "../lib/utils";
-import { useJukeboxPlayer } from "./useJukeboxPlayer";
-import { useControllableState } from "./useControllableState";
+import type { UseJukeboxOptions, UseJukeboxResult } from "../../../lib/types";
+import { getNextTrackIndex } from "../../../lib/utils";
+import { useControllableState } from "../../../hooks/useControllableState";
+import { useJukeboxPlayer } from "../../../hooks/useJukeboxPlayer";
 
 export function useJukebox({
   tracks,
@@ -15,6 +15,7 @@ export function useJukebox({
   onPause,
   onTrackChange,
   onEnd,
+  onError,
   defaultExpanded = false,
   expanded: controlledExpanded,
   onExpandedChange,
@@ -29,6 +30,7 @@ export function useJukebox({
     onPause,
     onTrackChange,
     onEnd,
+    onError,
   });
 
   const totalTracks = tracks.length;
@@ -66,12 +68,8 @@ export function useJukebox({
   }, [applyExpanded]);
 
   const toggleExpanded = useCallback(() => {
-    if (!hasTracks) {
-      return;
-    }
-
     applyExpanded(!expanded);
-  }, [applyExpanded, expanded, hasTracks]);
+  }, [applyExpanded, expanded]);
 
   return {
     player,

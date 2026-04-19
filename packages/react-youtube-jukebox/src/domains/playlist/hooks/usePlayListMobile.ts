@@ -17,15 +17,14 @@ export function usePlayListMobile() {
   useEffect(() => {
     const mediaQueryList = window.matchMedia(PLAYLIST_MOBILE_MEDIA_QUERY);
 
-    const syncIsMobile = (event?: MediaQueryListEvent) => {
-      setIsMobile(event?.matches ?? mediaQueryList.matches);
+    const handleChange = (event: MediaQueryListEvent) => {
+      setIsMobile(event.matches);
     };
 
-    syncIsMobile();
-    mediaQueryList.addEventListener("change", syncIsMobile);
+    mediaQueryList.addEventListener("change", handleChange);
 
     return () => {
-      mediaQueryList.removeEventListener("change", syncIsMobile);
+      mediaQueryList.removeEventListener("change", handleChange);
     };
   }, []);
 

@@ -1,7 +1,7 @@
-import type { ChangeEvent } from "react";
-
-import type { JukeboxExpandedRenderProps } from "../lib/types";
-import { VolumeLowIcon } from "./icons";
+import type { JukeboxExpandedRenderProps } from "../../../lib/types";
+import { VolumeLowIcon } from "../../../components/icons";
+import { ProgressSlider } from "../../../components/player/ProgressSlider";
+import { VolumeSlider } from "../../../components/player/VolumeSlider";
 
 type JukeboxExpandedPlayerViewProps = JukeboxExpandedRenderProps & {
   showSeekBar?: boolean;
@@ -27,15 +27,6 @@ export function JukeboxExpandedPlayer({
 }: JukeboxExpandedPlayerViewProps) {
   const hasMultipleTracks = totalTracks > 1;
   const hasNextTrack = nextTrack !== undefined;
-  const progressMax = duration > 0 ? duration : 1;
-
-  const handleVolumeInput = (event: ChangeEvent<HTMLInputElement>) => {
-    setVolume(Number(event.target.value));
-  };
-
-  const handleProgressInput = (event: ChangeEvent<HTMLInputElement>) => {
-    seek(Number(event.target.value));
-  };
 
   return (
     <>
@@ -50,16 +41,11 @@ export function JukeboxExpandedPlayer({
           <div className="rj-expanded__controls">
             {showSeekBar ? (
               <div className="rj-expanded__progress-row">
-                <input
-                  type="range"
-                  min={0}
-                  max={progressMax}
-                  step={0.1}
-                  value={Math.min(currentTime, progressMax)}
-                  onChange={handleProgressInput}
-                  aria-label="Playback position"
+                <ProgressSlider
+                  currentTime={currentTime}
+                  duration={duration}
+                  onSeek={seek}
                   className="rj-progress"
-                  disabled={!duration}
                 />
               </div>
             ) : null}
@@ -97,14 +83,9 @@ export function JukeboxExpandedPlayer({
                   <VolumeLowIcon isMuted={isMuted} />
                 </span>
               </button>
-              <input
-                type="range"
-                min={0}
-                max={100}
-                step={1}
-                value={volume}
-                onChange={handleVolumeInput}
-                aria-label="Volume"
+              <VolumeSlider
+                volume={volume}
+                onVolumeChange={setVolume}
                 className="rj-volume"
               />
               {hasMultipleTracks ? (

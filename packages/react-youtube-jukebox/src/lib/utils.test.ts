@@ -1,11 +1,7 @@
-import { describe, expect, it, vi } from "vitest";
+import { describe, expect, it } from "vitest";
 
-import {
-  DEFAULT_POSITION,
-  getPositionStyle,
-  getRandomTrackIndex,
-  normalizeOffset,
-} from "./shared";
+import { DEFAULT_POSITION } from "./constants";
+import { getPositionStyle, normalizeOffset, parseHexColor } from "./utils";
 
 describe("shared position helpers", () => {
   it("keeps the default position unchanged", () => {
@@ -49,26 +45,23 @@ describe("shared position helpers", () => {
   });
 });
 
-describe("getRandomTrackIndex", () => {
-  it("returns 0 when there is at most one track", () => {
-    expect(getRandomTrackIndex(0, 0)).toBe(0);
-    expect(getRandomTrackIndex(0, 1)).toBe(0);
+describe("parseHexColor", () => {
+  it("expands 3-digit shorthand hex colors", () => {
+    expect(parseHexColor("#abc")).toEqual([0xaa, 0xbb, 0xcc]);
+    expect(parseHexColor("abc")).toEqual([0xaa, 0xbb, 0xcc]);
   });
 
-  it("returns the only other index when there are two tracks", () => {
-    expect(getRandomTrackIndex(0, 2)).toBe(1);
-    expect(getRandomTrackIndex(1, 2)).toBe(0);
+  it("parses 6-digit hex colors", () => {
+    expect(parseHexColor("#112233")).toEqual([0x11, 0x22, 0x33]);
+    expect(parseHexColor("fF8800")).toEqual([0xff, 0x88, 0x00]);
   });
 
-  it("returns an index different from the current index", () => {
-    const randomSpy = vi.spyOn(Math, "random");
-
-    randomSpy.mockReturnValue(0.99);
-    expect(getRandomTrackIndex(0, 3)).toBe(2);
-
-    randomSpy.mockReturnValue(0);
-    expect(getRandomTrackIndex(1, 3)).toBe(0);
-
-    randomSpy.mockRestore();
+  it("returns null for invalid hex strings", () => {
+    expect(parseHexColor("")).toBeNull();
+    expect(parseHexColor("xyz")).toBeNull();
+    expect(parseHexColor("#12")).toBeNull();
+    expect(parseHexColor("#12345")).toBeNull();
+    expect(parseHexColor("#1234567")).toBeNull();
+    expect(parseHexColor("rgb(1,2,3)")).toBeNull();
   });
 });

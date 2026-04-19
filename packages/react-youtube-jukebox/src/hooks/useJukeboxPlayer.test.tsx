@@ -24,15 +24,6 @@ const BASE_TRACKS: JukeboxTrack[] = [
   },
 ];
 
-const THREE_TRACKS: JukeboxTrack[] = [
-  ...BASE_TRACKS,
-  {
-    videoId: "track-3",
-    title: "Track Three",
-    artist: "Artist Three",
-  },
-];
-
 class MockYouTubePlayer {
   static autoReady = true;
   static instances: MockYouTubePlayer[] = [];
@@ -66,8 +57,6 @@ class MockYouTubePlayer {
 function HookHarness({
   autoplay = true,
   tracks,
-  repeat,
-  shuffle,
   currentIndex: controlledCurrentIndex,
   onCurrentIndexChange,
   onPlay,
@@ -75,8 +64,6 @@ function HookHarness({
 }: {
   autoplay?: boolean;
   tracks: JukeboxTrack[];
-  repeat?: "none" | "all" | "one";
-  shuffle?: boolean;
   currentIndex?: number;
   onCurrentIndexChange?: (index: number) => void;
   onPlay?: () => void;
@@ -87,8 +74,6 @@ function HookHarness({
     tracks,
     currentIndex: controlledCurrentIndex,
     onCurrentIndexChange,
-    repeat,
-    shuffle,
     onPlay,
     onTrackChange,
   });
@@ -113,30 +98,6 @@ function DirectSelectHarness({ tracks }: { tracks: JukeboxTrack[] }) {
       <output data-testid="current-index">{currentIndex}</output>
       <button type="button" data-testid="jump" onClick={() => playTrackAt(1)}>
         Jump
-      </button>
-    </>
-  );
-}
-
-function ShuffleHarness({
-  tracks,
-  shuffle = true,
-}: {
-  tracks: JukeboxTrack[];
-  shuffle?: boolean;
-}) {
-  const { currentIndex, playNext, playerMountRef } = useJukeboxPlayer({
-    autoplay: false,
-    tracks,
-    shuffle,
-  });
-
-  return (
-    <>
-      <div ref={playerMountRef} />
-      <output data-testid="current-index">{currentIndex}</output>
-      <button type="button" data-testid="next" onClick={() => playNext()}>
-        Next
       </button>
     </>
   );
@@ -226,8 +187,8 @@ describe("useJukeboxPlayer", () => {
     expect(screen.getByTestId("current-index").textContent).toBe("0");
   });
 
-  it("reloads the current video when repeat mode is one and playback ends", async () => {
-    render(<HookHarness tracks={BASE_TRACKS} repeat="one" />);
+  it("replays the current video when a single-track playlist ends", async () => {
+    render(<HookHarness tracks={[BASE_TRACKS[0]!]} />);
 
     await waitFor(() => {
       expect(MockYouTubePlayer.instances).toHaveLength(1);
@@ -243,22 +204,20 @@ describe("useJukeboxPlayer", () => {
     });
   });
 
-  it("advances to a random track when shuffle is enabled", async () => {
-    const randomSpy = vi.spyOn(Math, "random").mockReturnValue(0.45);
-
-    render(<ShuffleHarness tracks={THREE_TRACKS} shuffle />);
+  it("advances to the next track when playback ends in a multi-track playlist", async () => {
+    render(<HookHarness tracks={BASE_TRACKS} />);
 
     await waitFor(() => {
       expect(MockYouTubePlayer.instances).toHaveLength(1);
     });
 
-    screen.getByTestId("next").click();
+    const instance = MockYouTubePlayer.instances[0];
+
+    instance?.options.events.onStateChange({ data: PLAYER_STATE_ENDED });
 
     await waitFor(() => {
       expect(screen.getByTestId("current-index").textContent).toBe("1");
     });
-
-    randomSpy.mockRestore();
   });
 
   it("invokes onPlay when the player enters the playing state", async () => {

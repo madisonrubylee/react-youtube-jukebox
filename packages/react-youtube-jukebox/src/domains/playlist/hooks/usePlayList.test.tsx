@@ -3,8 +3,8 @@
 import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import type { PlayListItem } from "../lib/types";
-import type { YouTubeNamespace, YouTubePlayerOptions } from "../lib/youtube";
+import type { PlayListItem } from "../../../lib/types";
+import type { YouTubeNamespace, YouTubePlayerOptions } from "../../../lib/youtube";
 import { usePlayList } from "./usePlayList";
 
 const PLAYLIST = [

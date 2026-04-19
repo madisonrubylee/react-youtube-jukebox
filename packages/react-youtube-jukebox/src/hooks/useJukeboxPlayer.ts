@@ -1,28 +1,21 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
-import type { JukeboxPlayerState, JukeboxTrack, RepeatMode } from "../lib/types";
-import { getNextTrackIndex, getRandomTrackIndex } from "../lib/utils";
+import type { JukeboxPlayerState, JukeboxTrack } from "../lib/types";
+import { getNextTrackIndex, resolveTrackEndedAction } from "../lib/utils";
 import {
   canControlPlayer,
-  loadYouTubeIframeApi,
   PLAYER_STATE_ENDED,
   PLAYER_STATE_PAUSED,
   PLAYER_STATE_PLAYING,
   type YouTubePlayer,
+  type YouTubePlayerStateEvent,
 } from "../lib/youtube";
 import { useLatestRef } from "./useLatestRef";
 import { usePersistentPlayerMount } from "./usePersistentPlayerMount";
 import { useProgressPolling } from "./useProgressPolling";
 import { useTrackIndexController } from "./useTrackIndexController";
 import { useVolumeControl } from "./useVolumeControl";
-
-const DEFAULT_REPEAT: RepeatMode = "all";
-
-const REPEAT_CYCLE: Record<RepeatMode, RepeatMode> = {
-  none: "all",
-  all: "one",
-  one: "none",
-};
+import { useYouTubePlayerLifecycle } from "./useYouTubePlayerLifecycle";
 
 type UseJukeboxPlayerOptions = {
   autoplay: boolean;
@@ -30,55 +23,12 @@ type UseJukeboxPlayerOptions = {
   defaultIndex?: number | undefined;
   currentIndex?: number | undefined;
   onCurrentIndexChange?: ((index: number) => void) | undefined;
-  shuffle?: boolean | undefined;
-  repeat?: RepeatMode | undefined;
   onPlay?: (() => void) | undefined;
   onPause?: (() => void) | undefined;
   onTrackChange?: ((track: JukeboxTrack, index: number) => void) | undefined;
   onEnd?: (() => void) | undefined;
+  onError?: ((error: unknown) => void) | undefined;
 };
-
-type TrackEndedAction =
-  | { type: "stop" }
-  | { type: "replay"; videoId: string }
-  | { type: "advance"; nextIndex: number };
-
-function resolveTrackEndedAction(
-  tracks: JukeboxTrack[],
-  currentIndex: number,
-  repeatMode: RepeatMode,
-): TrackEndedAction {
-  const trackCount = tracks.length;
-
-  if (trackCount <= 0) {
-    return { type: "stop" };
-  }
-
-  if (trackCount === 1) {
-    if (repeatMode === "none") {
-      return { type: "stop" };
-    }
-
-    const videoId = tracks[0]?.videoId;
-    return videoId ? { type: "replay", videoId } : { type: "stop" };
-  }
-
-  if (repeatMode === "one") {
-    const videoId = tracks[currentIndex]?.videoId;
-    return videoId ? { type: "replay", videoId } : { type: "stop" };
-  }
-
-  const isLast = currentIndex === trackCount - 1;
-
-  if (repeatMode === "none" && isLast) {
-    return { type: "stop" };
-  }
-
-  return {
-    type: "advance",
-    nextIndex: getNextTrackIndex(currentIndex, 1, trackCount),
-  };
-}
 
 export function useJukeboxPlayer({
   autoplay,
@@ -86,42 +36,30 @@ export function useJukeboxPlayer({
   defaultIndex = 0,
   currentIndex: controlledCurrentIndex,
   onCurrentIndexChange,
-  shuffle: shuffleInitial = false,
-  repeat: repeatInitial = DEFAULT_REPEAT,
   onPlay,
   onPause,
   onTrackChange,
   onEnd,
+  onError,
 }: UseJukeboxPlayerOptions): JukeboxPlayerState {
   const playerRef = useRef<YouTubePlayer | null>(null);
   const isPlayingRef = useRef(false);
   const shouldResumePlaybackRef = useRef(autoplay);
   const tracksRef = useRef(tracks);
-  const repeatRef = useRef<RepeatMode>(repeatInitial);
-  const shuffleRef = useRef(shuffleInitial);
 
   const onPlayRef = useLatestRef(onPlay);
   const onPauseRef = useLatestRef(onPause);
   const onTrackChangeRef = useLatestRef(onTrackChange);
   const onEndRef = useLatestRef(onEnd);
 
-  const [isReady, setIsReady] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [shuffle, setShuffle] = useState(shuffleInitial);
-  const [repeat, setRepeat] = useState<RepeatMode>(repeatInitial);
-  const {
-    isContainerMounted,
-    persistentWrapper,
-    playerMountRef,
-  } = usePersistentPlayerMount();
+  const [isReady, setIsReady] = useState(false);
 
-  const {
-    isMuted,
-    volume,
-    setVolume,
-    toggleMute,
-    syncPlayerAudioState,
-  } = useVolumeControl(playerRef);
+  const { isContainerMounted, persistentWrapper, playerMountRef } =
+    usePersistentPlayerMount();
+
+  const { isMuted, volume, setVolume, toggleMute, syncPlayerAudioState } =
+    useVolumeControl(playerRef);
 
   const {
     applyTrackIndex,
@@ -143,40 +81,8 @@ export function useJukeboxPlayer({
     useProgressPolling(playerRef, isPlaying, isReady, currentVideoId);
 
   useEffect(() => {
-    repeatRef.current = repeat;
-    shuffleRef.current = shuffle;
     isPlayingRef.current = isPlaying;
-  }, [repeat, shuffle, isPlaying]);
-
-  const moveTrack = useCallback(
-    (step: number) => {
-      if (!hasMultipleTracks) {
-        return;
-      }
-
-      shouldResumePlaybackRef.current = isPlayingRef.current;
-      const nextIndex = shuffleRef.current
-        ? getRandomTrackIndex(currentIndexRef.current, trackCount)
-        : getNextTrackIndex(currentIndexRef.current, step, trackCount);
-
-      applyTrackIndex(nextIndex);
-    },
-    [applyTrackIndex, currentIndexRef, hasMultipleTracks, trackCount],
-  );
-
-  const pausePlayback = useCallback(() => {
-    const player = playerRef.current;
-
-    shouldResumePlaybackRef.current = false;
-
-    if (!canControlPlayer(player)) {
-      setIsPlaying(false);
-      return;
-    }
-
-    player.pauseVideo();
-    setIsPlaying(false);
-  }, []);
+  }, [isPlaying]);
 
   useEffect(() => {
     tracksRef.current = tracks;
@@ -201,145 +107,77 @@ export function useJukeboxPlayer({
     }
   }, [safeCurrentIndex, currentVideoId, onTrackChangeRef]);
 
-  const toggleShuffle = useCallback(() => {
-    setShuffle((value) => !value);
-  }, []);
+  const handleEnded = useCallback(() => {
+    const player = playerRef.current;
 
-  const cycleRepeat = useCallback(() => {
-    setRepeat((mode) => REPEAT_CYCLE[mode]);
-  }, []);
+    onEndRef.current?.();
 
-  useEffect(() => {
-    if (!persistentWrapper || !isContainerMounted || !hasTracks) {
+    if (!player) {
+      shouldResumePlaybackRef.current = false;
+      setIsPlaying(false);
+      resetProgress();
       return;
     }
 
-    const wrapper = persistentWrapper;
-    const playerTarget = document.createElement("div");
-    playerTarget.style.width = "100%";
-    playerTarget.style.height = "100%";
-    wrapper.appendChild(playerTarget);
+    const action = resolveTrackEndedAction(
+      tracksRef.current,
+      currentIndexRef.current,
+    );
 
-    let isCancelled = false;
-
-    void loadYouTubeIframeApi()
-      .then((YT) => {
-        if (isCancelled) {
-          return;
-        }
-
-        playerRef.current = new YT.Player(playerTarget, {
-          width: "100%",
-          height: "100%",
-          videoId: tracksRef.current[currentIndexRef.current]?.videoId ?? "",
-          playerVars: {
-            controls: 1,
-            origin: window.location.origin,
-            playsinline: 1,
-            rel: 0,
-          },
-          events: {
-            onReady: () => {
-              const player = playerRef.current;
-
-              if (!player) {
-                return;
-              }
-
-              syncPlayerAudioState(player);
-              setIsReady(true);
-            },
-            onStateChange: (event) => {
-              if (event.data === PLAYER_STATE_ENDED) {
-                const player = playerRef.current;
-
-                onEndRef.current?.();
-
-                if (!player) {
-                  shouldResumePlaybackRef.current = false;
-                  setIsPlaying(false);
-                  resetProgress();
-                  return;
-                }
-
-                const action = resolveTrackEndedAction(
-                  tracksRef.current,
-                  currentIndexRef.current,
-                  repeatRef.current,
-                );
-
-                if (action.type === "stop") {
-                  shouldResumePlaybackRef.current = false;
-                  setIsPlaying(false);
-                  resetProgress();
-                  return;
-                }
-
-                shouldResumePlaybackRef.current = true;
-
-                if (action.type === "replay") {
-                  player.loadVideoById(action.videoId);
-                  return;
-                }
-
-                applyTrackIndexRef.current(action.nextIndex);
-                return;
-              }
-
-              if (event.data === PLAYER_STATE_PLAYING) {
-                setIsPlaying(true);
-                onPlayRef.current?.();
-                return;
-              }
-
-              if (event.data === PLAYER_STATE_PAUSED) {
-                setIsPlaying(false);
-                onPauseRef.current?.();
-              }
-            },
-            onError: (event) => {
-              console.warn(
-                "[react-youtube-jukebox] YouTube player reported an error",
-                event,
-              );
-              shouldResumePlaybackRef.current = false;
-              setIsPlaying(false);
-            },
-          },
-        });
-      })
-      .catch((error) => {
-        console.warn(
-          "[react-youtube-jukebox] Failed to initialize the YouTube iframe API",
-          error,
-        );
-        setIsReady(false);
-        setIsPlaying(false);
-      });
-
-    return () => {
-      isCancelled = true;
-      setIsReady(false);
+    if (action.type === "stop") {
+      shouldResumePlaybackRef.current = false;
       setIsPlaying(false);
-      playerRef.current?.destroy();
-      playerRef.current = null;
+      resetProgress();
+      return;
+    }
 
-      while (wrapper.firstChild) {
-        wrapper.removeChild(wrapper.firstChild);
+    shouldResumePlaybackRef.current = true;
+
+    if (action.type === "replay") {
+      player.loadVideoById(action.videoId);
+      return;
+    }
+
+    applyTrackIndexRef.current(action.nextIndex);
+  }, [applyTrackIndexRef, currentIndexRef, onEndRef, resetProgress]);
+
+  const handleYoutubeStateChange = useCallback(
+    (event: YouTubePlayerStateEvent) => {
+      if (event.data === PLAYER_STATE_ENDED) {
+        handleEnded();
+        return;
       }
-    };
-  }, [
-    applyTrackIndexRef,
-    currentIndexRef,
-    hasTracks,
-    isContainerMounted,
-    onEndRef,
-    onPauseRef,
-    onPlayRef,
+
+      if (event.data === PLAYER_STATE_PLAYING) {
+        setIsPlaying(true);
+        onPlayRef.current?.();
+        return;
+      }
+
+      if (event.data === PLAYER_STATE_PAUSED) {
+        setIsPlaying(false);
+        onPauseRef.current?.();
+      }
+    },
+    [handleEnded, onPauseRef, onPlayRef],
+  );
+
+  const getInitialVideoId = useCallback(
+    () => tracksRef.current[currentIndexRef.current]?.videoId ?? "",
+    [currentIndexRef],
+  );
+
+  useYouTubePlayerLifecycle({
+    playerRef,
     persistentWrapper,
-    resetProgress,
-    syncPlayerAudioState,
-  ]);
+    isContainerMounted,
+    hasTracks,
+    getInitialVideoId,
+    onReady: syncPlayerAudioState,
+    onReadinessChange: setIsReady,
+    onStateChange: handleYoutubeStateChange,
+    onError,
+  });
 
   useEffect(() => {
     const player = playerRef.current;
@@ -356,6 +194,74 @@ export function useJukeboxPlayer({
     player.cueVideoById(currentVideoId);
   }, [currentVideoId, isReady]);
 
+  const moveTrack = useCallback(
+    (step: number) => {
+      if (!hasMultipleTracks) {
+        return;
+      }
+
+      shouldResumePlaybackRef.current = isPlayingRef.current;
+      const nextIndex = getNextTrackIndex(
+        currentIndexRef.current,
+        step,
+        trackCount,
+      );
+
+      applyTrackIndex(nextIndex);
+    },
+    [applyTrackIndex, currentIndexRef, hasMultipleTracks, trackCount],
+  );
+
+  const pausePlayback = useCallback(() => {
+    const player = playerRef.current;
+
+    shouldResumePlaybackRef.current = false;
+
+    if (!canControlPlayer(player)) {
+      setIsPlaying(false);
+      return;
+    }
+
+    player.pauseVideo();
+    setIsPlaying(false);
+  }, []);
+
+  const togglePlay = useCallback(() => {
+    const player = playerRef.current;
+
+    if (!canControlPlayer(player) || !isReady || !hasTracks) {
+      return;
+    }
+
+    if (isPlayingRef.current) {
+      pausePlayback();
+      return;
+    }
+
+    shouldResumePlaybackRef.current = true;
+    player.playVideo();
+  }, [hasTracks, isReady, pausePlayback]);
+
+  const playNext = useCallback(() => {
+    moveTrack(1);
+  }, [moveTrack]);
+
+  const playPrev = useCallback(() => {
+    moveTrack(-1);
+  }, [moveTrack]);
+
+  const playTrackAt = useCallback(
+    (index: number) => {
+      if (!hasTracks) {
+        return;
+      }
+
+      shouldResumePlaybackRef.current = isPlayingRef.current;
+      applyTrackIndex(index);
+    },
+    [applyTrackIndex, hasTracks],
+  );
+
   return {
     playerMountRef,
     currentIndex: safeCurrentIndex,
@@ -364,42 +270,10 @@ export function useJukeboxPlayer({
     volume,
     setVolume,
     toggleMute,
-    togglePlay: useCallback(() => {
-      const player = playerRef.current;
-
-      if (!canControlPlayer(player) || !isReady || !hasTracks) {
-        return;
-      }
-
-      if (isPlayingRef.current) {
-        pausePlayback();
-        return;
-      }
-
-      shouldResumePlaybackRef.current = true;
-      player.playVideo();
-    }, [hasTracks, isReady, pausePlayback]),
-    playNext: useCallback(() => {
-      moveTrack(1);
-    }, [moveTrack]),
-    playPrev: useCallback(() => {
-      moveTrack(-1);
-    }, [moveTrack]),
-    playTrackAt: useCallback(
-      (index: number) => {
-        if (!hasTracks) {
-          return;
-        }
-
-        shouldResumePlaybackRef.current = isPlayingRef.current;
-        applyTrackIndex(index);
-      },
-      [applyTrackIndex, hasTracks],
-    ),
-    shuffle,
-    toggleShuffle,
-    repeat,
-    cycleRepeat,
+    togglePlay,
+    playNext,
+    playPrev,
+    playTrackAt,
     progress,
     duration,
     currentTime,

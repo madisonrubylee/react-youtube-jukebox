@@ -3,8 +3,8 @@
 import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import type { JukeboxTrack } from "../lib/types";
-import type { YouTubeNamespace, YouTubePlayerOptions } from "../lib/youtube";
+import type { JukeboxTrack } from "../../../lib/types";
+import type { YouTubeNamespace, YouTubePlayerOptions } from "../../../lib/youtube";
 import { useJukebox } from "./useJukebox";
 
 const TRACKS: JukeboxTrack[] = [

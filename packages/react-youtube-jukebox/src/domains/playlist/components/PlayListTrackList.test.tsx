@@ -4,8 +4,8 @@ import { cleanup, render } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import type { ComponentProps } from "react";
 
-import type { PlayListTrack } from "../../lib/types";
-import { PlayListTrackList } from "./PlayListSections";
+import type { PlayListTrack } from "../../../lib/types";
+import { PlayListTrackList } from "./PlayListTrackList";
 
 const TRACKS: PlayListTrack[] = [
   { videoId: "track-1", title: "Track One", artist: "Artist One" },

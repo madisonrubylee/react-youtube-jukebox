@@ -35,7 +35,7 @@ const { mockUseJukeboxPlayer, getDefaultJukeboxPlayerMock } = vi.hoisted(() => {
   };
 });
 
-vi.mock("../hooks/useJukeboxPlayer", () => ({
+vi.mock("../../../hooks/useJukeboxPlayer", () => ({
   useJukeboxPlayer: mockUseJukeboxPlayer,
 }));
 

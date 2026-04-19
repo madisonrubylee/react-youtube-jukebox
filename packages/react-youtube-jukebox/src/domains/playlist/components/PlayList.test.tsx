@@ -42,10 +42,6 @@ const { mockUseJukeboxPlayer, getDefaultJukeboxPlayerMock } = vi.hoisted(() => {
     playNext: vi.fn(),
     playPrev: vi.fn(),
     playTrackAt: vi.fn(),
-    shuffle: false,
-    toggleShuffle: vi.fn(),
-    repeat: "all" as const,
-    cycleRepeat: vi.fn(),
     progress: 0,
     duration: 100,
     currentTime: 10,
@@ -58,7 +54,7 @@ const { mockUseJukeboxPlayer, getDefaultJukeboxPlayerMock } = vi.hoisted(() => {
   };
 });
 
-vi.mock("../hooks/useJukeboxPlayer", () => ({
+vi.mock("../../../hooks/useJukeboxPlayer", () => ({
   useJukeboxPlayer: mockUseJukeboxPlayer,
 }));
 

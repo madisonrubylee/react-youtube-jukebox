@@ -1,13 +1,10 @@
-import {
-  useEffect,
-  type CSSProperties,
-  type ReactNode,
-} from "react";
+import { type CSSProperties, type ReactNode } from "react";
 import clsx from "clsx";
 import { createPortal } from "react-dom";
 
-import { useClientMounted } from "../hooks/useClientMounted";
+import { useClientMounted } from "../../../hooks/useClientMounted";
 import { useJukebox } from "../hooks/useJukebox";
+import { useJukeboxKeyboardShortcuts } from "../hooks/useJukeboxKeyboardShortcuts";
 import {
   DEFAULT_CHROME,
   DEFAULT_POSITION,
@@ -15,32 +12,16 @@ import {
   LEVEL_BAR_ANIMATION_DELAY_MS,
   LEVEL_BAR_HEIGHTS,
   LEVEL_BAR_REST_HEIGHT,
-} from "../lib/constants";
+} from "../../../lib/constants";
 import type {
   JukeboxExpandedRenderProps,
   JukeboxProps,
   JukeboxTrack,
-} from "../lib/types";
-import { getEffectiveChrome, getPositionStyle } from "../lib/utils";
-import "../styles/jukebox.css";
+} from "../../../lib/types";
+import { getEffectiveChrome, getPositionStyle } from "../../../lib/utils";
+import "../../../styles/jukebox.css";
+import { VolumeHighIcon } from "../../../components/icons";
 import { JukeboxExpandedPlayer } from "./JukeboxExpandedPlayer";
-import { VolumeHighIcon } from "./icons";
-
-function shouldIgnoreKeyboardShortcut(target: EventTarget | null) {
-  if (!(target instanceof Element)) {
-    return false;
-  }
-
-  if (target.closest("input, textarea, select, [contenteditable='true']")) {
-    return true;
-  }
-
-  if (target instanceof HTMLElement && target.isContentEditable) {
-    return true;
-  }
-
-  return false;
-}
 
 function ChevronIcon({ isExpanded }: { isExpanded: boolean }) {
   return (
@@ -153,6 +134,7 @@ export function Jukebox({
   onPause,
   onTrackChange,
   onEnd,
+  onError,
   keyboard = false,
   position = DEFAULT_POSITION,
   theme = DEFAULT_THEME,
@@ -177,6 +159,7 @@ export function Jukebox({
     onPause,
     onTrackChange,
     onEnd,
+    onError,
   });
   const {
     playerMountRef,
@@ -196,48 +179,13 @@ export function Jukebox({
     seek,
   } = player;
 
-  useEffect(() => {
-    if (!keyboard) {
-      return;
-    }
+  useJukeboxKeyboardShortcuts(keyboard, {
+    togglePlay,
+    playNext,
+    playPrev,
+    toggleMute,
+  });
 
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (shouldIgnoreKeyboardShortcut(event.target)) {
-        return;
-      }
-
-      if (event.code === "Space") {
-        event.preventDefault();
-        togglePlay();
-        return;
-      }
-
-      if (event.code === "ArrowRight") {
-        event.preventDefault();
-        playNext();
-        return;
-      }
-
-      if (event.code === "ArrowLeft") {
-        event.preventDefault();
-        playPrev();
-        return;
-      }
-
-      const key = event.key.toLowerCase();
-
-      if (key === "m") {
-        event.preventDefault();
-        toggleMute();
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [keyboard, togglePlay, playNext, playPrev, toggleMute]);
   const effectiveChrome = getEffectiveChrome(chrome);
 
   const expandedRenderProps: JukeboxExpandedRenderProps | undefined =
