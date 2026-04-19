@@ -1,4 +1,10 @@
-import { useCallback, useRef, useState, type RefObject } from "react";
+import { useCallback, useRef, useState } from "react";
+
+type UsePersistentPlayerMountResult = {
+  isContainerMounted: boolean;
+  persistentWrapper: HTMLDivElement | null;
+  playerMountRef: (slotNode: HTMLDivElement | null) => void;
+};
 
 function createPersistentWrapper(): HTMLDivElement | null {
   if (typeof document === "undefined") {
@@ -11,46 +17,45 @@ function createPersistentWrapper(): HTMLDivElement | null {
   return wrapper;
 }
 
-type UsePersistentPlayerMountResult = {
-  isContainerMounted: boolean;
-  persistentWrapperRef: RefObject<HTMLDivElement | null>;
-  playerMountRef: (slotNode: HTMLDivElement | null) => void;
-};
-
 export function usePersistentPlayerMount(): UsePersistentPlayerMountResult {
-  const persistentWrapperRef = useRef<HTMLDivElement | null>(
-    createPersistentWrapper(),
+  const [persistentWrapper] = useState<HTMLDivElement | null>(
+    createPersistentWrapper,
   );
   const mountedSlotRef = useRef<HTMLDivElement | null>(null);
   const [isContainerMounted, setIsContainerMounted] = useState(false);
 
-  const playerMountRef = useCallback((slotNode: HTMLDivElement | null) => {
-    const wrapper = persistentWrapperRef.current;
+  const playerMountRef = useCallback(
+    (slotNode: HTMLDivElement | null) => {
+      if (!persistentWrapper) {
+        return;
+      }
 
-    if (!wrapper) {
-      return;
-    }
+      const previousSlot = mountedSlotRef.current;
 
-    const previousSlot = mountedSlotRef.current;
+      if (
+        previousSlot &&
+        previousSlot !== slotNode &&
+        previousSlot.contains(persistentWrapper)
+      ) {
+        previousSlot.removeChild(persistentWrapper);
+      }
 
-    if (previousSlot && previousSlot !== slotNode && previousSlot.contains(wrapper)) {
-      previousSlot.removeChild(wrapper);
-    }
+      mountedSlotRef.current = slotNode;
 
-    mountedSlotRef.current = slotNode;
+      if (!slotNode) {
+        setIsContainerMounted(false);
+        return;
+      }
 
-    if (!slotNode) {
-      setIsContainerMounted(false);
-      return;
-    }
-
-    slotNode.appendChild(wrapper);
-    setIsContainerMounted(true);
-  }, []);
+      slotNode.appendChild(persistentWrapper);
+      setIsContainerMounted(true);
+    },
+    [persistentWrapper],
+  );
 
   return {
     isContainerMounted,
-    persistentWrapperRef,
+    persistentWrapper,
     playerMountRef,
   };
 }

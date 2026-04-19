@@ -111,7 +111,7 @@ export function useJukeboxPlayer({
   const [repeat, setRepeat] = useState<RepeatMode>(repeatInitial);
   const {
     isContainerMounted,
-    persistentWrapperRef,
+    persistentWrapper,
     playerMountRef,
   } = usePersistentPlayerMount();
 
@@ -210,12 +210,11 @@ export function useJukeboxPlayer({
   }, []);
 
   useEffect(() => {
-    const wrapper = persistentWrapperRef.current;
-
-    if (!wrapper || !isContainerMounted || !hasTracks) {
+    if (!persistentWrapper || !isContainerMounted || !hasTracks) {
       return;
     }
 
+    const wrapper = persistentWrapper;
     const playerTarget = document.createElement("div");
     playerTarget.style.width = "100%";
     playerTarget.style.height = "100%";
@@ -298,14 +297,22 @@ export function useJukeboxPlayer({
                 onPauseRef.current?.();
               }
             },
-            onError: () => {
+            onError: (event) => {
+              console.warn(
+                "[react-youtube-jukebox] YouTube player reported an error",
+                event,
+              );
               shouldResumePlaybackRef.current = false;
               setIsPlaying(false);
             },
           },
         });
       })
-      .catch(() => {
+      .catch((error) => {
+        console.warn(
+          "[react-youtube-jukebox] Failed to initialize the YouTube iframe API",
+          error,
+        );
         setIsReady(false);
         setIsPlaying(false);
       });
@@ -329,7 +336,7 @@ export function useJukeboxPlayer({
     onEndRef,
     onPauseRef,
     onPlayRef,
-    persistentWrapperRef,
+    persistentWrapper,
     resetProgress,
     syncPlayerAudioState,
   ]);

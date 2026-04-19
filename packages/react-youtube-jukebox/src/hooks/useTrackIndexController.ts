@@ -1,7 +1,6 @@
 import {
   useCallback,
   useEffect,
-  useMemo,
   useRef,
   useState,
   type RefObject,
@@ -33,16 +32,15 @@ export function useTrackIndexController({
   currentIndex: controlledCurrentIndex,
   onCurrentIndexChange,
 }: UseTrackIndexControllerOptions): UseTrackIndexControllerResult {
-  const trackSignature = useMemo(
-    () => tracks.map((track) => track.videoId).join("::"),
-    [tracks],
-  );
+  const trackCount = tracks.length;
+  const firstVideoId = tracks[0]?.videoId ?? "";
+  const lastVideoId = tracks[trackCount - 1]?.videoId ?? "";
+  const trackSignature = `${trackCount}:${firstVideoId}:${lastVideoId}`;
   const [internalState, setInternalState] = useState(() => ({
     currentIndex: defaultIndex,
     trackSignature,
   }));
   const isCurrentIndexControlled = controlledCurrentIndex !== undefined;
-  const trackCount = tracks.length;
   const hasTracks = trackCount > 0;
   const hasMultipleTracks = trackCount > 1;
   const internalCurrentIndex =

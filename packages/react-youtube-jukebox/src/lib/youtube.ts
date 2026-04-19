@@ -6,6 +6,10 @@ export type YouTubePlayerStateEvent = {
   data: number;
 };
 
+export type YouTubePlayerErrorEvent = {
+  data: number;
+};
+
 export type YouTubePlayer = {
   cueVideoById(videoId: string): void;
   destroy(): void;
@@ -22,7 +26,7 @@ export type YouTubePlayer = {
 
 export type YouTubePlayerOptions = {
   events: {
-    onError: () => void;
+    onError: (event: YouTubePlayerErrorEvent) => void;
     onReady: () => void;
     onStateChange: (event: YouTubePlayerStateEvent) => void;
   };

@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { useEffect, useLayoutEffect, useRef } from "react";
+import { memo, useCallback, useEffect, useLayoutEffect, useRef } from "react";
 
 import type { PlayListItem, PlayListSize, PlayListTrack } from "../../lib/types";
 import { PauseIcon, PlayIcon, VolumeLowIcon } from "../icons";
@@ -217,6 +217,44 @@ export function PlayListTabs({
   );
 }
 
+type TrackRowProps = {
+  index: number;
+  track: PlayListTrack;
+  isActive: boolean;
+  showPlayingIndicator: boolean;
+  onSelect: (index: number) => void;
+};
+
+const TrackRow = memo(function TrackRow({
+  index,
+  track,
+  isActive,
+  showPlayingIndicator,
+  onSelect,
+}: TrackRowProps) {
+  const handleClick = useCallback(() => {
+    onSelect(index);
+  }, [index, onSelect]);
+
+  return (
+    <button
+      type="button"
+      role="listitem"
+      onClick={handleClick}
+      className={clsx("rp-track", {
+        "rp-track--active": isActive,
+      })}>
+      <div className="rp-track__index">
+        {showPlayingIndicator ? <PlayingIndicator /> : index + 1}
+      </div>
+      <div className="rp-track__info">
+        <div className="rp-track__title">{track.title}</div>
+        <div className="rp-track__artist">{track.artist}</div>
+      </div>
+    </button>
+  );
+});
+
 export function PlayListTrackList({
   tracks,
   activePlaylistIndex,
@@ -256,22 +294,14 @@ export function PlayListTrackList({
         const isActive = index === currentGlobalIndex;
 
         return (
-          <button
+          <TrackRow
             key={`${track.videoId}-${index}`}
-            type="button"
-            role="listitem"
-            onClick={() => onTrackSelect(index)}
-            className={clsx("rp-track", {
-              "rp-track--active": isActive,
-            })}>
-            <div className="rp-track__index">
-              {isActive && isPlaying ? <PlayingIndicator /> : index + 1}
-            </div>
-            <div className="rp-track__info">
-              <div className="rp-track__title">{track.title}</div>
-              <div className="rp-track__artist">{track.artist}</div>
-            </div>
-          </button>
+            index={index}
+            track={track}
+            isActive={isActive}
+            showPlayingIndicator={isActive && isPlaying}
+            onSelect={onTrackSelect}
+          />
         );
       })}
     </div>
