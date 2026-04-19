@@ -48,6 +48,7 @@ const sidebarSectionDefinitions: SidebarSectionDefinition[] = [
       { href: "/", label: { en: "Overview", ko: "개요" } },
       { href: "/installation", label: { en: "Installation", ko: "설치" } },
       { href: "/quick-start", label: { en: "Quick Start", ko: "빠른 시작" } },
+      { href: "/changelog", label: { en: "Changelog", ko: "변경 이력" } },
     ],
   },
   {
