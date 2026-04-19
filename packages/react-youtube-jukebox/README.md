@@ -12,6 +12,11 @@ It wraps the YouTube IFrame Player API with a dock-style player UI, queue rotati
 
 For full documentation and live demos, visit **[react-youtube-jukebox.com](https://react-youtube-jukebox.com/)**.
 
+> **Migrating to v2?** `shuffle` / `repeat` controls and the `RepeatMode` type
+> have been removed, and the source tree was reorganized by feature/domain.
+> A new `onError` callback and `accentColor` prop were added. See the full
+> [CHANGELOG](./CHANGELOG.md#200---2026-04-19) for details.
+
 ## Install
 
 ```bash
