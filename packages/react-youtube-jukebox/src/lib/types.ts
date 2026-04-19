@@ -121,6 +121,7 @@ export type PlayListProps = {
   playlist: PlayListItem[];
   autoplay?: boolean;
   showSeekBar?: boolean;
+  accentColor?: string;
   theme?: PlayListTheme;
   size?: PlayListSize;
   defaultSize?: PlayListSize;

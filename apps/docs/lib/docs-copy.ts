@@ -257,7 +257,7 @@ const docsCopy = {
         interface:
           "The PlayList API stays intentionally focused. Pass grouped tracks by mood or category, then adjust autoplay, theme, or layout hooks without wiring Jukebox yourself.",
         playground:
-          "The live preview below renders inline for docs only. Use it to compare the available light and dark themes while keeping the built-in tab navigation and player controls visible.",
+          "The live preview below renders inline for docs only. Use it to compare the available light and dark themes, size modes, and accent colors while keeping the built-in tab navigation and player controls visible.",
       },
       sections: {
         playground: "Playground",
@@ -270,6 +270,8 @@ const docsCopy = {
           type: "Type",
         },
         rows: {
+          accentColor:
+            "Optional. Overrides the built-in green accent used by the play button, active tabs, active tracks, and seek thumb.",
           autoplay:
             'Optional. Defaults to "false" and starts from the active tab\'s first track when enabled.',
           className:
@@ -285,6 +287,7 @@ const docsCopy = {
         { href: "#playground", label: "Playground" },
       ],
       showcase: {
+        accentLabel: "Accent",
         themeLabel: "Theme",
         sizeLabel: "Size",
       },
@@ -654,9 +657,9 @@ const docsCopy = {
       title: "API & 플레이그라운드",
       body: {
         interface:
-          "PlayList API도 의도적으로 단순하게 유지했습니다. 무드나 카테고리별로 묶은 트랙 배열을 넘기고, autoplay, theme, className 정도만 조정하면 자체 탭 네비게이션과 플레이어를 바로 사용할 수 있습니다.",
+          "PlayList API도 의도적으로 단순하게 유지했습니다. 무드나 카테고리별로 묶은 트랙 배열을 넘기고, autoplay, theme, accentColor, className 정도만 조정하면 자체 탭 네비게이션과 플레이어를 바로 사용할 수 있습니다.",
         playground:
-          "아래 라이브 프리뷰는 문서 안에서만 인라인으로 렌더됩니다. light / dark 테마를 바꿔보면서 기본 탭 구조와 플레이어 UI를 함께 확인할 수 있습니다.",
+          "아래 라이브 프리뷰는 문서 안에서만 인라인으로 렌더됩니다. light / dark 테마, 크기 모드, accent color를 바꿔보면서 기본 탭 구조와 플레이어 UI를 함께 확인할 수 있습니다.",
       },
       sections: {
         playground: "플레이그라운드",
@@ -669,6 +672,8 @@ const docsCopy = {
           type: "타입",
         },
         rows: {
+          accentColor:
+            "선택값입니다. 재생 버튼, 활성 탭, 활성 트랙, seek thumb에 쓰이는 기본 초록 액센트 컬러를 덮어씁니다.",
           autoplay:
             '선택값입니다. 기본값은 "false"이며, 활성 탭의 첫 트랙부터 재생을 시작합니다.',
           className:
@@ -685,6 +690,7 @@ const docsCopy = {
         { href: "#playground", label: "플레이그라운드" },
       ],
       showcase: {
+        accentLabel: "액센트",
         themeLabel: "테마",
         sizeLabel: "크기",
       },

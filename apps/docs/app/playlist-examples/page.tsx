@@ -23,7 +23,8 @@ export default async function PlaylistExamplesPage() {
         <h2>{copy.playlistExamples.sections.themes}</h2>
         <p>{copy.playlistExamples.body.themes}</p>
         <CodeBlock>{`<PlayList playlist={playlist} theme="dark" />
-<PlayList playlist={playlist} theme="light" />`}</CodeBlock>
+<PlayList playlist={playlist} theme="light" />
+<PlayList playlist={playlist} theme="dark" accentColor="#8b5cf6" />`}</CodeBlock>
       </section>
 
       <section id="single-playlist">

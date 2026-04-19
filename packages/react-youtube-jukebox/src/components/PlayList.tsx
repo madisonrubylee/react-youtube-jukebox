@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import { createPortal } from "react-dom";
 import clsx from "clsx";
 
@@ -6,7 +7,7 @@ import { usePlayListMobile } from "../hooks/usePlayListMobile";
 import { usePlayList } from "../hooks/usePlayList";
 import { DEFAULT_PLAYLIST_THEME } from "../lib/constants";
 import type { PlayListProps } from "../lib/types";
-import { getPositionStyle } from "../lib/utils";
+import { buildAccentOverrides, getPositionStyle } from "../lib/utils";
 import { PlayListPlayer } from "./PlayListPlayer";
 import {
   MainPanelHeader,
@@ -25,6 +26,7 @@ export function PlayList({
   playlist,
   autoplay = false,
   showSeekBar = true,
+  accentColor,
   theme = DEFAULT_PLAYLIST_THEME,
   size,
   defaultSize,
@@ -67,9 +69,17 @@ export function PlayList({
     togglePlay,
   } = playerState;
 
+  const accentOverrides = accentColor
+    ? buildAccentOverrides(accentColor)
+    : undefined;
+
   const positionStyle = position
     ? getPositionStyle(position, offset, portal)
     : undefined;
+  const rootStyle: CSSProperties & Record<`--${string}`, string> = {
+    ...(positionStyle ?? {}),
+    ...(accentOverrides ?? {}),
+  };
 
   const dataSizeValue = (() => {
     if (resolvedSize === "mini") return "mini";
@@ -82,7 +92,7 @@ export function PlayList({
       className={clsx("rp-root", className)}
       data-theme={theme}
       data-size={dataSizeValue}
-      style={positionStyle}>
+      style={rootStyle}>
       <PlayListMiniBar
         currentTrack={currentTrack}
         isMuted={isMuted}

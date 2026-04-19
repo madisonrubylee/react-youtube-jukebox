@@ -31,8 +31,15 @@ type PlayListItem = {
 type PlayListProps = {
   playlist: PlayListItem[];
   autoplay?: boolean;
+  showSeekBar?: boolean;
+  accentColor?: string;
   theme?: "light" | "dark";
   size?: "mini" | "compact" | "expanded";
+  defaultSize?: "mini" | "compact" | "expanded";
+  onSizeChange?: (size: "mini" | "compact" | "expanded") => void;
+  position?: "bottom-right" | "bottom-left" | "bottom-center" | "top-right" | "top-left" | "top-center";
+  offset?: number | { x: number; y: number };
+  portal?: boolean;
   className?: string;
 };`}</CodeBlock>
       </section>
@@ -52,6 +59,11 @@ type PlayListProps = {
               <td><code>playlist</code></td>
               <td><code>PlayListItem[]</code></td>
               <td>{copy.playlist.table.rows.playlist}</td>
+            </tr>
+            <tr>
+              <td><code>accentColor</code></td>
+              <td><code>string</code></td>
+              <td>{copy.playlist.table.rows.accentColor}</td>
             </tr>
             <tr>
               <td><code>autoplay</code></td>

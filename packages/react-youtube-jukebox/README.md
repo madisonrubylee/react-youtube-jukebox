@@ -67,12 +67,13 @@ export function Page() {
     <PlayList
       playlist={playlist}
       autoplay
+      accentColor="#8b5cf6"
     />
   );
 }
 ```
 
-`PlayList` stays inline in your layout and includes a built-in seek bar so users can scrub playback without opening a separate player view.
+`PlayList` stays inline in your layout and includes a built-in seek bar so users can scrub playback without opening a separate player view. Pass `accentColor` when you want to replace the built-in green accent used by the play button, active tabs, active tracks, and seek thumb.
 
 ## Headless Hooks
 
@@ -268,6 +269,7 @@ type PlayListProps = {
   playlist: PlayListItem[];
   autoplay?: boolean;
   showSeekBar?: boolean;
+  accentColor?: string;
   theme?: PlayListTheme;
   size?: PlayListSize;
   defaultSize?: PlayListSize;
@@ -307,7 +309,7 @@ type UsePlayListOptions = {
 
 `playlist` is an array of playlist groups, and each group renders its own track list with a shared embedded player. Use `size` when you want to fully control the UI mode from outside, or `defaultSize` when you want the component to manage the initial mode internally. `onSizeChange` fires whenever the built-in size toggle changes between `mini`, `compact`, and `expanded`.
 
-`showSeekBar` defaults to `true` and controls whether the built-in bottom seek bar is visible. `portal` defaults to `false` for `PlayList`, so it stays inline in your layout unless you explicitly opt into portal rendering. `position` and `offset` only matter when the player is rendered as a floating layer.
+`showSeekBar` defaults to `true` and controls whether the built-in bottom seek bar is visible. `accentColor` lets you override the built-in green accent used by the play button, active tabs, active tracks, and seek thumb. `portal` defaults to `false` for `PlayList`, so it stays inline in your layout unless you explicitly opt into portal rendering. `position` and `offset` only matter when the player is rendered as a floating layer.
 
 ---
 
@@ -380,12 +382,13 @@ export function Page() {
     <PlayList
       playlist={playlist}
       autoplay
+      accentColor="#8b5cf6"
     />
   );
 }
 ```
 
-`PlayList`는 페이지 레이아웃 안에 직접 배치되는 컴포넌트이며, 기본 플레이어 하단에서 바로 탐색할 수 있는 seek 바를 제공합니다.
+`PlayList`는 페이지 레이아웃 안에 직접 배치되는 컴포넌트이며, 기본 플레이어 하단에서 바로 탐색할 수 있는 seek 바를 제공합니다. `accentColor`를 전달하면 재생 버튼, 활성 탭, 활성 트랙, seek thumb에 쓰이는 기본 초록 액센트 컬러를 바꿀 수 있습니다.
 
 ## 커스텀 확장 패널
 
@@ -507,6 +510,7 @@ type PlayListProps = {
   playlist: PlayListItem[];
   autoplay?: boolean;
   showSeekBar?: boolean;
+  accentColor?: string;
   theme?: PlayListTheme;
   size?: PlayListSize;
   defaultSize?: PlayListSize;
@@ -526,4 +530,4 @@ type PlayListProps = {
 
 `playlist`는 플레이리스트 묶음 배열이며, 각 묶음은 자체 트랙 목록을 가지면서 하나의 내장 플레이어를 공유합니다. 외부 상태에서 크기를 완전히 제어하고 싶다면 `size`를 사용하고, 초기값만 주고 내부 상태에 맡기고 싶다면 `defaultSize`를 사용하면 됩니다. `onSizeChange`는 내장 크기 토글로 `mini`, `compact`, `expanded`가 바뀔 때마다 호출됩니다.
 
-`showSeekBar`의 기본값은 `true`이며, 하단 기본 seek bar 노출 여부를 제어합니다. `PlayList`의 `portal` 기본값은 `false`라서 별도 설정이 없으면 레이아웃 안에 직접 렌더링됩니다. `position`과 `offset`은 플로팅 레이어처럼 띄워서 렌더링할 때 의미가 있습니다.
+`showSeekBar`의 기본값은 `true`이며, 하단 기본 seek bar 노출 여부를 제어합니다. `accentColor`는 재생 버튼, 활성 탭, 활성 트랙, seek thumb에 쓰이는 기본 초록 액센트 컬러를 덮어쓸 때 사용합니다. `PlayList`의 `portal` 기본값은 `false`라서 별도 설정이 없으면 레이아웃 안에 직접 렌더링됩니다. `position`과 `offset`은 플로팅 레이어처럼 띄워서 렌더링할 때 의미가 있습니다.

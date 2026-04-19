@@ -76,6 +76,56 @@ export function normalizeOffset(offset: JukeboxOffset | undefined) {
   return { x: DEFAULT_OFFSET_PX, y: DEFAULT_OFFSET_PX };
 }
 
+function parseHexColor(hex: string): [number, number, number] | null {
+  const clean = hex.replace(/^#/, "");
+
+  if (clean.length === 3) {
+    const redHex = clean.charAt(0);
+    const greenHex = clean.charAt(1);
+    const blueHex = clean.charAt(2);
+    const r = parseInt(redHex + redHex, 16);
+    const g = parseInt(greenHex + greenHex, 16);
+    const b = parseInt(blueHex + blueHex, 16);
+    return [r, g, b];
+  }
+
+  if (clean.length === 6) {
+    const r = parseInt(clean.slice(0, 2), 16);
+    const g = parseInt(clean.slice(2, 4), 16);
+    const b = parseInt(clean.slice(4, 6), 16);
+    return [r, g, b];
+  }
+
+  return null;
+}
+
+function lightenChannel(channel: number, amount: number): number {
+  return Math.min(255, Math.round(channel + (255 - channel) * amount));
+}
+
+export function buildAccentOverrides(
+  accentColor: string,
+): Record<`--${string}`, string> {
+  const rgb = parseHexColor(accentColor);
+
+  if (!rgb) {
+    return { "--rp-accent": accentColor };
+  }
+
+  const [r, g, b] = rgb;
+  const HOVER_LIGHTEN_AMOUNT = 0.15;
+  const hoverR = lightenChannel(r, HOVER_LIGHTEN_AMOUNT);
+  const hoverG = lightenChannel(g, HOVER_LIGHTEN_AMOUNT);
+  const hoverB = lightenChannel(b, HOVER_LIGHTEN_AMOUNT);
+
+  return {
+    "--rp-accent": accentColor,
+    "--rp-accent-hover": `rgb(${hoverR}, ${hoverG}, ${hoverB})`,
+    "--rp-tab-active-bg": accentColor,
+    "--rp-track-active": `rgba(${r}, ${g}, ${b}, 0.12)`,
+  };
+}
+
 export function getPositionStyle(
   position: JukeboxPosition,
   offset: JukeboxOffset | undefined,

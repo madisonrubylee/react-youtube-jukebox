@@ -21,6 +21,11 @@ type PlayListSizeOption = {
   value: PlayListSize;
 };
 
+type PlayListAccentOption = {
+  label: string;
+  value: string;
+};
+
 const PLAYLIST_THEME_OPTIONS: Record<DocsLocale, PlayListThemeOption[]> = {
   en: [
     { label: "Dark", value: "dark" },
@@ -45,6 +50,12 @@ const PLAYLIST_SIZE_OPTIONS: Record<DocsLocale, PlayListSizeOption[]> = {
   ],
 };
 
+const PLAYLIST_ACCENT_OPTIONS: PlayListAccentOption[] = [
+  { label: "#1db954", value: "#1db954" },
+  { label: "#8b5cf6", value: "#8b5cf6" },
+  { label: "#f97316", value: "#f97316" },
+];
+
 type PlayListShowcaseProps = {
   locale: DocsLocale;
 };
@@ -52,6 +63,7 @@ type PlayListShowcaseProps = {
 export function PlayListShowcase({ locale }: PlayListShowcaseProps) {
   const [theme, setTheme] = useState<PlayListTheme>("dark");
   const [size, setSize] = useState<PlayListSize>("compact");
+  const [accentColor, setAccentColor] = useState<string>("#1db954");
   const copy = getDocsCopy(locale);
   const themeOptions = PLAYLIST_THEME_OPTIONS[locale];
   const sizeOptions = PLAYLIST_SIZE_OPTIONS[locale];
@@ -100,11 +112,33 @@ export function PlayListShowcase({ locale }: PlayListShowcaseProps) {
             </button>
           ))}
         </div>
+
+        <span className="docs-preview__label">
+          {copy.playlist.showcase.accentLabel}
+        </span>
+        <div
+          className="docs-segmented-control"
+          role="radiogroup"
+          aria-label={copy.playlist.showcase.accentLabel}>
+          {PLAYLIST_ACCENT_OPTIONS.map((option) => (
+            <button
+              key={option.value}
+              type="button"
+              onClick={() => setAccentColor(option.value)}
+              className="docs-segmented-control__button"
+              data-active={accentColor === option.value}
+              role="radio"
+              aria-checked={accentColor === option.value}>
+              {option.label}
+            </button>
+          ))}
+        </div>
       </div>
       <div className="docs-playlist-showcase__preview">
         <PlayList
           playlist={demoPlaylist}
           autoplay
+          accentColor={accentColor}
           theme={theme}
           size={size}
           onSizeChange={setSize}
